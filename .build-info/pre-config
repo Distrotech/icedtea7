@@ -1,0 +1,9 @@
+#!/bin/bash
+
+/bin/cp ../.build-info/src/* ./
+#!/bin/bash
+
+/bin/cp ../.build-info/src/* ./
+#!/bin/bash
+
+/bin/cp ../.build-info/src/* ./

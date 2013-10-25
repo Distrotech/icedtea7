@@ -1,0 +1,21 @@
+#!/bin/bash
+
+mkdir -p ${3}/usr/${B_LIBDIRS}/jvm/
+
+rsync -avP openjdk.build/j2re-image/ ${3}/usr/${B_LIBDIRS}/jvm/jre-1.7.0_09/
+rsync -avP openjdk.build/j2sdk-image/ ${3}/usr/${B_LIBDIRS}/jvm/jdk-1.7.0_09/
+
+#!/bin/bash
+
+mkdir -p ${3}/usr/${B_LIBDIRS}/jvm/
+
+rsync -avP openjdk.build/j2re-image/ ${3}/usr/${B_LIBDIRS}/jvm/jre-1.7.0_09/
+rsync -avP openjdk.build/j2sdk-image/ ${3}/usr/${B_LIBDIRS}/jvm/jdk-1.7.0_09/
+
+#!/bin/bash
+
+mkdir -p ${3}/usr/${B_LIBDIRS}/jvm/
+
+rsync -avP openjdk.build/j2re-image/ ${3}/usr/${B_LIBDIRS}/jvm/jre-1.7.0_09/
+rsync -avP openjdk.build/j2sdk-image/ ${3}/usr/${B_LIBDIRS}/jvm/jdk-1.7.0_09/
+
