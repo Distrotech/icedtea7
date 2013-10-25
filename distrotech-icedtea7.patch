@@ -1,0 +1,167 @@
+--- openjdk/Makefile.dts	2013-02-01 23:40:27.854682246 +0200
++++ openjdk/Makefile	2013-02-01 23:41:12.723400523 +0200
+@@ -79,7 +79,7 @@
+ include ./make/sponsors-rules.gmk
+ include ./make/deploy-rules.gmk
+ 
+-all:: sanity
++all::
+ 
+ ifeq ($(SKIP_FASTDEBUG_BUILD), false)
+   all:: fastdebug_build
+--- openjdk/jdk/src/share/native/sun/awt/splashscreen/splashscreen_gif.c.dts	2013-02-08 11:31:39.656155348 +0200
++++ openjdk/jdk/src/share/native/sun/awt/splashscreen/splashscreen_gif.c	2013-02-08 11:32:34.653819299 +0200
+@@ -316,7 +316,11 @@
+ int
+ SplashDecodeGifStream(Splash * splash, SplashStream * stream)
+ {
++#ifdef GIFLIB_MAJOR >= 5
++    GifFileType *gif = DGifOpen((void *) stream, SplashStreamGifInputFunc, NULL);
++#else
+     GifFileType *gif = DGifOpen((void *) stream, SplashStreamGifInputFunc);
++#endif
+ 
+     if (!gif)
+         return 0;
+--- openjdk/jdk/make/launchers/Makefile.launcher.dts	2013-02-01 23:39:48.520929465 +0200
++++ openjdk/jdk/make/launchers/Makefile.launcher	2013-02-01 23:42:03.196083978 +0200
+@@ -164,7 +164,7 @@
+   ifneq ($(PLATFORM), windows)
+     ifneq ($(PLATFORM), macosx)
+       # Anything with a GUI needs X11 to be linked in.
+-      OTHER_LDLIBS += -L$(OPENWIN_LIB) -lX11
++      OTHER_LDLIBS += -L=$(OPENWIN_LIB) -lX11
+     endif
+   endif
+ endif
+--- openjdk/jdk/make/common/shared/Defs-linux.gmk.dts	2013-02-01 23:39:57.561872620 +0200
++++ openjdk/jdk/make/common/shared/Defs-linux.gmk	2013-02-01 23:41:13.556395297 +0200
+@@ -107,7 +107,7 @@
+ ifneq ($(ALT_OPENWIN_HOME),)
+   OPENWIN_HOME :=$(call PrefixPath,$(ALT_OPENWIN_HOME))
+ else
+-  OPENWIN_HOME  =/usr/X11R6/
++  OPENWIN_HOME  =/usr/X11R7/
+ endif
+ 
+ # DEVTOOLS_PATH: for other tools required for building (such as zip, etc.)
+@@ -195,24 +195,12 @@
+ 
+ # Macro to check it's input file for banned dependencies and verify the
+ #   binary built properly. Relies on process exit code.
+-ifndef CROSS_COMPILE_ARCH
+-define binary_file_verification # binary_file
+-( \
+-  $(ECHO) "Checking for mapfile use in: $1" && \
+-  if [ "`$(NM) -D -g --defined-only $1 | $(EGREP) 'SUNWprivate'`" = "" ] ; then \
+-    $(ECHO) "$(MAPFILE_WARNING): File was not built with a mapfile: $1"; \
+-  fi && \
+-  $(ECHO) "Library loads for: $1" && \
+-  $(LDD) $1 && \
+-  $(ECHO) "RUNPATH for: $1" && \
+-  ( $(READELF) -d $1 | $(EGREP) 'NEEDED|RUNPATH|RPATH' ) \
+-)
+-endef
+-else
+ define binary_file_verification 
+ ( \
+   $(ECHO) "Skipping binary file verification for cross-compile build" \
+ )
+ endef
+-endif
+ 
++OTHER_CFLAGS   =       -I=/usr/include/glib-2.0 -I=/usr/include/PCSC -I=/usr/include/gtk-2.0 \
++                       -I=/usr/include/cairo -I=/usr/include/freetype2 -I=/usr/X11R7/include -I=/usr/X11R7/include/X11/extensions
++OTHER_CPPFLAGS =       $(OTHER_CFLAGS)
+--- openjdk/jdk/make/sun/splashscreen/Makefile.dts	2013-02-02 07:55:49.741037614 +0200
++++ openjdk/jdk/make/sun/splashscreen/Makefile	2013-02-02 07:56:18.179826299 +0200
+@@ -89,8 +89,8 @@
+                 -I$(OPENWIN_HOME)/include/X11/extensions
+     OTHER_LDLIBS += -L$(OPENWIN_LIB) -lX11 -lXext $(LIBM) -pthread
+   else
+-    CPPFLAGS += -I$(OPENWIN_HOME)/include -I$(OPENWIN_HOME)/include/X11/extensions
+-    OTHER_LDLIBS += -L$(OPENWIN_LIB) -lX11 -lXext $(LIBM) -lpthread
++    CPPFLAGS += -I=$(OPENWIN_HOME)/include -I=$(OPENWIN_HOME)/include/X11/extensions
++    OTHER_LDLIBS += -L=$(OPENWIN_LIB) -lX11 -lXext $(LIBM) -lpthread
+   endif
+ else # PLATFORM
+   CFLAGS += -DWITH_WIN32
+--- openjdk/jdk/make/sun/xawt/Makefile.dts	2013-02-02 07:59:57.113204599 +0200
++++ openjdk/jdk/make/sun/xawt/Makefile	2013-02-02 07:59:15.351513259 +0200
+@@ -51,7 +51,7 @@
+ AUTO_FILES_JAVA_DIRS = sun/awt/X11
+ AUTO_JAVA_PRUNE = WrapperGenerator.java
+ 
+-LDFLAGS += -L$(OPENWIN_LIB)
++LDFLAGS += -L=$(OPENWIN_LIB)
+ 
+ # For Xrender extension.
+ ifeq ($(PLATFORM), solaris)
+@@ -203,9 +203,9 @@
+     # Allows for builds on Debian GNU Linux, X11 is in a different place 
+     # This should really be handled at a higher-level so we don't have to
+     # work-around this when cross-compiling
+-    CPPFLAGS += -I/usr/X11R6/include/X11/extensions \
+-                -I/usr/include/X11/extensions \
+-                -I$(OPENWIN_HOME)/include 
++    CPPFLAGS += -I=/usr/X11R6/include/X11/extensions \
++                -I=/usr/include/X11/extensions \
++                -I=$(OPENWIN_HOME)/include 
+   else
+     CPPFLAGS += -I$(OPENWIN_HOME)/include/X11/extensions \
+                 -I$(OPENWIN_HOME)/include 
+--- openjdk/jdk/src/solaris/native/java/net/PlainSocketImpl.c.dts	2013-02-08 02:07:14.611088981 +0200
++++ openjdk/jdk/src/solaris/native/java/net/PlainSocketImpl.c	2013-02-08 02:07:39.691942291 +0200
+@@ -43,8 +43,10 @@
+ #endif
+ #ifdef __linux__
+ #include <unistd.h>
++#ifndef __ILP32__
+ #include <sys/sysctl.h>
+ #endif
++#endif
+ 
+ #include "jvm.h"
+ #include "jni_util.h"
+--- openjdk/jdk/src/solaris/native/java/net/PlainDatagramSocketImpl.c.dts	2013-02-08 02:10:07.488075854 +0200
++++ openjdk/jdk/src/solaris/native/java/net/PlainDatagramSocketImpl.c	2013-02-08 02:10:27.827956345 +0200
+@@ -35,7 +35,9 @@
+ #endif
+ #ifdef __linux__
+ #include <unistd.h>
++#ifndef __ILP32__
+ #include <sys/sysctl.h>
++#endif
+ #include <sys/utsname.h>
+ #include <netinet/ip.h>
+ 
+--- openjdk/jdk/make/common/Defs-linux.gmk.dts	2013-02-08 02:17:03.614615722 +0200
++++ openjdk/jdk/make/common/Defs-linux.gmk	2013-02-08 02:18:56.142938329 +0200
+@@ -447,8 +447,12 @@
+ ifeq ($(ARCH), amd64)
+ override OPENWIN_LIB             = $(OPENWIN_HOME)/lib64
+ else
++ifeq ($(ARCH), ilp32)
++override OPENWIN_LIB             = $(OPENWIN_HOME)/libx32
++else
+ override OPENWIN_LIB             = $(OPENWIN_HOME)/lib
+ endif
++endif
+ override OTHER_M4FLAGS           = -D__GLIBC__ -DGNU_ASSEMBLER
+ override SUN_CMM_SUBDIR          =
+ override THREADS_FLAG            = native
+--- openjdk/hotspot/src/os/linux/vm/os_linux.cpp.dts	2013-02-08 01:19:44.179825431 +0200
++++ openjdk/hotspot/src/os/linux/vm/os_linux.cpp	2013-02-08 01:43:53.720100353 +0200
+@@ -1924,9 +1924,11 @@
+     static  Elf32_Half running_arch_code=EM_68K;
+   #elif  (defined SH)
+     static  Elf32_Half running_arch_code=EM_SH;
++  #elif (defined ILP32)
++    static  Elf32_Half running_arch_code=EM_X86_64;
+   #else
+     #error Method os::dll_load requires that one of following is defined:\
+-         IA32, AMD64, IA64, __sparc, __powerpc__, ARM, S390, ALPHA, MIPS, MIPSEL, PARISC, M68K, SH
++         IA32, AMD64, IA64, __sparc, __powerpc__, ARM, S390, ALPHA, MIPS, MIPSEL, PARISC, M68K, SH, ILP32
+   #endif
+ 
+   // Identify compatability class for VM's architecture and library's architecture

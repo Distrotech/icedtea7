@@ -1,0 +1,4391 @@
+m4trace:/usr/share/aclocal/pkg.m4:27: -1- AC_DEFUN([PKG_PROG_PKG_CONFIG], [m4_pattern_forbid([^_?PKG_[A-Z_]+$])
+m4_pattern_allow([^PKG_CONFIG(_(PATH|LIBDIR|SYSROOT_DIR|ALLOW_SYSTEM_(CFLAGS|LIBS)))?$])
+m4_pattern_allow([^PKG_CONFIG_(DISABLE_UNINSTALLED|TOP_BUILD_DIR|DEBUG_SPEW)$])
+AC_ARG_VAR([PKG_CONFIG], [path to pkg-config utility])
+AC_ARG_VAR([PKG_CONFIG_PATH], [directories to add to pkg-config's search path])
+AC_ARG_VAR([PKG_CONFIG_LIBDIR], [path overriding pkg-config's built-in search path])
+
+if test "x$ac_cv_env_PKG_CONFIG_set" != "xset"; then
+	AC_PATH_TOOL([PKG_CONFIG], [pkg-config])
+fi
+if test -n "$PKG_CONFIG"; then
+	_pkg_min_version=m4_default([$1], [0.9.0])
+	AC_MSG_CHECKING([pkg-config is at least version $_pkg_min_version])
+	if $PKG_CONFIG --atleast-pkgconfig-version $_pkg_min_version; then
+		AC_MSG_RESULT([yes])
+	else
+		AC_MSG_RESULT([no])
+		PKG_CONFIG=""
+	fi
+fi[]dnl
+])
+m4trace:/usr/share/aclocal/pkg.m4:60: -1- AC_DEFUN([PKG_CHECK_EXISTS], [AC_REQUIRE([PKG_PROG_PKG_CONFIG])dnl
+if test -n "$PKG_CONFIG" && \
+    AC_RUN_LOG([$PKG_CONFIG --exists --print-errors "$1"]); then
+  m4_default([$2], [:])
+m4_ifvaln([$3], [else
+  $3])dnl
+fi])
+m4trace:/usr/share/aclocal/pkg.m4:86: -1- AC_DEFUN([_PKG_SHORT_ERRORS_SUPPORTED], [AC_REQUIRE([PKG_PROG_PKG_CONFIG])
+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+        _pkg_short_errors_supported=yes
+else
+        _pkg_short_errors_supported=no
+fi[]dnl
+])
+m4trace:/usr/share/aclocal/pkg.m4:106: -1- AC_DEFUN([PKG_CHECK_MODULES], [AC_REQUIRE([PKG_PROG_PKG_CONFIG])dnl
+AC_ARG_VAR([$1][_CFLAGS], [C compiler flags for $1, overriding pkg-config])dnl
+AC_ARG_VAR([$1][_LIBS], [linker flags for $1, overriding pkg-config])dnl
+
+pkg_failed=no
+AC_MSG_CHECKING([for $1])
+
+_PKG_CONFIG([$1][_CFLAGS], [cflags], [$2])
+_PKG_CONFIG([$1][_LIBS], [libs], [$2])
+
+m4_define([_PKG_TEXT], [Alternatively, you may set the environment variables $1[]_CFLAGS
+and $1[]_LIBS to avoid the need to call pkg-config.
+See the pkg-config man page for more details.])
+
+if test $pkg_failed = yes; then
+   	AC_MSG_RESULT([no])
+        _PKG_SHORT_ERRORS_SUPPORTED
+        if test $_pkg_short_errors_supported = yes; then
+	        $1[]_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "$2" 2>&1`
+        else 
+	        $1[]_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "$2" 2>&1`
+        fi
+	# Put the nasty error message in config.log where it belongs
+	echo "$$1[]_PKG_ERRORS" >&AS_MESSAGE_LOG_FD
+
+	m4_default([$4], [AC_MSG_ERROR(
+[Package requirements ($2) were not met:
+
+$$1_PKG_ERRORS
+
+Consider adjusting the PKG_CONFIG_PATH environment variable if you
+installed software in a non-standard prefix.
+
+_PKG_TEXT])[]dnl
+        ])
+elif test $pkg_failed = untried; then
+     	AC_MSG_RESULT([no])
+	m4_default([$4], [AC_MSG_FAILURE(
+[The pkg-config script could not be found or is too old.  Make sure it
+is in your PATH or set the PKG_CONFIG environment variable to the full
+path to pkg-config.
+
+_PKG_TEXT
+
+To get pkg-config, see <http://pkg-config.freedesktop.org/>.])[]dnl
+        ])
+else
+	$1[]_CFLAGS=$pkg_cv_[]$1[]_CFLAGS
+	$1[]_LIBS=$pkg_cv_[]$1[]_LIBS
+        AC_MSG_RESULT([yes])
+	$3
+fi[]dnl
+])
+m4trace:/usr/share/aclocal/pkg.m4:169: -1- AC_DEFUN([PKG_INSTALLDIR], [m4_pushdef([pkg_default], [m4_default([$1], ['${libdir}/pkgconfig'])])
+m4_pushdef([pkg_description],
+    [pkg-config installation directory @<:@]pkg_default[@:>@])
+AC_ARG_WITH([pkgconfigdir],
+    [AS_HELP_STRING([--with-pkgconfigdir], pkg_description)],,
+    [with_pkgconfigdir=]pkg_default)
+AC_SUBST([pkgconfigdir], [$with_pkgconfigdir])
+m4_popdef([pkg_default])
+m4_popdef([pkg_description])
+])
+m4trace:/usr/share/aclocal/pkg.m4:189: -1- AC_DEFUN([PKG_NOARCH_INSTALLDIR], [m4_pushdef([pkg_default], [m4_default([$1], ['${datadir}/pkgconfig'])])
+m4_pushdef([pkg_description],
+    [pkg-config arch-independent installation directory @<:@]pkg_default[@:>@])
+AC_ARG_WITH([noarch-pkgconfigdir],
+    [AS_HELP_STRING([--with-noarch-pkgconfigdir], pkg_description)],,
+    [with_noarch_pkgconfigdir=]pkg_default)
+AC_SUBST([noarch_pkgconfigdir], [$with_noarch_pkgconfigdir])
+m4_popdef([pkg_default])
+m4_popdef([pkg_description])
+])
+m4trace:/usr/share/aclocal-1.13/amversion.m4:14: -1- AC_DEFUN([AM_AUTOMAKE_VERSION], [am__api_version='1.13'
+dnl Some users find AM_AUTOMAKE_VERSION and mistake it for a way to
+dnl require some minimum version.  Point them to the right macro.
+m4_if([$1], [1.13.4], [],
+      [AC_FATAL([Do not call $0, use AM_INIT_AUTOMAKE([$1]).])])dnl
+])
+m4trace:/usr/share/aclocal-1.13/amversion.m4:33: -1- AC_DEFUN([AM_SET_CURRENT_AUTOMAKE_VERSION], [AM_AUTOMAKE_VERSION([1.13.4])dnl
+m4_ifndef([AC_AUTOCONF_VERSION],
+  [m4_copy([m4_PACKAGE_VERSION], [AC_AUTOCONF_VERSION])])dnl
+_AM_AUTOCONF_VERSION(m4_defn([AC_AUTOCONF_VERSION]))])
+m4trace:/usr/share/aclocal-1.13/auxdir.m4:47: -1- AC_DEFUN([AM_AUX_DIR_EXPAND], [dnl Rely on autoconf to set up CDPATH properly.
+AC_PREREQ([2.50])dnl
+# expand $ac_aux_dir to an absolute path
+am_aux_dir=`cd $ac_aux_dir && pwd`
+])
+m4trace:/usr/share/aclocal-1.13/cond.m4:12: -1- AC_DEFUN([AM_CONDITIONAL], [AC_PREREQ([2.52])dnl
+ m4_if([$1], [TRUE],  [AC_FATAL([$0: invalid condition: $1])],
+       [$1], [FALSE], [AC_FATAL([$0: invalid condition: $1])])dnl
+AC_SUBST([$1_TRUE])dnl
+AC_SUBST([$1_FALSE])dnl
+_AM_SUBST_NOTMAKE([$1_TRUE])dnl
+_AM_SUBST_NOTMAKE([$1_FALSE])dnl
+m4_define([_AM_COND_VALUE_$1], [$2])dnl
+if $2; then
+  $1_TRUE=
+  $1_FALSE='#'
+else
+  $1_TRUE='#'
+  $1_FALSE=
+fi
+AC_CONFIG_COMMANDS_PRE(
+[if test -z "${$1_TRUE}" && test -z "${$1_FALSE}"; then
+  AC_MSG_ERROR([[conditional "$1" was never defined.
+Usually this means the macro was only invoked conditionally.]])
+fi])])
+m4trace:/usr/share/aclocal-1.13/depend.m4:26: -1- AC_DEFUN([_AM_DEPENDENCIES], [AC_REQUIRE([AM_SET_DEPDIR])dnl
+AC_REQUIRE([AM_OUTPUT_DEPENDENCY_COMMANDS])dnl
+AC_REQUIRE([AM_MAKE_INCLUDE])dnl
+AC_REQUIRE([AM_DEP_TRACK])dnl
+
+m4_if([$1], [CC],   [depcc="$CC"   am_compiler_list=],
+      [$1], [CXX],  [depcc="$CXX"  am_compiler_list=],
+      [$1], [OBJC], [depcc="$OBJC" am_compiler_list='gcc3 gcc'],
+      [$1], [OBJCXX], [depcc="$OBJCXX" am_compiler_list='gcc3 gcc'],
+      [$1], [UPC],  [depcc="$UPC"  am_compiler_list=],
+      [$1], [GCJ],  [depcc="$GCJ"  am_compiler_list='gcc3 gcc'],
+                    [depcc="$$1"   am_compiler_list=])
+
+AC_CACHE_CHECK([dependency style of $depcc],
+               [am_cv_$1_dependencies_compiler_type],
+[if test -z "$AMDEP_TRUE" && test -f "$am_depcomp"; then
+  # We make a subdir and do the tests there.  Otherwise we can end up
+  # making bogus files that we don't know about and never remove.  For
+  # instance it was reported that on HP-UX the gcc test will end up
+  # making a dummy file named 'D' -- because '-MD' means "put the output
+  # in D".
+  rm -rf conftest.dir
+  mkdir conftest.dir
+  # Copy depcomp to subdir because otherwise we won't find it if we're
+  # using a relative directory.
+  cp "$am_depcomp" conftest.dir
+  cd conftest.dir
+  # We will build objects and dependencies in a subdirectory because
+  # it helps to detect inapplicable dependency modes.  For instance
+  # both Tru64's cc and ICC support -MD to output dependencies as a
+  # side effect of compilation, but ICC will put the dependencies in
+  # the current directory while Tru64 will put them in the object
+  # directory.
+  mkdir sub
+
+  am_cv_$1_dependencies_compiler_type=none
+  if test "$am_compiler_list" = ""; then
+     am_compiler_list=`sed -n ['s/^#*\([a-zA-Z0-9]*\))$/\1/p'] < ./depcomp`
+  fi
+  am__universal=false
+  m4_case([$1], [CC],
+    [case " $depcc " in #(
+     *\ -arch\ *\ -arch\ *) am__universal=true ;;
+     esac],
+    [CXX],
+    [case " $depcc " in #(
+     *\ -arch\ *\ -arch\ *) am__universal=true ;;
+     esac])
+
+  for depmode in $am_compiler_list; do
+    # Setup a source with many dependencies, because some compilers
+    # like to wrap large dependency lists on column 80 (with \), and
+    # we should not choose a depcomp mode which is confused by this.
+    #
+    # We need to recreate these files for each test, as the compiler may
+    # overwrite some of them when testing with obscure command lines.
+    # This happens at least with the AIX C compiler.
+    : > sub/conftest.c
+    for i in 1 2 3 4 5 6; do
+      echo '#include "conftst'$i'.h"' >> sub/conftest.c
+      # Using ": > sub/conftst$i.h" creates only sub/conftst1.h with
+      # Solaris 10 /bin/sh.
+      echo '/* dummy */' > sub/conftst$i.h
+    done
+    echo "${am__include} ${am__quote}sub/conftest.Po${am__quote}" > confmf
+
+    # We check with '-c' and '-o' for the sake of the "dashmstdout"
+    # mode.  It turns out that the SunPro C++ compiler does not properly
+    # handle '-M -o', and we need to detect this.  Also, some Intel
+    # versions had trouble with output in subdirs.
+    am__obj=sub/conftest.${OBJEXT-o}
+    am__minus_obj="-o $am__obj"
+    case $depmode in
+    gcc)
+      # This depmode causes a compiler race in universal mode.
+      test "$am__universal" = false || continue
+      ;;
+    nosideeffect)
+      # After this tag, mechanisms are not by side-effect, so they'll
+      # only be used when explicitly requested.
+      if test "x$enable_dependency_tracking" = xyes; then
+	continue
+      else
+	break
+      fi
+      ;;
+    msvc7 | msvc7msys | msvisualcpp | msvcmsys)
+      # This compiler won't grok '-c -o', but also, the minuso test has
+      # not run yet.  These depmodes are late enough in the game, and
+      # so weak that their functioning should not be impacted.
+      am__obj=conftest.${OBJEXT-o}
+      am__minus_obj=
+      ;;
+    none) break ;;
+    esac
+    if depmode=$depmode \
+       source=sub/conftest.c object=$am__obj \
+       depfile=sub/conftest.Po tmpdepfile=sub/conftest.TPo \
+       $SHELL ./depcomp $depcc -c $am__minus_obj sub/conftest.c \
+         >/dev/null 2>conftest.err &&
+       grep sub/conftst1.h sub/conftest.Po > /dev/null 2>&1 &&
+       grep sub/conftst6.h sub/conftest.Po > /dev/null 2>&1 &&
+       grep $am__obj sub/conftest.Po > /dev/null 2>&1 &&
+       ${MAKE-make} -s -f confmf > /dev/null 2>&1; then
+      # icc doesn't choke on unknown options, it will just issue warnings
+      # or remarks (even with -Werror).  So we grep stderr for any message
+      # that says an option was ignored or not supported.
+      # When given -MP, icc 7.0 and 7.1 complain thusly:
+      #   icc: Command line warning: ignoring option '-M'; no argument required
+      # The diagnosis changed in icc 8.0:
+      #   icc: Command line remark: option '-MP' not supported
+      if (grep 'ignoring option' conftest.err ||
+          grep 'not supported' conftest.err) >/dev/null 2>&1; then :; else
+        am_cv_$1_dependencies_compiler_type=$depmode
+        break
+      fi
+    fi
+  done
+
+  cd ..
+  rm -rf conftest.dir
+else
+  am_cv_$1_dependencies_compiler_type=none
+fi
+])
+AC_SUBST([$1DEPMODE], [depmode=$am_cv_$1_dependencies_compiler_type])
+AM_CONDITIONAL([am__fastdep$1], [
+  test "x$enable_dependency_tracking" != xno \
+  && test "$am_cv_$1_dependencies_compiler_type" = gcc3])
+])
+m4trace:/usr/share/aclocal-1.13/depend.m4:163: -1- AC_DEFUN([AM_SET_DEPDIR], [AC_REQUIRE([AM_SET_LEADING_DOT])dnl
+AC_SUBST([DEPDIR], ["${am__leading_dot}deps"])dnl
+])
+m4trace:/usr/share/aclocal-1.13/depend.m4:171: -1- AC_DEFUN([AM_DEP_TRACK], [AC_ARG_ENABLE([dependency-tracking], [dnl
+AS_HELP_STRING(
+  [--enable-dependency-tracking],
+  [do not reject slow dependency extractors])
+AS_HELP_STRING(
+  [--disable-dependency-tracking],
+  [speeds up one-time build])])
+if test "x$enable_dependency_tracking" != xno; then
+  am_depcomp="$ac_aux_dir/depcomp"
+  AMDEPBACKSLASH='\'
+  am__nodep='_no'
+fi
+AM_CONDITIONAL([AMDEP], [test "x$enable_dependency_tracking" != xno])
+AC_SUBST([AMDEPBACKSLASH])dnl
+_AM_SUBST_NOTMAKE([AMDEPBACKSLASH])dnl
+AC_SUBST([am__nodep])dnl
+_AM_SUBST_NOTMAKE([am__nodep])dnl
+])
+m4trace:/usr/share/aclocal-1.13/depout.m4:12: -1- AC_DEFUN([_AM_OUTPUT_DEPENDENCY_COMMANDS], [{
+  # Older Autoconf quotes --file arguments for eval, but not when files
+  # are listed without --file.  Let's play safe and only enable the eval
+  # if we detect the quoting.
+  case $CONFIG_FILES in
+  *\'*) eval set x "$CONFIG_FILES" ;;
+  *)   set x $CONFIG_FILES ;;
+  esac
+  shift
+  for mf
+  do
+    # Strip MF so we end up with the name of the file.
+    mf=`echo "$mf" | sed -e 's/:.*$//'`
+    # Check whether this is an Automake generated Makefile or not.
+    # We used to match only the files named 'Makefile.in', but
+    # some people rename them; so instead we look at the file content.
+    # Grep'ing the first line is not enough: some people post-process
+    # each Makefile.in and add a new line on top of each file to say so.
+    # Grep'ing the whole file is not good either: AIX grep has a line
+    # limit of 2048, but all sed's we know have understand at least 4000.
+    if sed -n 's,^#.*generated by automake.*,X,p' "$mf" | grep X >/dev/null 2>&1; then
+      dirpart=`AS_DIRNAME("$mf")`
+    else
+      continue
+    fi
+    # Extract the definition of DEPDIR, am__include, and am__quote
+    # from the Makefile without running 'make'.
+    DEPDIR=`sed -n 's/^DEPDIR = //p' < "$mf"`
+    test -z "$DEPDIR" && continue
+    am__include=`sed -n 's/^am__include = //p' < "$mf"`
+    test -z "$am__include" && continue
+    am__quote=`sed -n 's/^am__quote = //p' < "$mf"`
+    # Find all dependency output files, they are included files with
+    # $(DEPDIR) in their names.  We invoke sed twice because it is the
+    # simplest approach to changing $(DEPDIR) to its actual value in the
+    # expansion.
+    for file in `sed -n "
+      s/^$am__include $am__quote\(.*(DEPDIR).*\)$am__quote"'$/\1/p' <"$mf" | \
+	 sed -e 's/\$(DEPDIR)/'"$DEPDIR"'/g'`; do
+      # Make sure the directory exists.
+      test -f "$dirpart/$file" && continue
+      fdir=`AS_DIRNAME(["$file"])`
+      AS_MKDIR_P([$dirpart/$fdir])
+      # echo "creating $dirpart/$file"
+      echo '# dummy' > "$dirpart/$file"
+    done
+  done
+}
+])
+m4trace:/usr/share/aclocal-1.13/depout.m4:71: -1- AC_DEFUN([AM_OUTPUT_DEPENDENCY_COMMANDS], [AC_CONFIG_COMMANDS([depfiles],
+     [test x"$AMDEP_TRUE" != x"" || _AM_OUTPUT_DEPENDENCY_COMMANDS],
+     [AMDEP_TRUE="$AMDEP_TRUE" ac_aux_dir="$ac_aux_dir"])
+])
+m4trace:/usr/share/aclocal-1.13/init.m4:23: -1- AC_DEFUN([AM_INIT_AUTOMAKE], [AC_PREREQ([2.65])dnl
+dnl Autoconf wants to disallow AM_ names.  We explicitly allow
+dnl the ones we care about.
+m4_pattern_allow([^AM_[A-Z]+FLAGS$])dnl
+AC_REQUIRE([AM_SET_CURRENT_AUTOMAKE_VERSION])dnl
+AC_REQUIRE([AC_PROG_INSTALL])dnl
+if test "`cd $srcdir && pwd`" != "`pwd`"; then
+  # Use -I$(srcdir) only when $(srcdir) != ., so that make's output
+  # is not polluted with repeated "-I."
+  AC_SUBST([am__isrc], [' -I$(srcdir)'])_AM_SUBST_NOTMAKE([am__isrc])dnl
+  # test to see if srcdir already configured
+  if test -f $srcdir/config.status; then
+    AC_MSG_ERROR([source directory already configured; run "make distclean" there first])
+  fi
+fi
+
+# test whether we have cygpath
+if test -z "$CYGPATH_W"; then
+  if (cygpath --version) >/dev/null 2>/dev/null; then
+    CYGPATH_W='cygpath -w'
+  else
+    CYGPATH_W=echo
+  fi
+fi
+AC_SUBST([CYGPATH_W])
+
+# Define the identity of the package.
+dnl Distinguish between old-style and new-style calls.
+m4_ifval([$2],
+[AC_DIAGNOSE([obsolete],
+             [$0: two- and three-arguments forms are deprecated.])
+m4_ifval([$3], [_AM_SET_OPTION([no-define])])dnl
+ AC_SUBST([PACKAGE], [$1])dnl
+ AC_SUBST([VERSION], [$2])],
+[_AM_SET_OPTIONS([$1])dnl
+dnl Diagnose old-style AC_INIT with new-style AM_AUTOMAKE_INIT.
+m4_if(
+  m4_ifdef([AC_PACKAGE_NAME], [ok]):m4_ifdef([AC_PACKAGE_VERSION], [ok]),
+  [ok:ok],,
+  [m4_fatal([AC_INIT should be called with package and version arguments])])dnl
+ AC_SUBST([PACKAGE], ['AC_PACKAGE_TARNAME'])dnl
+ AC_SUBST([VERSION], ['AC_PACKAGE_VERSION'])])dnl
+
+_AM_IF_OPTION([no-define],,
+[AC_DEFINE_UNQUOTED([PACKAGE], ["$PACKAGE"], [Name of package])
+ AC_DEFINE_UNQUOTED([VERSION], ["$VERSION"], [Version number of package])])dnl
+
+# Some tools Automake needs.
+AC_REQUIRE([AM_SANITY_CHECK])dnl
+AC_REQUIRE([AC_ARG_PROGRAM])dnl
+AM_MISSING_PROG([ACLOCAL], [aclocal-${am__api_version}])
+AM_MISSING_PROG([AUTOCONF], [autoconf])
+AM_MISSING_PROG([AUTOMAKE], [automake-${am__api_version}])
+AM_MISSING_PROG([AUTOHEADER], [autoheader])
+AM_MISSING_PROG([MAKEINFO], [makeinfo])
+AC_REQUIRE([AM_PROG_INSTALL_SH])dnl
+AC_REQUIRE([AM_PROG_INSTALL_STRIP])dnl
+AC_REQUIRE([AC_PROG_MKDIR_P])dnl
+# For better backward compatibility.  To be removed once Automake 1.9.x
+# dies out for good.  For more background, see:
+# <http://lists.gnu.org/archive/html/automake/2012-07/msg00001.html>
+# <http://lists.gnu.org/archive/html/automake/2012-07/msg00014.html>
+AC_SUBST([mkdir_p], ['$(MKDIR_P)'])
+# We need awk for the "check" target.  The system "awk" is bad on
+# some platforms.
+AC_REQUIRE([AC_PROG_AWK])dnl
+AC_REQUIRE([AC_PROG_MAKE_SET])dnl
+AC_REQUIRE([AM_SET_LEADING_DOT])dnl
+_AM_IF_OPTION([tar-ustar], [_AM_PROG_TAR([ustar])],
+	      [_AM_IF_OPTION([tar-pax], [_AM_PROG_TAR([pax])],
+			     [_AM_PROG_TAR([v7])])])
+_AM_IF_OPTION([no-dependencies],,
+[AC_PROVIDE_IFELSE([AC_PROG_CC],
+		  [_AM_DEPENDENCIES([CC])],
+		  [m4_define([AC_PROG_CC],
+			     m4_defn([AC_PROG_CC])[_AM_DEPENDENCIES([CC])])])dnl
+AC_PROVIDE_IFELSE([AC_PROG_CXX],
+		  [_AM_DEPENDENCIES([CXX])],
+		  [m4_define([AC_PROG_CXX],
+			     m4_defn([AC_PROG_CXX])[_AM_DEPENDENCIES([CXX])])])dnl
+AC_PROVIDE_IFELSE([AC_PROG_OBJC],
+		  [_AM_DEPENDENCIES([OBJC])],
+		  [m4_define([AC_PROG_OBJC],
+			     m4_defn([AC_PROG_OBJC])[_AM_DEPENDENCIES([OBJC])])])dnl
+AC_PROVIDE_IFELSE([AC_PROG_OBJCXX],
+		  [_AM_DEPENDENCIES([OBJCXX])],
+		  [m4_define([AC_PROG_OBJCXX],
+			     m4_defn([AC_PROG_OBJCXX])[_AM_DEPENDENCIES([OBJCXX])])])dnl
+])
+AC_REQUIRE([AM_SILENT_RULES])dnl
+dnl The testsuite driver may need to know about EXEEXT, so add the
+dnl 'am__EXEEXT' conditional if _AM_COMPILER_EXEEXT was seen.  This
+dnl macro is hooked onto _AC_COMPILER_EXEEXT early, see below.
+AC_CONFIG_COMMANDS_PRE(dnl
+[m4_provide_if([_AM_COMPILER_EXEEXT],
+  [AM_CONDITIONAL([am__EXEEXT], [test -n "$EXEEXT"])])])dnl
+])
+m4trace:/usr/share/aclocal-1.13/init.m4:136: -1- AC_DEFUN([_AC_AM_CONFIG_HEADER_HOOK], [# Compute $1's index in $config_headers.
+_am_arg=$1
+_am_stamp_count=1
+for _am_header in $config_headers :; do
+  case $_am_header in
+    $_am_arg | $_am_arg:* )
+      break ;;
+    * )
+      _am_stamp_count=`expr $_am_stamp_count + 1` ;;
+  esac
+done
+echo "timestamp for $_am_arg" >`AS_DIRNAME(["$_am_arg"])`/stamp-h[]$_am_stamp_count])
+m4trace:/usr/share/aclocal-1.13/install-sh.m4:11: -1- AC_DEFUN([AM_PROG_INSTALL_SH], [AC_REQUIRE([AM_AUX_DIR_EXPAND])dnl
+if test x"${install_sh}" != xset; then
+  case $am_aux_dir in
+  *\ * | *\	*)
+    install_sh="\${SHELL} '$am_aux_dir/install-sh'" ;;
+  *)
+    install_sh="\${SHELL} $am_aux_dir/install-sh"
+  esac
+fi
+AC_SUBST([install_sh])])
+m4trace:/usr/share/aclocal-1.13/lead-dot.m4:10: -1- AC_DEFUN([AM_SET_LEADING_DOT], [rm -rf .tst 2>/dev/null
+mkdir .tst 2>/dev/null
+if test -d .tst; then
+  am__leading_dot=.
+else
+  am__leading_dot=_
+fi
+rmdir .tst 2>/dev/null
+AC_SUBST([am__leading_dot])])
+m4trace:/usr/share/aclocal-1.13/make.m4:12: -1- AC_DEFUN([AM_MAKE_INCLUDE], [am_make=${MAKE-make}
+cat > confinc << 'END'
+am__doit:
+	@echo this is the am__doit target
+.PHONY: am__doit
+END
+# If we don't find an include directive, just comment out the code.
+AC_MSG_CHECKING([for style of include used by $am_make])
+am__include="#"
+am__quote=
+_am_result=none
+# First try GNU make style include.
+echo "include confinc" > confmf
+# Ignore all kinds of additional output from 'make'.
+case `$am_make -s -f confmf 2> /dev/null` in #(
+*the\ am__doit\ target*)
+  am__include=include
+  am__quote=
+  _am_result=GNU
+  ;;
+esac
+# Now try BSD make style include.
+if test "$am__include" = "#"; then
+   echo '.include "confinc"' > confmf
+   case `$am_make -s -f confmf 2> /dev/null` in #(
+   *the\ am__doit\ target*)
+     am__include=.include
+     am__quote="\""
+     _am_result=BSD
+     ;;
+   esac
+fi
+AC_SUBST([am__include])
+AC_SUBST([am__quote])
+AC_MSG_RESULT([$_am_result])
+rm -f confinc confmf
+])
+m4trace:/usr/share/aclocal-1.13/missing.m4:11: -1- AC_DEFUN([AM_MISSING_PROG], [AC_REQUIRE([AM_MISSING_HAS_RUN])
+$1=${$1-"${am_missing_run}$2"}
+AC_SUBST($1)])
+m4trace:/usr/share/aclocal-1.13/missing.m4:20: -1- AC_DEFUN([AM_MISSING_HAS_RUN], [AC_REQUIRE([AM_AUX_DIR_EXPAND])dnl
+AC_REQUIRE_AUX_FILE([missing])dnl
+if test x"${MISSING+set}" != xset; then
+  case $am_aux_dir in
+  *\ * | *\	*)
+    MISSING="\${SHELL} \"$am_aux_dir/missing\"" ;;
+  *)
+    MISSING="\${SHELL} $am_aux_dir/missing" ;;
+  esac
+fi
+# Use eval to expand $SHELL
+if eval "$MISSING --is-lightweight"; then
+  am_missing_run="$MISSING "
+else
+  am_missing_run=
+  AC_MSG_WARN(['missing' script is too old or missing])
+fi
+])
+m4trace:/usr/share/aclocal-1.13/options.m4:11: -1- AC_DEFUN([_AM_MANGLE_OPTION], [[_AM_OPTION_]m4_bpatsubst($1, [[^a-zA-Z0-9_]], [_])])
+m4trace:/usr/share/aclocal-1.13/options.m4:17: -1- AC_DEFUN([_AM_SET_OPTION], [m4_define(_AM_MANGLE_OPTION([$1]), [1])])
+m4trace:/usr/share/aclocal-1.13/options.m4:23: -1- AC_DEFUN([_AM_SET_OPTIONS], [m4_foreach_w([_AM_Option], [$1], [_AM_SET_OPTION(_AM_Option)])])
+m4trace:/usr/share/aclocal-1.13/options.m4:29: -1- AC_DEFUN([_AM_IF_OPTION], [m4_ifset(_AM_MANGLE_OPTION([$1]), [$2], [$3])])
+m4trace:/usr/share/aclocal-1.13/runlog.m4:12: -1- AC_DEFUN([AM_RUN_LOG], [{ echo "$as_me:$LINENO: $1" >&AS_MESSAGE_LOG_FD
+   ($1) >&AS_MESSAGE_LOG_FD 2>&AS_MESSAGE_LOG_FD
+   ac_status=$?
+   echo "$as_me:$LINENO: \$? = $ac_status" >&AS_MESSAGE_LOG_FD
+   (exit $ac_status); }])
+m4trace:/usr/share/aclocal-1.13/sanity.m4:11: -1- AC_DEFUN([AM_SANITY_CHECK], [AC_MSG_CHECKING([whether build environment is sane])
+# Reject unsafe characters in $srcdir or the absolute working directory
+# name.  Accept space and tab only in the latter.
+am_lf='
+'
+case `pwd` in
+  *[[\\\"\#\$\&\'\`$am_lf]]*)
+    AC_MSG_ERROR([unsafe absolute working directory name]);;
+esac
+case $srcdir in
+  *[[\\\"\#\$\&\'\`$am_lf\ \	]]*)
+    AC_MSG_ERROR([unsafe srcdir value: '$srcdir']);;
+esac
+
+# Do 'set' in a subshell so we don't clobber the current shell's
+# arguments.  Must try -L first in case configure is actually a
+# symlink; some systems play weird games with the mod time of symlinks
+# (eg FreeBSD returns the mod time of the symlink's containing
+# directory).
+if (
+   am_has_slept=no
+   for am_try in 1 2; do
+     echo "timestamp, slept: $am_has_slept" > conftest.file
+     set X `ls -Lt "$srcdir/configure" conftest.file 2> /dev/null`
+     if test "$[*]" = "X"; then
+	# -L didn't work.
+	set X `ls -t "$srcdir/configure" conftest.file`
+     fi
+     if test "$[*]" != "X $srcdir/configure conftest.file" \
+	&& test "$[*]" != "X conftest.file $srcdir/configure"; then
+
+	# If neither matched, then we have a broken ls.  This can happen
+	# if, for instance, CONFIG_SHELL is bash and it inherits a
+	# broken ls alias from the environment.  This has actually
+	# happened.  Such a system could not be considered "sane".
+	AC_MSG_ERROR([ls -t appears to fail.  Make sure there is not a broken
+  alias in your environment])
+     fi
+     if test "$[2]" = conftest.file || test $am_try -eq 2; then
+       break
+     fi
+     # Just in case.
+     sleep 1
+     am_has_slept=yes
+   done
+   test "$[2]" = conftest.file
+   )
+then
+   # Ok.
+   :
+else
+   AC_MSG_ERROR([newly created file is older than distributed files!
+Check your system clock])
+fi
+AC_MSG_RESULT([yes])
+# If we didn't sleep, we still need to ensure time stamps of config.status and
+# generated files are strictly newer.
+am_sleep_pid=
+if grep 'slept: no' conftest.file >/dev/null 2>&1; then
+  ( sleep 1 ) &
+  am_sleep_pid=$!
+fi
+AC_CONFIG_COMMANDS_PRE(
+  [AC_MSG_CHECKING([that generated files are newer than configure])
+   if test -n "$am_sleep_pid"; then
+     # Hide warnings about reused PIDs.
+     wait $am_sleep_pid 2>/dev/null
+   fi
+   AC_MSG_RESULT([done])])
+rm -f conftest.file
+])
+m4trace:/usr/share/aclocal-1.13/silent.m4:12: -1- AC_DEFUN([AM_SILENT_RULES], [AC_ARG_ENABLE([silent-rules], [dnl
+AS_HELP_STRING(
+  [--enable-silent-rules],
+  [less verbose build output (undo: "make V=1")])
+AS_HELP_STRING(
+  [--disable-silent-rules],
+  [verbose build output (undo: "make V=0")])dnl
+])
+case $enable_silent_rules in @%:@ (((
+  yes) AM_DEFAULT_VERBOSITY=0;;
+   no) AM_DEFAULT_VERBOSITY=1;;
+    *) AM_DEFAULT_VERBOSITY=m4_if([$1], [yes], [0], [1]);;
+esac
+dnl
+dnl A few 'make' implementations (e.g., NonStop OS and NextStep)
+dnl do not support nested variable expansions.
+dnl See automake bug#9928 and bug#10237.
+am_make=${MAKE-make}
+AC_CACHE_CHECK([whether $am_make supports nested variables],
+   [am_cv_make_support_nested_variables],
+   [if AS_ECHO([['TRUE=$(BAR$(V))
+BAR0=false
+BAR1=true
+V=1
+am__doit:
+	@$(TRUE)
+.PHONY: am__doit']]) | $am_make -f - >/dev/null 2>&1; then
+  am_cv_make_support_nested_variables=yes
+else
+  am_cv_make_support_nested_variables=no
+fi])
+if test $am_cv_make_support_nested_variables = yes; then
+  dnl Using '$V' instead of '$(V)' breaks IRIX make.
+  AM_V='$(V)'
+  AM_DEFAULT_V='$(AM_DEFAULT_VERBOSITY)'
+else
+  AM_V=$AM_DEFAULT_VERBOSITY
+  AM_DEFAULT_V=$AM_DEFAULT_VERBOSITY
+fi
+AC_SUBST([AM_V])dnl
+AM_SUBST_NOTMAKE([AM_V])dnl
+AC_SUBST([AM_DEFAULT_V])dnl
+AM_SUBST_NOTMAKE([AM_DEFAULT_V])dnl
+AC_SUBST([AM_DEFAULT_VERBOSITY])dnl
+AM_BACKSLASH='\'
+AC_SUBST([AM_BACKSLASH])dnl
+_AM_SUBST_NOTMAKE([AM_BACKSLASH])dnl
+])
+m4trace:/usr/share/aclocal-1.13/strip.m4:17: -1- AC_DEFUN([AM_PROG_INSTALL_STRIP], [AC_REQUIRE([AM_PROG_INSTALL_SH])dnl
+# Installed binaries are usually stripped using 'strip' when the user
+# run "make install-strip".  However 'strip' might not be the right
+# tool to use in cross-compilation environments, therefore Automake
+# will honor the 'STRIP' environment variable to overrule this program.
+dnl Don't test for $cross_compiling = yes, because it might be 'maybe'.
+if test "$cross_compiling" != no; then
+  AC_CHECK_TOOL([STRIP], [strip], :)
+fi
+INSTALL_STRIP_PROGRAM="\$(install_sh) -c -s"
+AC_SUBST([INSTALL_STRIP_PROGRAM])])
+m4trace:/usr/share/aclocal-1.13/substnot.m4:12: -1- AC_DEFUN([_AM_SUBST_NOTMAKE])
+m4trace:/usr/share/aclocal-1.13/substnot.m4:17: -1- AC_DEFUN([AM_SUBST_NOTMAKE], [_AM_SUBST_NOTMAKE($@)])
+m4trace:/usr/share/aclocal-1.13/tar.m4:23: -1- AC_DEFUN([_AM_PROG_TAR], [# Always define AMTAR for backward compatibility.  Yes, it's still used
+# in the wild :-(  We should find a proper way to deprecate it ...
+AC_SUBST([AMTAR], ['$${TAR-tar}'])
+
+# We'll loop over all known methods to create a tar archive until one works.
+_am_tools='gnutar m4_if([$1], [ustar], [plaintar]) pax cpio none'
+
+m4_if([$1], [v7],
+  [am__tar='$${TAR-tar} chof - "$$tardir"' am__untar='$${TAR-tar} xf -'],
+
+  [m4_case([$1],
+    [ustar],
+     [# The POSIX 1988 'ustar' format is defined with fixed-size fields.
+      # There is notably a 21 bits limit for the UID and the GID.  In fact,
+      # the 'pax' utility can hang on bigger UID/GID (see automake bug#8343
+      # and bug#13588).
+      am_max_uid=2097151 # 2^21 - 1
+      am_max_gid=$am_max_uid
+      # The $UID and $GID variables are not portable, so we need to resort
+      # to the POSIX-mandated id(1) utility.  Errors in the 'id' calls
+      # below are definitely unexpected, so allow the users to see them
+      # (that is, avoid stderr redirection).
+      am_uid=`id -u || echo unknown`
+      am_gid=`id -g || echo unknown`
+      AC_MSG_CHECKING([whether UID '$am_uid' is supported by ustar format])
+      if test $am_uid -le $am_max_uid; then
+         AC_MSG_RESULT([yes])
+      else
+         AC_MSG_RESULT([no])
+         _am_tools=none
+      fi
+      AC_MSG_CHECKING([whether GID '$am_gid' is supported by ustar format])
+      if test $am_gid -le $am_max_gid; then
+         AC_MSG_RESULT([yes])
+      else
+        AC_MSG_RESULT([no])
+        _am_tools=none
+      fi],
+
+  [pax],
+    [],
+
+  [m4_fatal([Unknown tar format])])
+
+  AC_MSG_CHECKING([how to create a $1 tar archive])
+
+  # Go ahead even if we have the value already cached.  We do so because we
+  # need to set the values for the 'am__tar' and 'am__untar' variables.
+  _am_tools=${am_cv_prog_tar_$1-$_am_tools}
+
+  for _am_tool in $_am_tools; do
+    case $_am_tool in
+    gnutar)
+      for _am_tar in tar gnutar gtar; do
+        AM_RUN_LOG([$_am_tar --version]) && break
+      done
+      am__tar="$_am_tar --format=m4_if([$1], [pax], [posix], [$1]) -chf - "'"$$tardir"'
+      am__tar_="$_am_tar --format=m4_if([$1], [pax], [posix], [$1]) -chf - "'"$tardir"'
+      am__untar="$_am_tar -xf -"
+      ;;
+    plaintar)
+      # Must skip GNU tar: if it does not support --format= it doesn't create
+      # ustar tarball either.
+      (tar --version) >/dev/null 2>&1 && continue
+      am__tar='tar chf - "$$tardir"'
+      am__tar_='tar chf - "$tardir"'
+      am__untar='tar xf -'
+      ;;
+    pax)
+      am__tar='pax -L -x $1 -w "$$tardir"'
+      am__tar_='pax -L -x $1 -w "$tardir"'
+      am__untar='pax -r'
+      ;;
+    cpio)
+      am__tar='find "$$tardir" -print | cpio -o -H $1 -L'
+      am__tar_='find "$tardir" -print | cpio -o -H $1 -L'
+      am__untar='cpio -i -H $1 -d'
+      ;;
+    none)
+      am__tar=false
+      am__tar_=false
+      am__untar=false
+      ;;
+    esac
+
+    # If the value was cached, stop now.  We just wanted to have am__tar
+    # and am__untar set.
+    test -n "${am_cv_prog_tar_$1}" && break
+
+    # tar/untar a dummy directory, and stop if the command works.
+    rm -rf conftest.dir
+    mkdir conftest.dir
+    echo GrepMe > conftest.dir/file
+    AM_RUN_LOG([tardir=conftest.dir && eval $am__tar_ >conftest.tar])
+    rm -rf conftest.dir
+    if test -s conftest.tar; then
+      AM_RUN_LOG([$am__untar <conftest.tar])
+      AM_RUN_LOG([cat conftest.dir/file])
+      grep GrepMe conftest.dir/file >/dev/null 2>&1 && break
+    fi
+  done
+  rm -rf conftest.dir
+
+  AC_CACHE_VAL([am_cv_prog_tar_$1], [am_cv_prog_tar_$1=$_am_tool])
+  AC_MSG_RESULT([$am_cv_prog_tar_$1])])
+
+AC_SUBST([am__tar])
+AC_SUBST([am__untar])
+])
+m4trace:acinclude.m4:1: -1- AC_DEFUN([IT_SET_ARCH_SETTINGS], [
+  case "${host_cpu}" in
+    x86_64)
+      BUILD_ARCH_DIR=amd64
+      INSTALL_ARCH_DIR=amd64
+      JRE_ARCH_DIR=amd64
+      ARCHFLAG="-m64"
+      ;;
+    i?86)
+      BUILD_ARCH_DIR=i586
+      INSTALL_ARCH_DIR=i386
+      JRE_ARCH_DIR=i386
+      ARCH_PREFIX=${LINUX32}
+      ARCHFLAG="-m32"
+      ;;
+    alpha*)
+      BUILD_ARCH_DIR=alpha
+      INSTALL_ARCH_DIR=alpha
+      JRE_ARCH_DIR=alpha
+      ;;
+    arm*)
+      BUILD_ARCH_DIR=arm
+      INSTALL_ARCH_DIR=arm
+      JRE_ARCH_DIR=arm
+      ARCHFLAG="-D_LITTLE_ENDIAN"
+      ;;
+    arm64|aarch64)
+      BUILD_ARCH_DIR=aarch64
+      INSTALL_ARCH_DIR=aarch64
+      JRE_ARCH_DIR=aarch64
+      ARCHFLAG="-D_LITTLE_ENDIAN"
+      ;;
+    mips)
+      BUILD_ARCH_DIR=mips
+      INSTALL_ARCH_DIR=mips
+      JRE_ARCH_DIR=mips
+       ;;
+    mipsel)
+      BUILD_ARCH_DIR=mipsel
+      INSTALL_ARCH_DIR=mipsel
+      JRE_ARCH_DIR=mipsel
+       ;;
+    powerpc)
+      BUILD_ARCH_DIR=ppc
+      INSTALL_ARCH_DIR=ppc
+      JRE_ARCH_DIR=ppc
+      ARCH_PREFIX=${LINUX32}
+      ARCHFLAG="-m32"
+      ;;
+    powerpc64)
+      BUILD_ARCH_DIR=ppc64
+      INSTALL_ARCH_DIR=ppc64
+      JRE_ARCH_DIR=ppc64
+      ARCHFLAG="-m64"
+       ;;
+    sparc)
+      BUILD_ARCH_DIR=sparc
+      INSTALL_ARCH_DIR=sparc
+      JRE_ARCH_DIR=sparc
+      CROSS_TARGET_ARCH=sparc
+      ARCH_PREFIX=${LINUX32}
+      ARCHFLAG="-m32"
+       ;;
+    sparc64)
+      BUILD_ARCH_DIR=sparcv9
+      INSTALL_ARCH_DIR=sparcv9
+      JRE_ARCH_DIR=sparc64
+      ARCHFLAG="-m64"
+       ;;
+    s390)
+      BUILD_ARCH_DIR=s390
+      INSTALL_ARCH_DIR=s390
+      JRE_ARCH_DIR=s390
+      ARCH_PREFIX=${LINUX32}
+      ARCHFLAG="-m31"
+       ;;
+    s390x)
+      BUILD_ARCH_DIR=s390x
+      INSTALL_ARCH_DIR=s390x
+      JRE_ARCH_DIR=s390x
+      CROSS_TARGET_ARCH=s390x
+      ARCHFLAG="-m64"
+      ;;
+    sh*)
+      BUILD_ARCH_DIR=sh
+      INSTALL_ARCH_DIR=sh
+      JRE_ARCH_DIR=sh
+      CROSS_TARGET_ARCH=sh
+      ;;
+    *)
+      BUILD_ARCH_DIR=`uname -m`
+      INSTALL_ARCH_DIR=$BUILD_ARCH_DIR
+      JRE_ARCH_DIR=$INSTALL_ARCH_DIR
+      ;;
+  esac
+  AC_SUBST(BUILD_ARCH_DIR)
+  AC_SUBST(INSTALL_ARCH_DIR)
+  AC_SUBST(JRE_ARCH_DIR)
+  AC_SUBST(ARCH_PREFIX)
+  AC_SUBST(ARCHFLAG)
+])
+m4trace:acinclude.m4:104: -1- AC_DEFUN([IT_SET_OS_DIRS], [
+  case "${host_os}" in
+    *linux*)
+      BUILD_OS_DIR=linux
+      OS_PATH=
+      ;;
+    *solaris*)
+      BUILD_OS_DIR=solaris
+      OS_PATH=/opt/SunStudioExpress/bin:/opt/SUNWpro/bin:/usr/gnu/bin
+      ;;
+    *darwin*|*bsd*)
+      BUILD_OS_DIR=bsd
+      OS_PATH=
+      ;;
+    *)
+      AC_MSG_ERROR([unsupported operating system ${host_os}])
+      ;;
+  esac
+  AC_SUBST(BUILD_OS_DIR)
+  AC_SUBST(OS_PATH)
+])
+m4trace:acinclude.m4:127: -1- AC_DEFUN([IT_FIND_COMPILER], [
+  IT_FIND_JAVAC
+  IT_FIND_ECJ
+  IT_USING_ECJ
+
+  AC_SUBST(ECJ)
+  AC_SUBST(JAVAC)
+])
+m4trace:acinclude.m4:137: -1- AC_DEFUN_ONCE([IT_FIND_ECJ], [
+  ECJ_DEFAULT=/usr/bin/ecj
+  AC_MSG_CHECKING([if an ecj binary was specified])
+  AC_ARG_WITH([ecj],
+	      [AS_HELP_STRING(--with-ecj,bytecode compilation with ecj)],
+  [
+    if test "x${withval}" = "xyes"; then
+      ECJ=no
+    else
+      ECJ="${withval}"
+    fi
+  ],
+  [ 
+    ECJ=no
+  ])
+  AC_MSG_RESULT(${ECJ})
+  if test "x${ECJ}" = "xno"; then
+    ECJ=${ECJ_DEFAULT}
+  fi
+  AC_MSG_CHECKING([if $ECJ is a valid executable file])
+  if test -x "${ECJ}" && test -f "${ECJ}"; then
+    AC_MSG_RESULT([yes])
+  else
+    ECJ=""
+    AC_PATH_PROG(ECJ, "ecj")
+    if test -z "${ECJ}"; then
+      AC_PATH_PROG(ECJ, "ecj-3.1")
+    fi
+    if test -z "${ECJ}"; then
+      AC_PATH_PROG(ECJ, "ecj-3.2")
+    fi
+    if test -z "${ECJ}"; then
+      AC_PATH_PROG(ECJ, "ecj-3.3")
+    fi
+    if test -z "${ECJ}"; then
+      AC_PATH_PROG(ECJ, "ecj-3.4")
+    fi
+  fi
+])
+m4trace:acinclude.m4:178: -1- AC_DEFUN_ONCE([IT_FIND_JAVAC], [
+  JAVAC_DEFAULT=${SYSTEM_JDK_DIR}/bin/javac
+  AC_MSG_CHECKING([if a javac binary was specified])
+  AC_ARG_WITH([javac],
+	      [AS_HELP_STRING([--with-javac[[=PATH]]],the path to a javac binary)],
+  [
+    if test "x${withval}" = "xyes"; then
+      JAVAC=no
+    else
+      JAVAC="${withval}"
+    fi
+  ],
+  [
+    JAVAC=no
+  ])
+  AC_MSG_RESULT(${JAVAC})
+  if test "x${JAVAC}" = "xno"; then
+    JAVAC=${JAVAC_DEFAULT}
+  fi
+  AC_MSG_CHECKING([if $JAVAC is a valid executable file])
+  if test -x "${JAVAC}" && test -f "${JAVAC}"; then
+    AC_MSG_RESULT([yes])
+  else
+    AC_MSG_RESULT([no])
+    JAVAC=""
+    AC_PATH_PROG(JAVAC, "javac")
+  fi
+  AC_SUBST(JAVAC)
+  ])
+m4trace:acinclude.m4:210: -1- AC_DEFUN_ONCE([IT_FIND_JAVA], [
+  JAVA_DEFAULT=${SYSTEM_JDK_DIR}/bin/java
+  AC_MSG_CHECKING([if a java binary was specified])
+  AC_ARG_WITH([java],
+              [AS_HELP_STRING([--with-java[[=PATH]]],specify location of a 1.5 Java VM)],
+  [
+    if test "x${withval}" = "xyes"; then
+      JAVA=no
+    else
+      JAVA="${withval}"
+    fi
+  ],
+  [
+    JAVA=no
+  ])
+  AC_MSG_RESULT(${JAVA})
+  if test "x${JAVA}" = "xno"; then
+    JAVA=${JAVA_DEFAULT}
+  fi
+  AC_MSG_CHECKING([if $JAVA is a valid executable file])
+  if test -x "${JAVA}" && test -f "${JAVA}"; then
+    AC_MSG_RESULT([yes])
+  else
+    AC_MSG_RESULT([no])
+    JAVA=""
+    AC_PATH_PROG(JAVA, "java")
+    if test -z "${JAVA}"; then
+      AC_PATH_PROG(JAVA, "gij")
+    fi
+    if test -z "${JAVA}"; then
+      AC_PATH_PROG(JAVA, "cacao")
+    fi
+    if test -z "${JAVA}"; then
+      AC_MSG_ERROR("A 1.5-compatible Java VM is required.")
+    fi
+  fi
+  AC_SUBST(JAVA)
+])
+m4trace:acinclude.m4:250: -1- AC_DEFUN_ONCE([IT_CP_SUPPORTS_REFLINK], [
+  AC_CACHE_CHECK([if cp supports --reflink], it_cv_reflink, [
+    touch tmp.$$
+    if cp --reflink=auto tmp.$$ tmp2.$$ >&AS_MESSAGE_LOG_FD 2>&1; then
+      it_cv_reflink=yes;
+    else
+      it_cv_reflink=no;
+    fi
+    rm -f tmp.$$ tmp2.$$
+  ])
+  AM_CONDITIONAL([CP_SUPPORTS_REFLINK], test x"${it_cv_reflink}" = "xyes")
+])
+m4trace:acinclude.m4:264: -1- AC_DEFUN_ONCE([IT_WITH_OPENJDK_SRC_DIR], [
+  DEFAULT_SRC_DIR=${abs_top_builddir}/openjdk
+  AC_MSG_CHECKING([for an OpenJDK source directory])
+  AC_ARG_WITH([openjdk-src-dir],
+              [AS_HELP_STRING([--with-openjdk-src-dir=DIR],specify the location of the OpenJDK source tree)],
+  [
+    OPENJDK_SRC_DIR=${withval}
+    with_external_src_dir=true
+  ],
+  [ 
+    OPENJDK_SRC_DIR=${DEFAULT_SRC_DIR}
+    with_external_src_dir=false
+  ])
+  AC_MSG_RESULT(${OPENJDK_SRC_DIR})
+  AC_SUBST(OPENJDK_SRC_DIR)
+  if test "x${with_external_src_dir}" = "xtrue"; then
+    AC_MSG_CHECKING([if ${OPENJDK_SRC_DIR}/README exists])
+    if test -f ${OPENJDK_SRC_DIR}/README; then
+      openjdk_src_dir_valid=yes;
+    else
+      openjdk_src_dir_valid="no, resetting to ${DEFAULT_SRC_DIR}";
+      OPENJDK_SRC_DIR=${DEFAULT_SRC_DIR}
+      with_external_src_dir=false
+    fi
+    AC_MSG_RESULT(${openjdk_src_dir_valid})
+    if test "x${openjdk_src_dir_valid}" = "xyes"; then
+      AC_MSG_CHECKING([if we can hard link rather than copy the OpenJDK source directory])
+      if cp -l ${OPENJDK_SRC_DIR}/README tmp.$$ >&AS_MESSAGE_LOG_FD 2>&1; then
+        openjdk_src_dir_hardlinkable=yes;
+      else
+        openjdk_src_dir_hardlinkable=no;
+      fi
+      AC_MSG_RESULT(${openjdk_src_dir_hardlinkable})
+      rm -f tmp.$$
+    fi
+  fi
+  AM_CONDITIONAL(OPENJDK_SRC_DIR_FOUND, test "x${with_external_src_dir}" = "xtrue")
+  AM_CONDITIONAL(OPENJDK_SRC_DIR_HARDLINKABLE, test "x${openjdk_src_dir_hardlinkable}" = "xyes")
+])
+m4trace:acinclude.m4:305: -1- AC_DEFUN_ONCE([IT_CAN_HARDLINK_TO_SOURCE_TREE], [
+  AC_CACHE_CHECK([if we can hard link rather than copy from ${abs_top_srcdir}], it_cv_hardlink_src, [
+    if cp -l ${abs_top_srcdir}/README tmp.$$ >&AS_MESSAGE_LOG_FD 2>&1; then
+      it_cv_hardlink_src=yes;
+    else
+      it_cv_hardlink_src=no;
+    fi
+    rm -f tmp.$$
+  ])
+  AM_CONDITIONAL([SRC_DIR_HARDLINKABLE], test x"${it_cv_hardlink_src}" = "xyes")
+])
+m4trace:acinclude.m4:318: -1- AC_DEFUN([IT_FIND_ECJ_JAR], [
+  AC_MSG_CHECKING([for an ecj JAR file])
+  AC_ARG_WITH([ecj-jar],
+              [AS_HELP_STRING([--with-ecj-jar[[=PATH]]],specify location of an ECJ JAR file)],
+  [
+    if test -f "${withval}"; then
+      ECJ_JAR="${withval}"
+    fi
+  ],
+  [
+    ECJ_JAR=
+  ])
+  if test -z "${ECJ_JAR}"; then
+    for jar in /usr/share/java/eclipse-ecj.jar \
+      /usr/share/java/ecj.jar \
+      /usr/share/eclipse-ecj-3.{2,3,4,5}/lib/ecj.jar; do
+        if test -e $jar; then
+          ECJ_JAR=$jar
+	  break
+        fi
+      done
+      if test -z "${ECJ_JAR}"; then
+        ECJ_JAR=no
+      fi
+  fi
+  AC_MSG_RESULT(${ECJ_JAR})
+  if test "x${ECJ_JAR}" = "xno"; then
+    if test "x${JAVAC}" = "x"; then
+      AC_MSG_ERROR("No compiler or ecj JAR file was found.")
+    fi
+  fi
+  AC_SUBST(ECJ_JAR)
+])
+m4trace:acinclude.m4:353: -1- AC_DEFUN([IT_CHECK_GCC_VERSION], [
+  AC_MSG_CHECKING([version of GCC])
+  gcc_ver=`${CC} -dumpversion`
+  gcc_major_ver=`echo ${gcc_ver}|cut -d'.' -f1`
+  gcc_minor_ver=`echo ${gcc_ver}|cut -d'.' -f2`
+  AM_CONDITIONAL(GCC_OLD, test ! ${gcc_major_ver} -ge 4 -a ${gcc_minor_ver} -ge 3)
+  AC_MSG_RESULT([${gcc_ver} (major version ${gcc_major_ver}, minor version ${gcc_minor_ver})])
+])
+m4trace:acinclude.m4:363: -1- AC_DEFUN([IT_FIND_JAVAH], [
+  JAVAH_DEFAULT=${SYSTEM_JDK_DIR}/bin/javah
+  AC_MSG_CHECKING([if a javah executable is specified])
+  AC_ARG_WITH([javah],
+              [AS_HELP_STRING([--with-javah[[=PATH]]],specify location of javah)],
+  [
+    if test "x${withval}" = "xyes"; then
+      JAVAH=no
+    else
+      JAVAH="${withval}"
+    fi
+  ],
+  [
+    JAVAH=no
+  ])
+  AC_MSG_RESULT(${JAVAH})
+  if test "x${JAVAH}" == "xno"; then
+    JAVAH=${JAVAH_DEFAULT}
+  fi
+  AC_MSG_CHECKING([if $JAVAH is a valid executable file])
+  if test -x "${JAVAH}" && test -f "${JAVAH}"; then
+    AC_MSG_RESULT([yes])
+  else
+    AC_MSG_RESULT([no])
+    JAVAH=""
+    AC_PATH_PROG(JAVAH, "javah")
+    if test -z "${JAVAH}"; then
+      AC_PATH_PROG(JAVAH, "gjavah")
+    fi
+    if test -z "${JAVAH}"; then
+      AC_MSG_ERROR("A Java header generator was not found.")
+    fi
+  fi
+  AC_SUBST(JAVAH)
+])
+m4trace:acinclude.m4:400: -1- AC_DEFUN([IT_FIND_JAR], [
+  JAR_DEFAULT=${SYSTEM_JDK_DIR}/bin/jar
+  AC_MSG_CHECKING([if a jar executable is specified])
+  AC_ARG_WITH([jar],
+              [AS_HELP_STRING([--with-jar[[=PATH]]],specify location of jar)],
+  [
+    if test "x${withval}" = "xyes"; then
+      JAR=no
+    else
+      JAR="${withval}"
+     fi
+  ],
+  [
+    JAR=no
+  ])
+  AC_MSG_RESULT(${JAR})
+  if test "x${JAR}" == "xno"; then
+    JAR=${JAR_DEFAULT}
+  fi
+  AC_MSG_CHECKING([if $JAR is a valid executable file])
+  if test -x "${JAR}" && test -f "${JAR}"; then
+    AC_MSG_RESULT([yes])
+  else
+    AC_MSG_RESULT([no])
+    JAR=""
+    AC_PATH_PROG(JAR, "jar")
+    if test -z "${JAR}"; then
+      AC_PATH_PROG(JAR, "gjar")
+    fi
+    if test -z "${JAR}"; then
+      AC_MSG_ERROR("No Java archive tool was found.")
+    fi
+  fi
+  AC_MSG_CHECKING([whether jar supports @<file> argument])
+  touch _config.txt
+  cat >_config.list <<EOF
+_config.txt
+EOF
+  if $JAR cf _config.jar @_config.list >&AS_MESSAGE_LOG_FD 2>&1; then
+    JAR_KNOWS_ATFILE=1
+    AC_MSG_RESULT(yes)
+  else
+    JAR_KNOWS_ATFILE=
+    AC_MSG_RESULT(no)
+  fi
+  AC_MSG_CHECKING([whether jar supports stdin file arguments])
+  if cat _config.list | $JAR cf@ _config.jar >&AS_MESSAGE_LOG_FD 2>&1; then
+    JAR_ACCEPTS_STDIN_LIST=1
+    AC_MSG_RESULT(yes)
+  else
+    JAR_ACCEPTS_STDIN_LIST=
+    AC_MSG_RESULT(no)
+  fi
+  rm -f _config.list _config.jar
+  AC_MSG_CHECKING([whether jar supports -J options at the end])
+  if $JAR cf _config.jar _config.txt -J-Xmx896m >&AS_MESSAGE_LOG_FD 2>&1; then
+    JAR_KNOWS_J_OPTIONS=1
+    AC_MSG_RESULT(yes)
+  else
+    JAR_KNOWS_J_OPTIONS=
+    AC_MSG_RESULT(no)
+  fi
+  rm -f _config.txt _config.jar
+  AC_SUBST(JAR)
+  AC_SUBST(JAR_KNOWS_ATFILE)
+  AC_SUBST(JAR_ACCEPTS_STDIN_LIST)
+  AC_SUBST(JAR_KNOWS_J_OPTIONS)
+])
+m4trace:acinclude.m4:470: -1- AC_DEFUN([IT_FIND_RMIC], [
+  RMIC_DEFAULT=${SYSTEM_JDK_DIR}/bin/rmic
+  AC_MSG_CHECKING(if an rmic executable is specified)
+  AC_ARG_WITH([rmic],
+              [AS_HELP_STRING([--with-rmic[[=PATH]]],specify location of rmic)],
+  [
+    if test "x${withval}" = "xyes"; then
+      RMIC=no
+    else
+      RMIC="${withval}"
+    fi
+  ],
+  [
+    RMIC=no
+  ])
+  AC_MSG_RESULT(${RMIC})
+  if test "x${RMIC}" = "xno"; then
+    RMIC=${RMIC_DEFAULT}
+  fi
+  AC_MSG_CHECKING([if $RMIC is a valid executable file])
+  if test -x "${RMIC}" && test -f "${RMIC}"; then
+    AC_MSG_RESULT([yes])
+  else
+    AC_MSG_RESULT([no])
+    RMIC=""
+    AC_PATH_PROG(RMIC, "rmic")
+    if test -z "${RMIC}"; then
+      AC_PATH_PROG(RMIC, "grmic")
+    fi
+    if test -z "${RMIC}"; then
+      AC_MSG_ERROR("An RMI compiler was not found.")
+    fi
+  fi
+  AC_SUBST(RMIC)
+])
+m4trace:acinclude.m4:507: -1- AC_DEFUN([IT_FIND_NATIVE2ASCII], [
+  NATIVE2ASCII_DEFAULT=${SYSTEM_JDK_DIR}/bin/native2ascii
+  AC_MSG_CHECKING([if a native2ascii binary was specified])
+  AC_ARG_WITH([native2ascii],
+              [AS_HELP_STRING(--with-native2ascii,specify location of the native2ascii converter)],
+  [
+    if test "x${withval}" = "xyes"; then
+      NATIVE2ASCII=no
+    else
+      NATIVE2ASCII="${withval}"
+   fi
+  ],
+  [
+    NATIVE2ASCII=no
+  ])
+  AC_MSG_RESULT(${NATIVE2ASCII})
+  if test "x${NATIVE2ASCII}" = "xno"; then
+    NATIVE2ASCII=${NATIVE2ASCII_DEFAULT}
+  fi
+  AC_MSG_CHECKING([if $NATIVE2ASCII is a valid executable file])
+  if test -x "${NATIVE2ASCII}" && test -f "${NATIVE2ASCII}"; then
+    AC_MSG_RESULT([yes])
+  else
+    AC_MSG_RESULT([no])
+    NATIVE2ASCII=""
+    AC_PATH_PROG(NATIVE2ASCII, "native2ascii")
+    if test -z "${NATIVE2ASCII}"; then
+      AC_PATH_PROG(NATIVE2ASCII, "gnative2ascii")
+    fi
+    if test -z "${NATIVE2ASCII}"; then
+      AC_MSG_ERROR("A native2ascii converter was not found.")
+    fi
+  fi
+  AC_SUBST([NATIVE2ASCII])
+])
+m4trace:acinclude.m4:544: -1- AC_DEFUN([IT_WITH_OPENJDK_SRC_ZIP], [
+  AC_MSG_CHECKING([for an OpenJDK source zip])
+  AC_ARG_WITH([openjdk-src-zip],
+              [AS_HELP_STRING([--with-openjdk-src-zip[[=PATH]]],specify the location of the OpenJDK source zip)],
+  [
+    ALT_OPENJDK_SRC_ZIP=${withval}
+    if test "x${ALT_OPENJDK_SRC_ZIP}" = "xno"; then
+      ALT_OPENJDK_SRC_ZIP="not specified"
+    elif ! test -f ${ALT_OPENJDK_SRC_ZIP} ; then
+      AC_MSG_ERROR([Invalid OpenJDK source zip specified: ${ALT_OPENJDK_SRC_ZIP}])
+    fi
+  ],
+  [ 
+    ALT_OPENJDK_SRC_ZIP="not specified"
+  ])
+  AM_CONDITIONAL(USE_ALT_OPENJDK_SRC_ZIP, test "x${ALT_OPENJDK_SRC_ZIP}" != "xnot specified")
+  AC_MSG_RESULT(${ALT_OPENJDK_SRC_ZIP})
+  AC_SUBST(ALT_OPENJDK_SRC_ZIP)
+])
+m4trace:acinclude.m4:565: -1- AC_DEFUN([IT_WITH_ALT_JAR_BINARY], [
+  AC_MSG_CHECKING([for an alternate jar command])
+  AC_ARG_WITH([alt-jar],
+              [AS_HELP_STRING(--with-alt-jar=PATH, specify the location of an alternate jar binary to use for building)],
+  [
+    ALT_JAR_CMD=${withval}
+    AM_CONDITIONAL(USE_ALT_JAR, test x = x)
+  ],
+  [ 
+    ALT_JAR_CMD="not specified"
+    AM_CONDITIONAL(USE_ALT_JAR, test x != x)
+  ])
+  AC_MSG_RESULT(${ALT_JAR_CMD})
+  AC_SUBST(ALT_JAR_CMD)
+])
+m4trace:acinclude.m4:582: -1- AC_DEFUN([IT_FIND_RHINO_JAR], [
+  AC_MSG_CHECKING([whether to include Javascript support via Rhino])
+  AC_ARG_WITH([rhino],
+              [AS_HELP_STRING([--with-rhino[[=PATH]]],specify location of the rhino jar)],
+  [
+    case "${withval}" in
+      yes)
+	RHINO_JAR=yes
+        ;;
+      no)
+        RHINO_JAR=no
+        ;;
+      *)
+    	if test -f "${withval}"; then
+          RHINO_JAR="${withval}"
+        else
+	  AC_MSG_RESULT([not found])
+          AC_MSG_ERROR("The rhino jar ${withval} was not found.")
+        fi
+	;;
+     esac
+  ],
+  [
+    RHINO_JAR=yes
+  ])
+  if test x"${RHINO_JAR}" = "xyes"; then
+    if test -e "/usr/share/java/rhino.jar"; then
+      RHINO_JAR=/usr/share/java/rhino.jar
+    elif test -e "/usr/share/java/js.jar"; then
+      RHINO_JAR=/usr/share/java/js.jar
+    elif test -e "/usr/share/rhino-1.6/lib/js.jar"; then
+      RHINO_JAR=/usr/share/rhino-1.6/lib/js.jar
+    fi
+    if test x"${RHINO_JAR}" = "xyes"; then
+      AC_MSG_RESULT([not found])
+      AC_MSG_ERROR("A rhino jar was not found in /usr/share/java as either rhino.jar or js.jar.")
+    fi
+  fi
+  AC_MSG_RESULT(${RHINO_JAR})
+  AM_CONDITIONAL(WITH_RHINO, test x"${RHINO_JAR}" != "xno")
+dnl Clear RHINO_JAR if it doesn't contain a valid filename
+  if test x"${RHINO_JAR}" = "xno"; then
+    RHINO_JAR=
+  fi
+  AC_SUBST(RHINO_JAR)
+])
+m4trace:acinclude.m4:630: -1- AC_DEFUN([IT_DISABLE_OPTIMIZATIONS], [
+  AC_MSG_CHECKING([whether to disable optimizations and build with -O0 -g])
+  AC_ARG_ENABLE([optimizations],
+                [AS_HELP_STRING(--disable-optimizations,build with -O0 -g [[default=no]])],
+  [
+    case "${enableval}" in
+      no)
+        disable_optimizations=yes
+        ;;
+      *)
+        disable_optimizations=no
+        ;;
+    esac
+  ],
+  [
+    disable_optimizations=no
+  ])
+  AC_MSG_RESULT([$disable_optimizations])
+  AM_CONDITIONAL([DISABLE_OPTIMIZATIONS], test x"${disable_optimizations}" = "xyes")
+])
+m4trace:acinclude.m4:652: -1- AC_DEFUN([IT_FIND_TOOL], [AC_PATH_TOOL([$1],[$2])
+ if test x"$$1" = x ; then
+   AC_MSG_ERROR([$2 program not found in PATH])
+ fi
+ AC_SUBST([$1])
+])
+m4trace:acinclude.m4:660: -1- AC_DEFUN_ONCE([IT_ENABLE_ZERO_BUILD], [
+  AC_REQUIRE([IT_SET_ARCH_SETTINGS])
+  AC_REQUIRE([IT_ENABLE_CACAO])
+  AC_REQUIRE([IT_ENABLE_JAMVM])
+  AC_MSG_CHECKING([whether to use the zero-assembler port])
+  use_zero=no
+  AC_ARG_ENABLE([zero],
+                [AS_HELP_STRING(--enable-zero,
+                               use zero-assembler port on non-zero platforms)],
+  [
+    case "${enableval}" in
+      no)
+        use_zero=no
+        ;;
+      *)
+        use_zero=yes
+        ;;
+    esac
+  ],
+  [
+    if test "x${use_shark}" = "xyes"; then
+      use_zero=yes;
+    else
+      case "${host}" in
+        i?86-*-*) ;;
+        sparc*-*-*) ;;
+        x86_64-*-*) ;;
+        *)
+          if test "x${ENABLE_CACAO}" != xno || \
+	     test "x${ENABLE_JAMVM}" = xyes; then
+            use_zero=no
+          else
+            use_zero=yes
+          fi
+          ;;
+      esac
+    fi
+  ])
+  AC_MSG_RESULT($use_zero)
+  AM_CONDITIONAL(ZERO_BUILD, test "x${use_zero}" = xyes)
+
+  ZERO_LIBARCH="${INSTALL_ARCH_DIR}"
+  dnl can't use AC_CHECK_SIZEOF on multilib
+  case "${ZERO_LIBARCH}" in
+    arm|i386|ppc|s390|sh|sparc)
+      ZERO_BITSPERWORD=32
+      ;;
+    aarch64|alpha|amd64|ia64|ppc64|s390x|sparcv9)
+      ZERO_BITSPERWORD=64
+      ;;
+    *)
+      AC_CHECK_SIZEOF(void *)
+      ZERO_BITSPERWORD=`expr "${ac_cv_sizeof_void_p}" "*" 8`
+  esac
+  AC_C_BIGENDIAN([ZERO_ENDIANNESS="big"], [ZERO_ENDIANNESS="little"])
+  case "${ZERO_LIBARCH}" in
+    i386)
+      ZERO_ARCHDEF="IA32"
+      ;;
+    ppc*)
+      ZERO_ARCHDEF="PPC"
+      ;;
+    s390*)
+      ZERO_ARCHDEF="S390"
+      ;;
+    sparc*)
+      ZERO_ARCHDEF="SPARC"
+      ;;
+    *)
+      ZERO_ARCHDEF=`echo ${ZERO_LIBARCH} | tr a-z A-Z`
+  esac
+  AC_SUBST(ZERO_LIBARCH)
+  AC_SUBST(ZERO_BITSPERWORD)
+  AC_SUBST(ZERO_ENDIANNESS)
+  AC_SUBST(ZERO_ARCHDEF)
+])
+m4trace:acinclude.m4:738: -1- AC_DEFUN([IT_SET_SHARK_BUILD], [
+  AC_MSG_CHECKING(whether to use the Shark JIT)
+  shark_selected=no
+  AC_ARG_ENABLE([shark], [AS_HELP_STRING(--enable-shark, use Shark JIT)],
+  [
+    case "${enableval}" in
+      no)
+        ;;
+      *)
+        shark_selected=yes
+        ;;
+    esac
+  ])
+
+  use_shark=no
+  if test "x${shark_selected}" = "xyes"; then
+      use_shark=yes
+  fi
+  AC_MSG_RESULT($use_shark)
+
+  AM_CONDITIONAL(SHARK_BUILD, test "x${use_shark}" = xyes)
+])
+m4trace:acinclude.m4:762: -1- AC_DEFUN([IT_ENABLE_CACAO], [
+  AC_MSG_CHECKING(whether to use CACAO as VM)
+  AC_ARG_ENABLE([cacao],
+	      [AS_HELP_STRING(--enable-cacao,use CACAO as VM [[default=no]])],
+  [
+    ENABLE_CACAO="${enableval}"
+  ],
+  [
+    ENABLE_CACAO=no
+  ])
+
+  AC_MSG_RESULT(${ENABLE_CACAO})
+  AM_CONDITIONAL(ENABLE_CACAO, test x"${ENABLE_CACAO}" = "xyes")
+  AC_SUBST(ENABLE_CACAO)
+])
+m4trace:acinclude.m4:779: -1- AC_DEFUN([IT_WITH_CACAO_HOME], [
+  AC_MSG_CHECKING([for a CACAO home directory])
+  AC_ARG_WITH([cacao-home],
+              [AS_HELP_STRING([--with-cacao-home[[=PATH]]],
+                              [CACAO home directory [[PATH=/usr/local/cacao]]])],
+              [
+                case "${withval}" in
+                yes)
+                  CACAO_IMPORT_PATH=/usr/local/cacao
+                  ;;
+                *)
+                  CACAO_IMPORT_PATH=${withval}
+                  ;;
+                esac
+                AM_CONDITIONAL(USE_SYSTEM_CACAO, true)
+              ],
+              [
+                CACAO_IMPORT_PATH="\$(abs_top_builddir)/cacao/install"
+                AM_CONDITIONAL(USE_SYSTEM_CACAO, false)
+              ])
+  AC_MSG_RESULT(${CACAO_IMPORT_PATH})
+  AC_SUBST(CACAO_IMPORT_PATH)
+])
+m4trace:acinclude.m4:804: -1- AC_DEFUN([IT_WITH_CACAO_SRC_ZIP], [
+  AC_MSG_CHECKING([for a CACAO source zip])
+  AC_ARG_WITH([cacao-src-zip],
+              [AS_HELP_STRING(--with-cacao-src-zip=PATH,specify the location of the CACAO source zip)],
+  [
+    ALT_CACAO_SRC_ZIP=${withval}
+    if test "x${ALT_CACAO_SRC_ZIP}" = "xno"; then
+      ALT_CACAO_SRC_ZIP="not specified"
+    elif ! test -f ${ALT_CACAO_SRC_ZIP} ; then
+      AC_MSG_ERROR([Invalid CACAO source zip specified: ${ALT_CACAO_SRC_ZIP}])
+    fi
+  ],
+  [ 
+    ALT_CACAO_SRC_ZIP="not specified"
+  ])
+  AM_CONDITIONAL(USE_ALT_CACAO_SRC_ZIP, test "x${ALT_CACAO_SRC_ZIP}" != "xnot specified")
+  AC_MSG_RESULT(${ALT_CACAO_SRC_ZIP})
+  AC_SUBST(ALT_CACAO_SRC_ZIP)
+])
+m4trace:acinclude.m4:825: -1- AC_DEFUN([IT_WITH_CACAO_SRC_DIR], [
+  AC_MSG_CHECKING([for a CACAO source directory])
+  AC_ARG_WITH([cacao-src-dir],
+              [AS_HELP_STRING(--with-cacao-src-dir,specify the location of the Cacao sources)],
+  [
+    ALT_CACAO_SRC_DIR=${withval}
+    AM_CONDITIONAL(USE_ALT_CACAO_SRC_DIR, test x = x)
+  ],
+  [
+    ALT_CACAO_SRC_DIR="not specified"
+    AM_CONDITIONAL(USE_ALT_CACAO_SRC_DIR, test x != x)
+  ])
+  AC_MSG_RESULT(${ALT_CACAO_SRC_DIR})
+  AC_SUBST(ALT_CACAO_SRC_DIR)
+])
+m4trace:acinclude.m4:842: -1- AC_DEFUN([IT_ENABLE_HG], [
+  AC_REQUIRE([IT_WITH_PROJECT])
+  AC_MSG_CHECKING(whether to retrieve the source code from Mercurial)
+  AC_ARG_ENABLE([hg],
+                [AS_HELP_STRING(--enable-hg,download source code from Mercurial [[default=depends on project]])],
+  [
+    case "${enableval}" in
+      no)
+	enable_hg=no
+        ;;
+      *)
+        enable_hg=yes
+        ;;
+    esac
+  ],
+  [
+    case "${project}" in
+      icedtea)
+        enable_hg=no
+        ;;
+      *)
+        enable_hg=yes
+        ;;
+    esac
+  ])
+  AC_MSG_RESULT([${enable_hg}])
+  AM_CONDITIONAL([USE_HG], test x"${enable_hg}" = "xyes")
+])
+m4trace:acinclude.m4:872: -1- AC_DEFUN([IT_WITH_VERSION_SUFFIX], [
+  AC_MSG_CHECKING(if a version suffix has been specified)
+  AC_ARG_WITH([version-suffix],
+              [AS_HELP_STRING(--with-version-suffix=TEXT,appends the given text to the JDK version)],
+  [
+    case "${withval}" in
+      yes)
+	version_suffix=
+	AC_MSG_RESULT([no])
+        ;;
+      no)
+	version_suffix=
+	AC_MSG_RESULT([no])
+	;;
+      *)
+        version_suffix=${withval}
+	AC_MSG_RESULT([${version_suffix}])
+        ;;
+    esac
+  ],
+  [
+    version_suffix=
+    AC_MSG_RESULT([no])
+  ])
+  AC_SUBST(VERSION_SUFFIX, $version_suffix)
+])
+m4trace:acinclude.m4:900: -1- AC_DEFUN([IT_WITH_PROJECT], [
+  AC_MSG_CHECKING(which OpenJDK project is being used)
+  AC_ARG_WITH([project],
+              [AS_HELP_STRING(--with-project=PROJECT,choose the OpenJDK project to use: icedtea jdk7 closures cvmi caciocavallo bsd nio2 [[PROJECT=icedtea]])],
+  [
+    case "${withval}" in
+      yes)
+	project=icedtea
+        ;;
+      no)
+	AC_MSG_ERROR([argument passed to --with-project should be a supported OpenJDK project (see help)])
+	;;
+      *)
+        project=${withval}
+        ;;
+    esac
+  ],
+  [
+    project=icedtea
+  ])
+  AC_MSG_RESULT([${project}])
+  AC_SUBST(PROJECT_NAME, $project)
+  AM_CONDITIONAL([USE_CLOSURES], test x"${project}" = "xclosures")
+  AM_CONDITIONAL([USE_CVMI], test x"${project}" = "xcvmi")
+  AM_CONDITIONAL([USE_CACIOCAVALLO], test x"${project}" = "xcaciocavallo")
+  AM_CONDITIONAL([USE_BSD], test x"${project}" = "xbsd")
+  AM_CONDITIONAL([USE_NIO2], test x"${project}" = "xnio2")
+  AM_CONDITIONAL([USE_JDK7], test x"${project}" = "xjdk7")
+])
+m4trace:acinclude.m4:931: -1- AC_DEFUN([IT_WITH_GCJ], [
+  AC_MSG_CHECKING([whether to compile ecj natively])
+  AC_ARG_WITH([gcj],
+	      [AS_HELP_STRING([--with-gcj[[=PATH]]],location of gcj for natively compiling ecj)],
+  [
+    GCJ="${withval}"
+  ],
+  [ 
+    GCJ="no"
+  ])
+  AC_MSG_RESULT([${GCJ}])
+  if test "x${GCJ}" = xyes; then
+    AC_PATH_TOOL([GCJ],[gcj])
+  fi
+  AM_CONDITIONAL([BUILD_NATIVE_ECJ], test x"${GCJ}" != xno)
+  AC_SUBST([GCJ])
+])
+m4trace:acinclude.m4:950: -1- AC_DEFUN_ONCE([IT_WITH_HOTSPOT_BUILD], [
+  AC_REQUIRE([IT_ENABLE_ZERO_BUILD])
+  DEFAULT_BUILD="default"
+  AC_MSG_CHECKING([which HotSpot build to use])
+  AC_ARG_WITH([hotspot-build],
+	      [AS_HELP_STRING(--with-hotspot-build=BUILD,the HotSpot build to use [[BUILD=default]])],
+  [
+    HSBUILD="${withval}"
+  ],
+  [ 
+    HSBUILD="${DEFAULT_BUILD}"
+  ])
+  if test "x${HSBUILD}" = xyes; then
+	HSBUILD="${DEFAULT_BUILD}"
+  elif test "x${HSBUILD}" = xno; then
+	HSBUILD="default"
+  fi
+  AC_MSG_RESULT([${HSBUILD}])
+  AC_SUBST([HSBUILD])
+  AM_CONDITIONAL(WITH_ALT_HSBUILD, test "x${HSBUILD}" != "xdefault")
+])
+m4trace:acinclude.m4:973: -1- AC_DEFUN([IT_WITH_HOTSPOT_SRC_ZIP], [
+  AC_MSG_CHECKING([for a HotSpot source zip])
+  AC_ARG_WITH([hotspot-src-zip],
+              [AS_HELP_STRING(--with-hotspot-src-zip=PATH,specify the location of the HotSpot source zip)],
+  [
+    ALT_HOTSPOT_SRC_ZIP=${withval}
+    if test "x${ALT_HOTSPOT_SRC_ZIP}" = "xno"; then
+      ALT_HOTSPOT_SRC_ZIP="not specified"
+    elif ! test -f ${ALT_HOTSPOT_SRC_ZIP} ; then
+      AC_MSG_ERROR([Invalid HotSpot source zip specified: ${ALT_HOTSPOT_SRC_ZIP}])
+    fi
+  ],
+  [ 
+    ALT_HOTSPOT_SRC_ZIP="not specified"
+  ])
+  AM_CONDITIONAL(USE_ALT_HOTSPOT_SRC_ZIP, test "x${ALT_HOTSPOT_SRC_ZIP}" != "xnot specified")
+  AC_MSG_RESULT(${ALT_HOTSPOT_SRC_ZIP})
+  AC_SUBST(ALT_HOTSPOT_SRC_ZIP)
+])
+m4trace:acinclude.m4:994: -1- AC_DEFUN([IT_WITH_CORBA_SRC_ZIP], [
+  AC_MSG_CHECKING([for a CORBA source zip])
+  AC_ARG_WITH([corba-src-zip],
+              [AS_HELP_STRING(--with-corba-src-zip=PATH,specify the location of the CORBA source zip)],
+  [
+    ALT_CORBA_SRC_ZIP=${withval}
+    if test "x${ALT_CORBA_SRC_ZIP}" = "xno"; then
+      ALT_CORBA_SRC_ZIP="not specified"
+    elif ! test -f ${ALT_CORBA_SRC_ZIP} ; then
+      AC_MSG_ERROR([Invalid CORBA source zip specified: ${ALT_CORBA_SRC_ZIP}])
+    fi
+  ],
+  [ 
+    ALT_CORBA_SRC_ZIP="not specified"
+  ])
+  AM_CONDITIONAL(USE_ALT_CORBA_SRC_ZIP, test "x${ALT_CORBA_SRC_ZIP}" != "xnot specified")
+  AC_MSG_RESULT(${ALT_CORBA_SRC_ZIP})
+  AC_SUBST(ALT_CORBA_SRC_ZIP)
+])
+m4trace:acinclude.m4:1015: -1- AC_DEFUN([IT_WITH_JAXP_SRC_ZIP], [
+  AC_MSG_CHECKING([for a JAXP source zip])
+  AC_ARG_WITH([jaxp-src-zip],
+              [AS_HELP_STRING(--with-jaxp-src-zip=PATH,specify the location of the JAXP source zip)],
+  [
+    ALT_JAXP_SRC_ZIP=${withval}
+    if test "x${ALT_JAXP_SRC_ZIP}" = "xno"; then
+      ALT_JAXP_SRC_ZIP="not specified"
+    elif ! test -f ${ALT_JAXP_SRC_ZIP} ; then
+      AC_MSG_ERROR([Invalid JAXP source zip specified: ${ALT_JAXP_SRC_ZIP}])
+    fi
+  ],
+  [ 
+    ALT_JAXP_SRC_ZIP="not specified"
+  ])
+  AM_CONDITIONAL(USE_ALT_JAXP_SRC_ZIP, test "x${ALT_JAXP_SRC_ZIP}" != "xnot specified")
+  AC_MSG_RESULT(${ALT_JAXP_SRC_ZIP})
+  AC_SUBST(ALT_JAXP_SRC_ZIP)
+])
+m4trace:acinclude.m4:1036: -1- AC_DEFUN([IT_WITH_JAXWS_SRC_ZIP], [
+  AC_MSG_CHECKING([for a JAXWS source zip])
+  AC_ARG_WITH([jaxws-src-zip],
+              [AS_HELP_STRING(--with-jaxws-src-zip=PATH,specify the location of the JAXWS source zip)],
+  [
+    ALT_JAXWS_SRC_ZIP=${withval}
+    if test "x${ALT_JAXWS_SRC_ZIP}" = "xno"; then
+      ALT_JAXWS_SRC_ZIP="not specified"
+    elif ! test -f ${ALT_JAXWS_SRC_ZIP} ; then
+      AC_MSG_ERROR([Invalid JAXWS source zip specified: ${ALT_JAXWS_SRC_ZIP}])
+    fi
+  ],
+  [ 
+    ALT_JAXWS_SRC_ZIP="not specified"
+  ])
+  AM_CONDITIONAL(USE_ALT_JAXWS_SRC_ZIP, test "x${ALT_JAXWS_SRC_ZIP}" != "xnot specified")
+  AC_MSG_RESULT(${ALT_JAXWS_SRC_ZIP})
+  AC_SUBST(ALT_JAXWS_SRC_ZIP)
+])
+m4trace:acinclude.m4:1057: -1- AC_DEFUN([IT_WITH_JDK_SRC_ZIP], [
+  AC_MSG_CHECKING([for a JDK source zip])
+  AC_ARG_WITH([jdk-src-zip],
+              [AS_HELP_STRING(--with-jdk-src-zip=PATH,specify the location of the JDK source zip)],
+  [
+    ALT_JDK_SRC_ZIP=${withval}
+    if test "x${ALT_JDK_SRC_ZIP}" = "xno"; then
+      ALT_JDK_SRC_ZIP="not specified"
+    elif ! test -f ${ALT_JDK_SRC_ZIP} ; then
+      AC_MSG_ERROR([Invalid JDK source zip specified: ${ALT_JDK_SRC_ZIP}])
+    fi
+  ],
+  [ 
+    ALT_JDK_SRC_ZIP="not specified"
+  ])
+  AM_CONDITIONAL(USE_ALT_JDK_SRC_ZIP, test "x${ALT_JDK_SRC_ZIP}" != "xnot specified")
+  AC_MSG_RESULT(${ALT_JDK_SRC_ZIP})
+  AC_SUBST(ALT_JDK_SRC_ZIP)
+])
+m4trace:acinclude.m4:1078: -1- AC_DEFUN([IT_WITH_LANGTOOLS_SRC_ZIP], [
+  AC_MSG_CHECKING([for a langtools source zip])
+  AC_ARG_WITH([langtools-src-zip],
+              [AS_HELP_STRING(--with-langtools-src-zip=PATH,specify the location of the langtools source zip)],
+  [
+    ALT_LANGTOOLS_SRC_ZIP=${withval}
+    if test "x${ALT_LANGTOOLS_SRC_ZIP}" = "xno"; then
+      ALT_LANGTOOLS_SRC_ZIP="not specified"
+    elif ! test -f ${ALT_LANGTOOLS_SRC_ZIP} ; then
+      AC_MSG_ERROR([Invalid langtools source zip specified: ${ALT_LANGTOOLS_SRC_ZIP}])
+    fi
+  ],
+  [ 
+    ALT_LANGTOOLS_SRC_ZIP="not specified"
+  ])
+  AM_CONDITIONAL(USE_ALT_LANGTOOLS_SRC_ZIP, test "x${ALT_LANGTOOLS_SRC_ZIP}" != "xnot specified")
+  AC_MSG_RESULT(${ALT_LANGTOOLS_SRC_ZIP})
+  AC_SUBST(ALT_LANGTOOLS_SRC_ZIP)
+])
+m4trace:acinclude.m4:1099: -1- AC_DEFUN([IT_WITH_HG_REVISION], [
+  AC_MSG_CHECKING([which Mercurial revision to use])
+  AC_ARG_WITH([hg-revision],
+	      [AS_HELP_STRING(--with-hg-revision=REV,the Mercurial revision to use [[REV=tip]])],
+  [
+    HGREV="${withval}"
+    AC_MSG_RESULT([${HGREV}])
+  ],
+  [ 
+    HGREV=""
+    AC_MSG_RESULT([tip])
+  ])
+  AC_SUBST([HGREV])
+  AM_CONDITIONAL(WITH_HGREV, test "x${HGREV}" != "x")
+])
+m4trace:acinclude.m4:1116: -1- AC_DEFUN([IT_CHECK_IF_BOOTSTRAPPING], [
+  AC_MSG_CHECKING([whether to build a bootstrap version first])
+  AC_ARG_ENABLE([bootstrap],
+                [AS_HELP_STRING(--disable-bootstrap, don't build a bootstrap version [[default=no]])],
+  [
+    case "${enableval}" in
+      no)
+	enable_bootstrap=no
+        ;;
+      *)
+        enable_bootstrap=yes
+        ;;
+    esac
+  ],
+  [
+        enable_bootstrap=yes
+  ])
+  AC_MSG_RESULT([${enable_bootstrap}])
+  AM_CONDITIONAL([BOOTSTRAPPING], test x"${enable_bootstrap}" = "xyes")
+])
+m4trace:acinclude.m4:1138: -1- AC_DEFUN([IT_CHECK_FOR_JDK], [
+  AC_MSG_CHECKING([for a JDK home directory])
+  AC_ARG_WITH([jdk-home],
+	      [AS_HELP_STRING([--with-jdk-home[[=PATH]]],
+                              [jdk home directory (default is first predefined JDK found)])],
+              [
+                if test "x${withval}" = xyes
+                then
+                  SYSTEM_JDK_DIR=
+                elif test "x${withval}" = xno
+                then
+	          SYSTEM_JDK_DIR=
+	        else
+                  SYSTEM_JDK_DIR=${withval}
+                fi
+              ],
+              [
+	        SYSTEM_JDK_DIR=
+              ])
+  if test -z "${SYSTEM_JDK_DIR}"; then
+    AC_MSG_RESULT([not specified])
+    if test "x${enable_bootstrap}" = "xyes"; then
+      BOOTSTRAP_VMS="/usr/lib/jvm/java-gcj /usr/lib/jvm/gcj-jdk /usr/lib/jvm/cacao";
+    fi
+    ICEDTEA6_VMS="/usr/lib/jvm/icedtea-6 /usr/lib/jvm/icedtea6 /usr/lib/jvm/java-6-openjdk
+    		  /usr/lib/jvm/java-1.6.0-openjdk.x86_64 /usr/lib64/jvm/java-1.6.0-openjdk
+		  /usr/lib/jvm/java-1.6.0"
+    ICEDTEA7_VMS="/usr/lib/jvm/icedtea-7 /usr/lib/jvm/icedtea7 /usr/lib/jvm/java-1.7.0-openjdk
+    		  /usr/lib/jvm/java-1.7.0-openjdk.x86_64 /usr/lib64/jvm/java-1.7.0-openjdk
+		  /usr/lib/jvm/java-1.7.0"
+    for dir in ${BOOTSTRAP_VMS} ${ICEDTEA7_VMS} ${ICEDTEA6_VMS} \
+    	       /usr/lib/jvm/java-openjdk /usr/lib/jvm/openjdk /usr/lib/jvm/java-icedtea \
+	       /etc/alternatives/java_sdk_openjdk ; do
+       AC_MSG_CHECKING([for ${dir}]);
+       if test -d $dir; then
+         SYSTEM_JDK_DIR=$dir ;
+	 AC_MSG_RESULT([found]) ;
+	 break ;
+       else
+         AC_MSG_RESULT([not found]) ;
+       fi
+    done
+  else
+    AC_MSG_RESULT(${SYSTEM_JDK_DIR})
+  fi
+  if ! test -d "${SYSTEM_JDK_DIR}"; then
+    AC_MSG_ERROR("A JDK JDK home directory could not be found.")
+  fi
+  AC_SUBST(SYSTEM_JDK_DIR)
+])
+m4trace:acinclude.m4:1190: -1- AC_DEFUN([IT_JAVAH], [
+AC_REQUIRE([IT_CHECK_JAVA_AND_JAVAC_WORK])
+AC_CACHE_CHECK([if $JAVAH exhibits Classpath bug 39408], it_cv_cp39408_javah, [
+SUPERCLASS=Test.java
+SUBCLASS=TestImpl.java
+SUB=$(echo $SUBCLASS|sed 's#\.java##')
+SUBHEADER=$(echo $SUBCLASS|sed 's#\.java#.h#')
+mkdir tmp.$$
+cd tmp.$$
+cat << \EOF > $SUPERCLASS
+/* [#]line __oline__ "configure" */
+public class Test 
+{
+  public static final int POTATO = 0;
+  public static final int CABBAGE = 1;
+}
+EOF
+cat << \EOF > $SUBCLASS
+/* [#]line __oline__ "configure" */
+public class TestImpl
+  extends Test
+{
+  public native void doStuff();
+}
+EOF
+if $JAVAC -cp . $JAVACFLAGS -source 5 -target 5 $SUBCLASS >&AS_MESSAGE_LOG_FD 2>&1; then
+  if $JAVAH -classpath . $SUB >&AS_MESSAGE_LOG_FD 2>&1; then
+    if cat $SUBHEADER | grep POTATO >&AS_MESSAGE_LOG_FD 2>&1; then
+      it_cv_cp39408_javah=no;
+    else
+      it_cv_cp39408_javah=yes;
+    fi
+  else
+    AC_MSG_ERROR([The Java header generator $JAVAH failed])
+    echo "configure: failed program was:" >&AC_FD_CC
+    cat $SUBCLASS >&AC_FD_CC
+  fi
+else
+  AC_MSG_ERROR([The Java compiler $JAVAC failed])
+  echo "configure: failed program was:" >&AC_FD_CC
+  cat $SUBCLASS >&AC_FD_CC
+fi
+])
+AC_CACHE_CHECK([if $JAVAH exhibits Classpath bug 40188], it_cv_cp40188_javah, [
+  if test -e $SUBHEADER ; then
+    if cat $SUBHEADER | grep TestImpl_POTATO >&AS_MESSAGE_LOG_FD 2>&1; then
+      it_cv_cp40188_javah=no;
+    else
+      it_cv_cp40188_javah=yes;
+    fi
+  fi
+])
+AC_CACHE_CHECK([if $JAVAH supports -X options], it_cv_javahx, [
+  if $JAVAH -Xbootclasspath:${SYSTEM_JDK_DIR}/jre/lib/rt.jar -classpath . $SUB >&AS_MESSAGE_LOG_FD 2>&1; then
+    it_cv_javahx=yes
+  else
+    it_cv_javahx=no
+  fi
+])
+rm -f $SUBCLASS $SUPERCLASS $SUBHEADER *.class
+AC_CACHE_CHECK([if $JAVAH exhibits Classpath bug 45526], it_cv_cp45526_javah, [
+SRC=Test.java
+CLASSFILE=$(echo $SRC|sed 's#\.java##')
+HEADER=$(echo $SRC|sed 's#\.java#.h#')
+cat << \EOF > $SRC
+/* [#]line __oline__ "configure" */
+public class Test 
+{
+    public native void doStuff();
+
+    public class Inner
+    {
+        public native int doMoreStuff(long ptr);
+    }
+}
+EOF
+if $JAVAC -cp . $JAVACFLAGS -source 5 -target 5 $SRC >&AS_MESSAGE_LOG_FD 2>&1; then
+  if $JAVAH -classpath . $CLASSFILE >&AS_MESSAGE_LOG_FD 2>&1; then
+    if test -e Test_Inner.h ; then
+      it_cv_cp45526_javah=no;
+    else
+      it_cv_cp45526_javah=yes;
+    fi
+  else
+    AC_MSG_ERROR([The Java header generator $JAVAH failed])
+    echo "configure: failed program was:" >&AC_FD_CC
+    cat $SUBCLASS >&AC_FD_CC
+  fi
+else
+  AC_MSG_ERROR([The Java compiler $JAVAC failed])
+  echo "configure: failed program was:" >&AC_FD_CC
+  cat $SUBCLASS >&AC_FD_CC
+fi
+])
+rm -f $SRC *.class *.h
+cd ..
+rmdir tmp.$$
+AM_CONDITIONAL([CP39408_JAVAH], test x"${it_cv_cp39408_javah}" = "xyes")
+AM_CONDITIONAL([CP40188_JAVAH], test x"${it_cv_cp40188_javah}" = "xyes")
+AM_CONDITIONAL([CP45526_JAVAH], test x"${it_cv_cp45526_javah}" = "xyes")
+AM_CONDITIONAL([JAVAH_SUPPORTS_X_OPTIONS], test x"${it_cv_javahx}" = "xyes")
+AC_PROVIDE([$0])dnl
+])
+m4trace:acinclude.m4:1294: -1- AC_DEFUN([IT_CHECK_ADDITIONAL_VMS], [
+AC_MSG_CHECKING([for additional virtual machines to build])
+AC_ARG_WITH(additional-vms,
+            AC_HELP_STRING([--with-additional-vms=VM-LIST],
+	    [build additional virtual machines. Valid value is a comma separated string with the backend names `cacao', `jamvm', `zero' and `shark'.]),
+[
+if test "x${withval}" != x ; then
+  with_additional_vms=${withval}
+  for vm in `echo ${with_additional_vms} | sed 's/,/ /g'`; do
+    case "x$vm" in
+      xcacao) add_vm_cacao=yes;;
+      xzero)  add_vm_zero=yes;;
+      xshark) add_vm_shark=yes;;
+      xjamvm) add_vm_jamvm=yes;;
+      *) AC_MSG_ERROR([proper usage is --with-additional-vms=vm1,vm2,...])
+    esac
+  done
+fi])
+
+if test "x${with_additional_vms}" = x; then
+   with_additional_vms="none";
+fi
+AC_MSG_RESULT($with_additional_vms)
+
+AM_CONDITIONAL(ADD_JAMVM_BUILD, test x$add_vm_jamvm != x)
+AM_CONDITIONAL(ADD_CACAO_BUILD, test x$add_vm_cacao != x)
+AM_CONDITIONAL(ADD_ZERO_BUILD,  test x$add_vm_zero  != x || test x$add_vm_shark != x)
+AM_CONDITIONAL(ADD_SHARK_BUILD, test x$add_vm_shark != x)
+AM_CONDITIONAL(BUILD_CACAO, test x$add_vm_cacao != x || test "x${ENABLE_CACAO}" = xyes)
+AM_CONDITIONAL(BUILD_JAMVM, test x$add_vm_jamvm != x || test "x${ENABLE_JAMVM}" = xyes)
+
+if test "x${ENABLE_JAMVM}" = xyes && test "x${ADD_JAMVM_BUILD_TRUE}" = x; then
+  AC_MSG_ERROR([additional vm is the default vm])
+fi
+if test "x${ENABLE_CACAO}" = xyes && test "x${ADD_CACAO_BUILD_TRUE}" = x; then
+  AC_MSG_ERROR([additional vm is the default vm])
+fi
+if test "x${ZERO_BUILD_TRUE}" = x && test "x${ADD_ZERO_BUILD_TRUE}" = x && test "x${ADD_SHARK_BUILD_TRUE}" != x; then
+  AC_MSG_ERROR([additional vm is the default vm])
+fi
+if test "x${SHARK_BUILD_TRUE}" = x && test "x${ADD_SHARK_BUILD_TRUE}" = x; then
+  AC_MSG_ERROR([additional vm is the default vm])
+fi
+if test "x${USE_SYSTEM_CACAO_TRUE}" = x; then
+  AC_MSG_ERROR([cannot build with system cacao as additional vm])
+fi
+if test "x${ADD_ZERO_BUILD_TRUE}" = x && test "x${abs_top_builddir}" = "x${abs_top_srcdir}"; then
+  AC_MSG_ERROR([build of additional zero/shark VM requires build with srcdir != builddir])
+fi
+])
+m4trace:acinclude.m4:1346: -1- AC_DEFUN([IT_LIBRARY_CHECK], [
+AC_CACHE_CHECK([if java.io.PrintStream is missing the 1.5 constructors (PR40616)], it_cv_cp40616, [
+CLASS=Test.java
+BYTECODE=$(echo $CLASS|sed 's#\.java##')
+mkdir tmp.$$
+cd tmp.$$
+cat << \EOF > $CLASS
+[/* [#]line __oline__ "configure" */
+import java.io.File;
+import java.io.PrintStream;
+
+public class Test 
+{
+  public static void main(String[] args)
+  throws Exception
+  {
+    PrintStream p = new PrintStream(new File("bluh"), "UTF-8");
+    p.close();
+  }
+}]
+EOF
+if $JAVAC -cp . $JAVACFLAGS -source 5 -target 5 $CLASS >&AS_MESSAGE_LOG_FD 2>&1 ; then
+  if $JAVA -classpath . $BYTECODE >&AS_MESSAGE_LOG_FD 2>&1 ; then
+    it_cv_cp40616=no;
+  else
+    it_cv_cp40616=yes;
+  fi
+else
+  it_cv_cp40616=yes;
+fi
+])
+rm -f $CLASS *.class bluh
+cd ..
+rmdir tmp.$$
+AM_CONDITIONAL([CP40616], test x"${it_cv_cp40616}" = "xyes")
+AC_PROVIDE([$0])dnl
+])
+m4trace:acinclude.m4:1384: -1- AC_DEFUN([IT_PR40630_CHECK], [
+if test "x${it_cv_JAVA_UTIL_SCANNER}" = "xno"; then
+  AC_CACHE_CHECK([if java.util.Scanner exhibits Classpath bug 40630], it_cv_cp40630, [
+  CLASS=Test.java
+  BYTECODE=$(echo $CLASS|sed 's#\.java##')
+  mkdir tmp.$$
+  cd tmp.$$
+  cat << \EOF > $CLASS
+[/* [#]line __oline__ "configure" */
+import java.util.Scanner;
+
+public class Test 
+{
+  public static void main(String[] args)
+  throws Exception
+  {
+    Scanner s = new Scanner("Blah\nBlah\n\nBlah\n\n");
+    for (int i = 0; i < 5; ++i)
+      s.nextLine();
+    s.hasNextLine();
+  }
+}]
+EOF
+  if $JAVAC -cp . $JAVACFLAGS -source 5 -target 5 $CLASS >&AS_MESSAGE_LOG_FD 2>&1; then
+    if $JAVA -classpath . $BYTECODE >&AS_MESSAGE_LOG_FD 2>&1; then
+      it_cv_cp40630=no;
+    else
+      it_cv_cp40630=yes;
+    fi
+  else
+    it_cv_cp40630=yes;
+  fi
+  rm -f $CLASS *.class
+  cd ..
+  rmdir tmp.$$
+  ])
+fi
+AM_CONDITIONAL([CP40630], test x"${it_cv_cp40630}" = "xyes")
+AC_PROVIDE([$0])dnl
+])
+m4trace:acinclude.m4:1425: -1- AC_DEFUN([IT_USING_ECJ], [
+AC_CACHE_CHECK([if we are using ecj as javac], it_cv_ecj, [
+if $JAVAC -version 2>&1| grep '^Eclipse' >&AS_MESSAGE_LOG_FD ; then
+  it_cv_ecj=yes;
+else
+  it_cv_ecj=no;
+fi
+])
+USING_ECJ=$it_cv_ecj
+AC_SUBST(USING_ECJ)
+AC_PROVIDE([$0])dnl
+])
+m4trace:acinclude.m4:1438: -1- AC_DEFUN([IT_CHECK_ENABLE_WARNINGS], [
+  AC_MSG_CHECKING(whether to enable Java compiler warnings)
+  AC_ARG_ENABLE([warnings],
+	      [AS_HELP_STRING(--enable-warnings,produce warnings from javac/ecj [[default=no]])],
+  [
+    ENABLE_WARNINGS="${enableval}"
+  ],
+  [
+    ENABLE_WARNINGS=no
+  ])
+
+  AC_MSG_RESULT(${ENABLE_WARNINGS})
+  AM_CONDITIONAL(ENABLE_WARNINGS, test x"${ENABLE_WARNINGS}" = "xyes")
+  AC_SUBST(ENABLE_WARNINGS)
+])
+m4trace:acinclude.m4:1455: -1- AC_DEFUN([IT_WITH_TZDATA_DIR], [
+  DEFAULT="/usr/share/javazi"
+  AC_MSG_CHECKING([which Java timezone data directory to use])
+  AC_ARG_WITH([tzdata-dir],
+	      [AS_HELP_STRING([--with-tzdata-dir[[=DIR]]],set the Java timezone data directory [[DIR=/usr/share/javazi]])],
+  [
+    if test "x${withval}" = x || test "x${withval}" = xyes; then
+      TZDATA_DIR_SET=yes
+      TZDATA_DIR="${DEFAULT}"
+    else
+      if test "x${withval}" = xno; then
+        TZDATA_DIR_SET=no
+        AC_MSG_RESULT([no])
+      else
+        TZDATA_DIR_SET=yes
+        TZDATA_DIR="${withval}"
+      fi
+    fi
+  ],
+  [ 
+    TZDATA_DIR="${DEFAULT}"
+  ])
+  if test "x${TZDATA_DIR}" != "x"; then
+    AC_MSG_RESULT([${TZDATA_DIR}])
+  fi
+  AC_SUBST([TZDATA_DIR])
+  AM_CONDITIONAL(WITH_TZDATA_DIR, test "x${TZDATA_DIR}" != "x")
+  AC_CONFIG_FILES([tz.properties])
+])
+m4trace:acinclude.m4:1487: -1- AC_DEFUN_ONCE([IT_CHECK_JAVA_AND_JAVAC_WORK], [
+  AC_REQUIRE([IT_FIND_JAVA])
+  AC_REQUIRE([IT_FIND_COMPILER])
+  AC_CACHE_CHECK([if the VM and compiler work together], it_cv_jdk_works, [
+  CLASS=Test.java
+  BYTECODE=$(echo $CLASS|sed 's#\.java##')
+  mkdir tmp.$$
+  cd tmp.$$
+  cat << \EOF > $CLASS
+[/* [#]line __oline__ "configure" */
+
+public class Test
+{
+    public static void main(String[] args)
+    {
+      System.out.println("Hello World!");
+    }
+}]
+EOF
+  if $JAVAC -cp . $JAVACFLAGS -source 5 -target 5 $CLASS >&AS_MESSAGE_LOG_FD 2>&1; then
+    if $JAVA -classpath . $BYTECODE >&AS_MESSAGE_LOG_FD 2>&1; then
+      it_cv_jdk_works=yes;
+    else
+      it_cv_jdk_works=no;
+      AC_MSG_ERROR([VM failed to run compiled class.])
+    fi
+  else
+    it_cv_jdk_works=no;
+    AC_MSG_ERROR([Compiler failed to compile Java code.])
+  fi
+  rm -f $CLASS *.class
+  cd ..
+  rmdir tmp.$$
+  ])
+AC_PROVIDE([$0])dnl
+])
+m4trace:acinclude.m4:1530: -1- AC_DEFUN([IT_CHECK_FOR_CLASS], [
+AC_REQUIRE([IT_CHECK_JAVA_AND_JAVAC_WORK])
+AC_CACHE_CHECK([if $2 is missing], it_cv_$1, [
+CLASS=Test.java
+BYTECODE=$(echo $CLASS|sed 's#\.java##')
+mkdir tmp.$$
+cd tmp.$$
+cat << \EOF > $CLASS
+[/* [#]line __oline__ "configure" */
+public class Test
+{
+  public static void main(String[] args)
+  {
+    System.err.println("Class found: " + $2.class);
+  }
+}
+]
+EOF
+if $JAVAC -cp . $JAVACFLAGS -source 5 -target 5 -nowarn $CLASS >&AS_MESSAGE_LOG_FD 2>&1; then
+  if $JAVA -classpath . $BYTECODE >&AS_MESSAGE_LOG_FD 2>&1; then
+      it_cv_$1=no;
+  else
+      it_cv_$1=yes;
+  fi
+else
+  it_cv_$1=yes;
+fi
+])
+rm -f $CLASS *.class
+cd ..
+rmdir tmp.$$
+AM_CONDITIONAL([LACKS_$1], test x"${it_cv_$1}" = "xyes")
+AC_PROVIDE([$0])dnl
+])
+m4trace:acinclude.m4:1565: -1- AC_DEFUN([IT_FIND_NUMBER_OF_PROCESSORS], [
+  FIND_TOOL([GETCONF], [getconf])
+  AC_CACHE_CHECK([the number of online processors], it_cv_proc, [
+    if number=$($GETCONF _NPROCESSORS_ONLN); then
+      it_cv_proc=$number;
+    else
+      it_cv_proc=2;
+    fi
+  ])
+  AC_PROVIDE([$0])dnl
+])
+m4trace:acinclude.m4:1577: -1- AC_DEFUN_ONCE([IT_GETDTDTYPE_CHECK], [
+  AC_REQUIRE([IT_CHECK_JAVA_AND_JAVAC_WORK])
+  AC_CACHE_CHECK([if javax.xml.stream.events.Attribute.getDTDType() wrongly returns a QName], it_cv_dtdtype, [
+  CLASS=Test.java
+  BYTECODE=$(echo $CLASS|sed 's#\.java##')
+  mkdir tmp.$$
+  cd tmp.$$
+  cat << \EOF > $CLASS
+[/* [#]line __oline__ "configure" */
+import javax.xml.namespace.QName;
+import javax.xml.stream.Location;
+import javax.xml.stream.events.Attribute;
+import javax.xml.stream.events.Characters;
+import javax.xml.stream.events.EndElement;
+import javax.xml.stream.events.StartElement;
+
+import java.lang.reflect.Method;
+
+public class Test
+    implements Attribute
+{
+    // This method will not qualify if using an
+    // old version of Classpath where it returns
+    // a QName.
+    public String getDTDType() { return "Boom"; }
+
+    // Other Attribute methods
+    public QName getName() { return null; }
+    public String getValue() { return "Bang"; }
+    public boolean isSpecified() { return false; }
+
+    // XMLEvent methods
+    public Characters asCharacters() { return null; }
+    public EndElement asEndElement() { return null; }
+    public StartElement asStartElement() { return null; }
+    public int getEventType() { return 42; }
+    public Location getLocation() { return null; }
+    public QName getSchemaType() { return null; }
+    public boolean isAttribute() { return true; }
+    public boolean isCharacters() { return false; }
+    public boolean isEndDocument() { return false; }
+    public boolean isEndElement() { return false; }
+    public boolean isEntityReference() { return false; }
+    public boolean isNamespace() { return false; }
+    public boolean isProcessingInstruction() { return false; }
+    public boolean isStartDocument() { return false; }
+    public boolean isStartElement() { return false; }
+    public void writeAsEncodedUnicode(java.io.Writer w) {}
+
+    public static void main(String[] args)
+    {
+        for (Method m : Attribute.class.getMethods())
+            if (m.getName().equals("getDTDType"))
+                if (m.getReturnType().equals(QName.class))
+                    System.exit(1);
+    }
+}]
+EOF
+  if $JAVAC -cp . $JAVACFLAGS -source 5 -target 5 $CLASS >&AS_MESSAGE_LOG_FD 2>&1; then
+    if $JAVA -classpath . $BYTECODE >&AS_MESSAGE_LOG_FD 2>&1; then
+      it_cv_dtdtype=no;
+    else
+      it_cv_dtdtype=yes;
+    fi
+  else
+    it_cv_dtdtype=yes;
+  fi
+  rm -f $CLASS *.class
+  cd ..
+  rmdir tmp.$$
+  ])
+AM_CONDITIONAL([DTDTYPE_QNAME], test x"${it_cv_dtdtype}" = "xyes")
+AC_PROVIDE([$0])dnl
+])
+m4trace:acinclude.m4:1652: -1- AC_DEFUN_ONCE([IT_GET_PKGVERSION], [
+AC_MSG_CHECKING([for distribution package version])
+AC_ARG_WITH([pkgversion],
+        [AS_HELP_STRING([--with-pkgversion=PKG],
+                        [Use PKG in the version string in addition to "IcedTea"])],
+        [case "$withval" in
+          yes) AC_MSG_ERROR([package version not specified]) ;;
+          no)  PKGVERSION=none ;;
+          *)   PKGVERSION="$withval" ;;
+         esac],
+        [PKGVERSION=none])
+AC_MSG_RESULT([${PKGVERSION}])
+AM_CONDITIONAL(HAS_PKGVERSION, test "x${PKGVERSION}" != "xnone") 
+AC_SUBST(PKGVERSION)
+])
+m4trace:acinclude.m4:1669: -1- AC_DEFUN_ONCE([IT_GET_LSB_DATA], [
+AC_REQUIRE([IT_GET_PKGVERSION])
+AC_MSG_CHECKING([build identification])
+if test -n "$LSB_RELEASE"; then
+  lsb_info="$($LSB_RELEASE -ds | sed 's/^"//;s/"$//')"
+  if test "x$PKGVERSION" = "xnone"; then
+    DIST_ID="Built on $lsb_info ($(date))"
+  else
+    DIST_ID="$lsb_info, package $PKGVERSION"
+  fi
+  DIST_NAME="$($LSB_RELEASE -is | sed 's/^"//;s/"$//')"
+else
+  DIST_ID="Custom build ($(date))"
+  DIST_NAME="$build_os"
+fi
+AC_MSG_RESULT([${DIST_ID}])
+AC_SUBST(DIST_ID)
+AC_SUBST(DIST_NAME)
+])
+m4trace:acinclude.m4:1691: -1- AC_DEFUN_ONCE([IT_CHECK_FOR_MERCURIAL], [
+  AC_PATH_TOOL([HG],[hg])
+  AC_SUBST([HG])
+])
+m4trace:acinclude.m4:1697: -1- AC_DEFUN_ONCE([IT_OBTAIN_HG_REVISIONS], [
+  AC_REQUIRE([IT_CHECK_FOR_MERCURIAL])
+  AC_REQUIRE([IT_WITH_OPENJDK_SRC_DIR])
+  ICEDTEA_REVISION="none";
+  JDK_REVISION="none";
+  HOTSPOT_REVISION="none";
+  if which ${HG} >&AS_MESSAGE_LOG_FD 2>&1; then
+    AC_MSG_CHECKING([for IcedTea Mercurial revision ID])
+    if test -e ${abs_top_srcdir}/.hg ; then 
+      ICEDTEA_REVISION="r`(cd ${abs_top_srcdir}; ${HG} id -i)`" ; 
+    fi ;
+    AC_MSG_RESULT([${ICEDTEA_REVISION}])
+    AC_SUBST([ICEDTEA_REVISION])
+    AC_MSG_CHECKING([for JDK Mercurial revision ID])
+    if test -e ${OPENJDK_SRC_DIR}/jdk/.hg ; then
+      JDK_REVISION="r`(cd ${OPENJDK_SRC_DIR}/jdk; ${HG} id -i)`" ;
+    fi ;
+    AC_MSG_RESULT([${JDK_REVISION}])
+    AC_SUBST([JDK_REVISION])
+    AC_MSG_CHECKING([for HotSpot Mercurial revision ID])
+    if test -e ${OPENJDK_SRC_DIR}/hotspot/.hg ; then \
+      HOTSPOT_REVISION="r`(cd ${OPENJDK_SRC_DIR}/hotspot; ${HG} id -i)`" ;
+    fi ; 
+    AC_MSG_RESULT([${HOTSPOT_REVISION}])
+    AC_SUBST([HOTSPOT_REVISION])
+  fi;
+  AM_CONDITIONAL([HAS_ICEDTEA_REVISION], test "x${ICEDTEA_REVISION}" != xnone)
+  AM_CONDITIONAL([HAS_JDK_REVISION], test "x${JDK_REVISION}" != xnone)
+  AM_CONDITIONAL([HAS_HOTSPOT_REVISION], test "x${HOTSPOT_REVISION}" != xnone)
+])
+m4trace:acinclude.m4:1729: -1- AC_DEFUN_ONCE([IT_OBTAIN_DEFAULT_LIBDIR], [
+dnl find the system library directory
+AC_CACHE_CHECK([for system library directory], [it_cv_default_libdir],
+[
+if test "x$LDD" = x; then
+  it_cv_default_libdir=/usr/lib
+else
+  AC_LANG_CONFTEST([AC_LANG_PROGRAM([[]], [[]])])
+  $CC conftest.c
+  syslibdir=`$LDD a.out | sed -n '/libc\.so./s,.*=> */\(@<:@^/@:>@*\)/.*,\1,p'`
+  rm -f a.out
+  case x${syslibdir} in
+    xlib|xlib64|xlib32|xlibn32) NSS_LIBDIR=/usr/${syslibdir};;
+    *) it_cv_default_libdir=/usr/lib
+  esac
+fi
+])
+AC_SUBST([DEFAULT_LIBDIR], $it_cv_default_libdir)
+])
+m4trace:acinclude.m4:1750: -1- AC_DEFUN_ONCE([IT_LOCATE_NSS], [
+AC_REQUIRE([IT_OBTAIN_DEFAULT_LIBDIR])
+AC_MSG_CHECKING([whether to enable the NSS-based security provider])
+AC_ARG_ENABLE([nss],
+	      [AS_HELP_STRING([--enable-nss],
+	      		      [Enable inclusion of NSS security provider])],
+	      [ENABLE_NSS="${enableval}"], [ENABLE_NSS='no'])
+AM_CONDITIONAL([ENABLE_NSS], [test x$ENABLE_NSS = xyes])
+if test "x${ENABLE_NSS}" = "xyes"
+then
+  AC_MSG_RESULT([enabled by default (edit java.security to disable)])
+else
+  AC_MSG_RESULT([disabled by default (edit java.security to enable)])
+fi
+PKG_CHECK_MODULES(NSS, nss, [NSS_FOUND=yes], [NSS_FOUND=no])
+if test "x${NSS_FOUND}" = xno
+then
+  if test "x${ENABLE_NSS}" = "xyes"
+  then
+    AC_MSG_ERROR([Could not find NSS.  Either install it or configure using --disable-nss.])
+  else
+    AC_MSG_WARN([Could not find NSS; using $DEFAULT_LIBDIR as its location.])
+    NSS_LIBDIR=$DEFAULT_LIBDIR
+  fi
+else
+  NSS_LIBDIR=`$PKG_CONFIG --variable=libdir nss`
+fi
+AC_SUBST(NSS_LIBDIR)
+AC_CONFIG_FILES([nss.cfg])
+])
+m4trace:acinclude.m4:1782: -1- AC_DEFUN([IT_DIAMOND_CHECK], [
+  AC_CACHE_CHECK([if javac lacks support for the diamond operator], it_cv_diamond, [
+  CLASS=Test.java
+  BYTECODE=$(echo $CLASS|sed 's#\.java##')
+  mkdir tmp.$$
+  cd tmp.$$
+  cat << \EOF > $CLASS
+[/* [#]line __oline__ "configure" */
+import java.util.HashMap;
+import java.util.Map;
+
+public class Test
+{
+    public static void main(String[] args)
+    {
+      Map<String,String> m = new HashMap<>();
+    }
+}]
+EOF
+  if $JAVAC -cp . $JAVACFLAGS -source 7 -target 7 $CLASS >&AS_MESSAGE_LOG_FD 2>&1; then
+    it_cv_diamond=no;
+  else
+    it_cv_diamond=yes;
+  fi
+  rm -f $CLASS *.class
+  cd ..
+  rmdir tmp.$$
+  ])
+AM_CONDITIONAL([JAVAC_LACKS_DIAMOND], test x"${it_cv_diamond}" = "xyes")
+AC_PROVIDE([$0])dnl
+])
+m4trace:acinclude.m4:1815: -1- AC_DEFUN_ONCE([IT_FIND_NUMBER_OF_PROCESSORS], [
+  IT_FIND_TOOL([GETCONF], [getconf])
+  AC_CACHE_CHECK([the number of online processors], it_cv_proc, [
+    if number=$($GETCONF _NPROCESSORS_ONLN); then
+      it_cv_proc=$number;
+    else
+      it_cv_proc=2;
+    fi
+  ])
+  AC_PROVIDE([$0])dnl
+])
+m4trace:acinclude.m4:1831: -1- AC_DEFUN_ONCE([IT_CHECK_NUMBER_OF_PARALLEL_JOBS], [
+AC_REQUIRE([IT_FIND_NUMBER_OF_PROCESSORS])
+proc_default=$(($it_cv_proc + 1))
+AC_MSG_CHECKING([how many parallel build jobs to execute])
+AC_ARG_WITH([parallel-jobs],
+	[AS_HELP_STRING([--with-parallel-jobs[[=NUM]]],
+			[build IcedTea using the specified number of parallel jobs])],
+	[
+          if test "x${withval}" = xyes; then
+            PARALLEL_JOBS=${proc_default}
+	  elif test "x${withval}" = xno; then
+	    PARALLEL_JOBS=2
+          else
+            PARALLEL_JOBS=${withval}
+          fi
+        ],
+        [
+          PARALLEL_JOBS=2
+        ])
+AC_MSG_RESULT(${PARALLEL_JOBS})
+AC_SUBST(PARALLEL_JOBS)
+])
+m4trace:acinclude.m4:1855: -1- AC_DEFUN_ONCE([IT_DISABLE_TESTS], [
+  AC_MSG_CHECKING([whether to disable the execution of the JTReg tests])
+  AC_ARG_ENABLE([tests],
+                [AS_HELP_STRING(--disable-tests,do not run the JTReg tests via make check [[default=no]])],
+  [
+    case "${enableval}" in
+      no)
+        disable_tests=yes
+        ;;
+      *)
+        disable_tests=no
+        ;;
+    esac
+  ],
+  [
+    disable_tests=no
+  ])
+  AC_MSG_RESULT([$disable_tests])
+  AM_CONDITIONAL([DISABLE_TESTS], test x"${disable_tests}" = "xyes")
+])
+m4trace:acinclude.m4:1877: -1- AC_DEFUN_ONCE([IT_DISABLE_HOTSPOT_TESTS], [
+  AC_MSG_CHECKING([whether to disable the execution of the HotSpot JTReg tests])
+  AC_ARG_ENABLE([hotspot-tests],
+                [AS_HELP_STRING(--disable-hotspot-tests,do not run the HotSpot JTReg tests via make check-hotspot [[default=no]])],
+  [
+    case "${enableval}" in
+      no)
+        disable_hotspot_tests=yes
+        ;;
+      *)
+        disable_hotspot_tests=no
+        ;;
+    esac
+  ],
+  [
+    disable_hotspot_tests=no
+  ])
+  AC_MSG_RESULT([$disable_hotspot_tests])
+  AM_CONDITIONAL([DISABLE_HOTSPOT_TESTS], test x"${disable_hotspot_tests}" = "xyes")
+])
+m4trace:acinclude.m4:1899: -1- AC_DEFUN_ONCE([IT_DISABLE_LANGTOOLS_TESTS], [
+  AC_MSG_CHECKING([whether to disable the execution of the langtools JTReg tests])
+  AC_ARG_ENABLE([langtools-tests],
+                [AS_HELP_STRING(--disable-langtools-tests,do not run the langtools JTReg tests via make check-langtools [[default=no]])],
+  [
+    case "${enableval}" in
+      no)
+        disable_langtools_tests=yes
+        ;;
+      *)
+        disable_langtools_tests=no
+        ;;
+    esac
+  ],
+  [
+    disable_langtools_tests=no
+  ])
+  AC_MSG_RESULT([$disable_langtools_tests])
+  AM_CONDITIONAL([DISABLE_LANGTOOLS_TESTS], test x"${disable_langtools_tests}" = "xyes")
+])
+m4trace:acinclude.m4:1921: -1- AC_DEFUN_ONCE([IT_DISABLE_JDK_TESTS], [
+  AC_MSG_CHECKING([whether to disable the execution of the JDK JTReg tests])
+  AC_ARG_ENABLE([jdk-tests],
+                [AS_HELP_STRING(--disable-jdk-tests,do not run the JDK JTReg tests via make check-jdk [[default=no]])],
+  [
+    case "${enableval}" in
+      no)
+        disable_jdk_tests=yes
+        ;;
+      *)
+        disable_jdk_tests=no
+        ;;
+    esac
+  ],
+  [
+    disable_jdk_tests=no
+  ])
+  AC_MSG_RESULT([$disable_jdk_tests])
+  AM_CONDITIONAL([DISABLE_JDK_TESTS], test x"${disable_jdk_tests}" = "xyes")
+])
+m4trace:acinclude.m4:1943: -1- AC_DEFUN_ONCE([IT_CHECK_FOR_LCMS], [
+  AC_MSG_CHECKING([whether to use the system LCMS install])
+  AC_ARG_ENABLE([system-lcms],
+	      [AS_HELP_STRING(--enable-system-lcms,use the system LCMS [[default=yes]])],
+  [
+    ENABLE_SYSTEM_LCMS="${enableval}"
+  ],
+  [
+    ENABLE_SYSTEM_LCMS="yes"
+  ])
+  AC_MSG_RESULT(${ENABLE_SYSTEM_LCMS})
+  if test x"${ENABLE_SYSTEM_LCMS}" = "xyes"; then
+    dnl Check for LCMS2 headers and libraries.
+    PKG_CHECK_MODULES(LCMS2, lcms2 >= 2.5,[LCMS2_FOUND=yes],[LCMS2_FOUND=no])
+    if test "x${LCMS2_FOUND}" = xno
+    then
+      AC_MSG_ERROR([Could not find LCMS >= 2.5; install it or build with --disable-system-lcms to use the in-tree copy.])
+    fi
+    AC_SUBST(LCMS2_CFLAGS)
+    AC_SUBST(LCMS2_LIBS)
+  fi
+  AM_CONDITIONAL(USE_SYSTEM_LCMS, test x"${ENABLE_SYSTEM_LCMS}" = "xyes")
+  AC_SUBST(ENABLE_SYSTEM_LCMS)
+])
+m4trace:acinclude.m4:1969: -1- AC_DEFUN_ONCE([IT_CHECK_FOR_ZLIB], [
+  AC_MSG_CHECKING([whether to use the system zlib install])
+  AC_ARG_ENABLE([system-zlib],
+	      [AS_HELP_STRING(--enable-system-zlib,use the system ZLIB [[default=yes]])],
+  [
+    ENABLE_SYSTEM_ZLIB="${enableval}"
+  ],
+  [
+    ENABLE_SYSTEM_ZLIB="yes"
+  ])
+  AC_MSG_RESULT(${ENABLE_SYSTEM_ZLIB})
+  if test x"${ENABLE_SYSTEM_ZLIB}" = "xyes"; then
+    dnl Check for ZLIB headers and libraries.
+    PKG_CHECK_MODULES(ZLIB, zlib,[ZLIB_FOUND=yes],[ZLIB_FOUND=no])
+    if test "x${ZLIB_FOUND}" = xno
+    then
+      AC_MSG_ERROR([Could not find ZLIB; install ZLIB or build with --disable-system-zlib to use the in-tree copy.])
+    fi
+    AC_SUBST(ZLIB_CFLAGS)
+    AC_SUBST(ZLIB_LIBS)
+  fi
+  AM_CONDITIONAL(USE_SYSTEM_ZLIB, test x"${ENABLE_SYSTEM_ZLIB}" = "xyes")
+  AC_SUBST(ENABLE_SYSTEM_ZLIB)
+])
+m4trace:acinclude.m4:1995: -1- AC_DEFUN_ONCE([IT_CHECK_FOR_JPEG], [
+  AC_MSG_CHECKING([whether to use the system jpeg install])
+  AC_ARG_ENABLE([system-jpeg],
+	      [AS_HELP_STRING(--enable-system-jpeg,use the system libjpeg [[default=yes]])],
+  [
+    ENABLE_SYSTEM_JPEG="${enableval}"
+  ],
+  [
+    ENABLE_SYSTEM_JPEG="yes"
+  ])
+  AC_MSG_RESULT(${ENABLE_SYSTEM_JPEG})
+  if test x"${ENABLE_SYSTEM_JPEG}" = "xyes"; then
+    dnl Check for JPEG headers and libraries.
+    AC_CHECK_LIB([jpeg], [main],
+        , [AC_MSG_ERROR([Could not find JPEG library; install JPEG or build with --disable-system-jpeg to use the in-tree copy.])])
+    AC_CHECK_HEADER([jpeglib.h],
+        , [AC_MSG_ERROR([Could not find JPEG header; install JPEG or build with --disable-system-jpeg to use the in-tree copy.])])
+    JPEG_LIBS="-ljpeg"
+    AC_SUBST(JPEG_LIBS)
+  fi
+  AM_CONDITIONAL(USE_SYSTEM_JPEG, test x"${ENABLE_SYSTEM_JPEG}" = "xyes")
+  AC_SUBST(ENABLE_SYSTEM_JPEG)
+])
+m4trace:acinclude.m4:2020: -1- AC_DEFUN_ONCE([IT_CHECK_FOR_PNG], [
+  AC_MSG_CHECKING([whether to use the system libpng install])
+  AC_ARG_ENABLE([system-png],
+	      [AS_HELP_STRING(--enable-system-png,use the system PNG [[default=yes]])],
+  [
+    ENABLE_SYSTEM_PNG="${enableval}"
+  ],
+  [
+    ENABLE_SYSTEM_PNG="yes"
+  ])
+  AC_MSG_RESULT(${ENABLE_SYSTEM_PNG})
+  if test x"${ENABLE_SYSTEM_PNG}" = "xyes"; then
+    dnl Check for PNG headers and libraries.
+    PKG_CHECK_MODULES(PNG, libpng,[LIBPNG_FOUND=yes],[LIBPNG_FOUND=no])
+    if test "x${LIBPNG_FOUND}" = xno
+    then
+      AC_MSG_ERROR([Could not find libpng; install libpng or build with --disable-system-png to use the in-tree copy.])
+    fi
+    AC_SUBST(PNG_CFLAGS)
+    AC_SUBST(PNG_LIBS)
+  fi
+  AM_CONDITIONAL(USE_SYSTEM_PNG, test x"${ENABLE_SYSTEM_PNG}" = "xyes")
+  AC_SUBST(ENABLE_SYSTEM_PNG)
+])
+m4trace:acinclude.m4:2046: -1- AC_DEFUN_ONCE([IT_CHECK_FOR_GIF], [
+  AC_MSG_CHECKING([whether to use the system giflib install])
+  AC_ARG_ENABLE([system-gif],
+	      [AS_HELP_STRING(--enable-system-gif,use the system giflib [[default=yes]])],
+  [
+    ENABLE_SYSTEM_GIF="${enableval}"
+  ],
+  [
+    ENABLE_SYSTEM_GIF="yes"
+  ])
+  AC_MSG_RESULT(${ENABLE_SYSTEM_GIF})
+  if test x"${ENABLE_SYSTEM_GIF}" = "xyes"; then
+    dnl Check for GIF headers and libraries.
+    AC_CHECK_LIB([gif], [main],
+        , [AC_MSG_ERROR([Could not find GIF library; install GIF or build with --disable-system-gif to use the in-tree copy.])])
+    AC_CHECK_HEADER([gif_lib.h],
+        , [AC_MSG_ERROR([Could not find GIF header; install GIF or build with --disable-system-gif to use the in-tree copy.])])
+    GIF_LIBS="-lgif"
+    AC_SUBST(GIF_LIBS)
+  fi
+  AM_CONDITIONAL(USE_SYSTEM_GIF, test x"${ENABLE_SYSTEM_GIF}" = "xyes")
+  AC_SUBST(ENABLE_SYSTEM_GIF)
+])
+m4trace:acinclude.m4:2072: -1- AC_DEFUN_ONCE([IT_CHECK_FOR_KERBEROS], [
+  AC_MSG_CHECKING([whether to use the system Kerberos install])
+  AC_ARG_ENABLE([system-kerberos],
+	      [AS_HELP_STRING(--enable-system-kerberos,use the system kerberos [[default=yes]])],
+  [
+    ENABLE_SYSTEM_KERBEROS="${enableval}"
+  ],
+  [
+    ENABLE_SYSTEM_KERBEROS="yes"
+  ])
+  AC_MSG_RESULT(${ENABLE_SYSTEM_KERBEROS})
+  if test x"${ENABLE_SYSTEM_KERBEROS}" = "xyes"; then
+    dnl Check for krb5 header and library.
+    AC_CHECK_LIB([krb5], [krb5_cc_default],
+        , [AC_MSG_ERROR([Could not find Kerberos library; install Kerberos or build with --disable-system-kerberos to use the default cache location.])])
+    AC_CHECK_HEADER([krb5.h],
+        , [AC_MSG_ERROR([Could not find Kerberos header; install Kerberos or build with --disable-system-kerberos to use the default cache location.])])
+    KRB5_LIBS="-lkrb5"
+    AC_SUBST(KRB5_LIBS)
+  fi
+  AM_CONDITIONAL(USE_SYSTEM_KERBEROS, test x"${ENABLE_SYSTEM_KERBEROS}" = "xyes")
+  AC_SUBST(ENABLE_SYSTEM_KERBEROS)
+])
+m4trace:acinclude.m4:2097: -1- AC_DEFUN_ONCE([IT_CHECK_FOR_GTK], [
+  AC_MSG_CHECKING([whether to use the system Gtk+ install])
+  AC_ARG_ENABLE([system-gtk],
+	      [AS_HELP_STRING(--enable-system-gtk,use the system Gtk+ [[default=yes]])],
+  [
+    ENABLE_SYSTEM_GTK="${enableval}"
+  ],
+  [
+    ENABLE_SYSTEM_GTK="yes"
+  ])
+  AC_MSG_RESULT(${ENABLE_SYSTEM_GTK})
+  if test x"${ENABLE_SYSTEM_GTK}" = "xyes"; then
+    dnl Check for Gtk+ headers and libraries.
+    PKG_CHECK_MODULES(GTK, gtk+-2.0 gthread-2.0,[GTK_FOUND=yes],[GTK_FOUND=no])
+    if test "x${GTK_FOUND}" = xno
+    then
+      AC_MSG_ERROR([Could not find Gtk+; install Gtk+ or build with --disable-system-gtk to use the in-tree headers.])
+    fi
+    AC_SUBST(GTK_CFLAGS)
+    AC_SUBST(GTK_LIBS)
+  fi
+  AM_CONDITIONAL(USE_SYSTEM_GTK, test x"${ENABLE_SYSTEM_GTK}" = "xyes")
+  AC_SUBST(ENABLE_SYSTEM_GTK)
+])
+m4trace:acinclude.m4:2123: -1- AC_DEFUN_ONCE([IT_CHECK_FOR_GIO], [
+  AC_MSG_CHECKING([whether to use the system GIO install])
+  AC_ARG_ENABLE([system-gio],
+	      [AS_HELP_STRING(--enable-system-gio,use the system GIO [[default=yes]])],
+  [
+    ENABLE_SYSTEM_GIO="${enableval}"
+  ],
+  [
+    ENABLE_SYSTEM_GIO="yes"
+  ])
+  AC_MSG_RESULT(${ENABLE_SYSTEM_GIO})
+  if test x"${ENABLE_SYSTEM_GIO}" = "xyes"; then
+    dnl Check for Gio+ headers and libraries.
+    PKG_CHECK_MODULES(GIO, gio-2.0 >= 2.26,[GIO_FOUND=yes],[GIO_FOUND=no])
+    if test "x${GIO_FOUND}" = xno
+    then
+      AC_MSG_ERROR([Could not find GIO >= 2.26; install GIO or build with --disable-system-gio to use the in-tree headers.])
+    fi
+    AC_SUBST(GIO_CFLAGS)
+    AC_SUBST(GIO_LIBS)
+  fi
+  AM_CONDITIONAL(USE_SYSTEM_GIO, test x"${ENABLE_SYSTEM_GIO}" = "xyes")
+  AC_SUBST(ENABLE_SYSTEM_GIO)
+])
+m4trace:acinclude.m4:2149: -1- AC_DEFUN_ONCE([IT_CHECK_FOR_FONTCONFIG], [
+  AC_MSG_CHECKING([whether to use the system fontconfig install])
+  AC_ARG_ENABLE([system-fontconfig],
+	      [AS_HELP_STRING(--enable-system-fontconfig,use the system fontconfig [[default=yes]])],
+  [
+    ENABLE_SYSTEM_FONTCONFIG="${enableval}"
+  ],
+  [
+    ENABLE_SYSTEM_FONTCONFIG="yes"
+  ])
+  AC_MSG_RESULT(${ENABLE_SYSTEM_FONTCONFIG})
+  if test x"${ENABLE_SYSTEM_FONTCONFIG}" = "xyes"; then
+    dnl Check for Fontconfig+ headers and libraries.
+    PKG_CHECK_MODULES(FONTCONFIG, fontconfig,[FONTCONFIG_FOUND=yes],[FONTCONFIG_FOUND=no])
+    if test "x${FONTCONFIG_FOUND}" = xno
+    then
+      AC_MSG_ERROR([Could not find fontconfig; install fontconfig or build with --disable-system-fontconfig to use the in-tree headers.])
+    fi
+    AC_SUBST(FONTCONFIG_CFLAGS)
+    AC_SUBST(FONTCONFIG_LIBS)
+  fi
+  AM_CONDITIONAL(USE_SYSTEM_FONTCONFIG, test x"${ENABLE_SYSTEM_FONTCONFIG}" = "xyes")
+  AC_SUBST(ENABLE_SYSTEM_FONTCONFIG)
+])
+m4trace:acinclude.m4:2175: -1- AC_DEFUN_ONCE([IT_CHECK_FOR_CUPS], [
+  dnl Check for CUPS headers and libraries.
+  AC_CHECK_LIB([cups], [cupsServer],
+      , [AC_MSG_ERROR([Could not find CUPS library; install CUPS.])])
+  AC_CHECK_HEADERS([cups/cups.h cups/ppd.h],
+      , [AC_MSG_ERROR([Could not find CUPS headers; install CUPS (including cups-devel on binary distros).])])
+  CUPS_LIBS="-lcups"
+  AC_SUBST(CUPS_LIBS)
+])
+m4trace:acinclude.m4:2186: -1- AC_DEFUN_ONCE([IT_CHECK_FOR_SYSCALLS], [
+  AC_MSG_CHECKING([whether to build against the required syscalls])
+  AC_ARG_ENABLE([compile-against-syscalls],
+	      [AS_HELP_STRING(--enable-compile-against-syscalls,compile against syscalls [[default=yes]])],
+  [
+    ENABLE_SYSCALL_COMPILATION="${enableval}"
+  ],
+  [
+    ENABLE_SYSCALL_COMPILATION="yes"
+  ])
+  AC_MSG_RESULT(${ENABLE_SYSCALL_COMPILATION})
+  if test x"${ENABLE_SYSCALL_COMPILATION}" = "xyes"; then
+    dnl Check for syscalls
+    AC_CHECK_FUNCS([openat64 fstatat64 fgetxattr fsetxattr fremovexattr flistxattr unlinkat renameat futimesat fdopendir epoll_create epoll_ctl epoll_wait],,
+      [AC_MSG_ERROR([Could not find required syscalls; check config.log and use --disable-compile-against-syscalls if necessary.])])
+    AC_CHECK_HEADERS([sys/epoll.h attr/xattr.h],
+      , [AC_MSG_ERROR([Could not find required system headers; install the appropriate files from glibc-headers, libc6-dev and/or libattr-devel, libattr1-dev or use --disable-compile-against-syscalls if necessary.])])
+  fi
+  AM_CONDITIONAL(USE_SYSCALL_COMPILATION, test x"${ENABLE_SYSCALL_COMPILATION}" = "xyes")
+  AC_SUBST(ENABLE_SYSCALL_COMPILATION)
+])
+m4trace:acinclude.m4:2209: -1- AC_DEFUN([IT_ENABLE_JAMVM], [
+  AC_MSG_CHECKING(whether to use JamVM as VM)
+  AC_ARG_ENABLE([jamvm],
+	      [AS_HELP_STRING(--enable-jamvm,use JamVM as VM [[default=no]])],
+  [
+    ENABLE_JAMVM="${enableval}"
+  ],
+  [
+    ENABLE_JAMVM=no
+  ])
+
+  AC_MSG_RESULT(${ENABLE_JAMVM})
+  AM_CONDITIONAL(ENABLE_JAMVM, test x"${ENABLE_JAMVM}" = "xyes")
+  AC_SUBST(ENABLE_JAMVM)
+])
+m4trace:acinclude.m4:2226: -1- AC_DEFUN([IT_WITH_JAMVM_SRC_ZIP], [
+  AC_MSG_CHECKING([for a JamVM source zip])
+  AC_ARG_WITH([jamvm-src-zip],
+	      [AS_HELP_STRING(--with-jamvm-src-zip,specify the location of the JamVM source zip)],
+  [
+    ALT_JAMVM_SRC_ZIP=${withval}
+    if test "x${ALT_JAMVM_SRC_ZIP}" = "xno"; then
+      ALT_JAMVM_SRC_ZIP="not specified"
+    elif ! test -f ${ALT_JAMVM_SRC_ZIP} ; then
+      AC_MSG_ERROR([Invalid JamVM source zip specified: ${ALT_JAMVM_SRC_ZIP}])
+    fi
+  ],
+  [
+    ALT_JAMVM_SRC_ZIP="not specified"
+  ])
+  AM_CONDITIONAL(USE_ALT_JAMVM_SRC_ZIP, test "x${ALT_JAMVM_SRC_ZIP}" != "xnot specified")
+  AC_MSG_RESULT(${ALT_JAMVM_SRC_ZIP})
+  AC_SUBST(ALT_JAMVM_SRC_ZIP)
+])
+m4trace:acinclude.m4:2247: -1- AC_DEFUN_ONCE([IT_BYTECODE7_CHECK], [
+AC_CACHE_CHECK([if the VM supports 1.7 bytecode], it_cv_bytecode7, [
+CLASS=Test.java
+BYTECODE=$(echo $CLASS|sed 's#\.java##')
+mkdir tmp.$$
+cd tmp.$$
+cat << \EOF > $CLASS
+[/* [#]line __oline__ "configure" */
+public class Test 
+{
+  public static void main(String[] args)
+  {
+  }
+}]
+EOF
+if $JAVAC -cp . $JAVACFLAGS -source 7 -target 7 $CLASS >&AS_MESSAGE_LOG_FD 2>&1 ; then
+  if $JAVA -classpath . $BYTECODE >&AS_MESSAGE_LOG_FD 2>&1 ; then
+    it_cv_bytecode7=yes;
+  else
+    it_cv_bytecode7=no;
+  fi
+else
+  it_cv_bytecode7=no;
+fi
+])
+rm -f $CLASS *.class
+cd ..
+rmdir tmp.$$
+AM_CONDITIONAL([NO_BYTECODE7], test x"${it_cv_bytecode7}" = "xno")
+AC_PROVIDE([$0])dnl
+])
+m4trace:acinclude.m4:2279: -1- AC_DEFUN([IT_CHECK_IF_DOWNLOADING], [
+  AC_MSG_CHECKING([whether to download tarballs])
+  AC_ARG_ENABLE([downloading],
+	      [AS_HELP_STRING(--disable-downloading,don't download tarballs [[default=no]])],
+  [
+    case "${enableval}" in
+      no)
+	enable_downloading=no
+        ;;
+      *)
+        enable_downloading=yes
+        ;;
+    esac
+  ],
+  [
+        enable_downloading=yes
+  ])
+  AC_MSG_RESULT([${enable_downloading}])
+  AM_CONDITIONAL([DOWNLOADING], test x"${enable_downloading}" = "xyes")
+  AC_SUBST([enable_downloading])
+])
+m4trace:acinclude.m4:2302: -1- AC_DEFUN_ONCE([IT_WITH_PAX], [
+  AC_MSG_CHECKING([for pax utility to use])
+  AC_ARG_WITH([pax],
+              [AS_HELP_STRING(--with-pax=COMMAND,the command used for pax marking)],
+  [
+    PAX_COMMAND=${withval}
+  ],
+  [ 
+    PAX_COMMAND="not specified"
+  ])
+  case "x${PAX_COMMAND}" in
+    xchpax)
+      case "${host_cpu}" in
+        i?86)
+          PAX_COMMAND_ARGS="-msp"
+          ;;
+        *)
+          PAX_COMMAND_ARGS="-m"
+          ;;
+      esac
+      ;;
+    xpaxctl)
+      case "${host_cpu}" in
+        i?86)
+          PAX_COMMAND_ARGS="-msp"
+          ;;
+        *)
+          PAX_COMMAND_ARGS="-m"
+          ;;
+      esac
+      ;;
+    *)
+      PAX_COMMAND="not specified"
+      PAX_COMMAND_ARGS="not specified"
+      ;;
+  esac
+  AM_CONDITIONAL(WITH_PAX, test "x${PAX_COMMAND}" != "xnot specified")
+  AC_MSG_RESULT(${PAX_COMMAND})
+  AC_SUBST(PAX_COMMAND)
+  AC_SUBST(PAX_COMMAND_ARGS)
+])
+m4trace:acinclude.m4:2345: -1- AC_DEFUN([IT_USING_CACAO], [
+  AC_REQUIRE([IT_FIND_JAVA])
+  AC_CACHE_CHECK([if we are using CACAO as the build VM], it_cv_cacao, [
+  if $JAVA -version 2>&1| grep '^CACAO' >&AS_MESSAGE_LOG_FD ; then
+    it_cv_cacao=yes;
+  else
+    it_cv_cacao=no;
+  fi
+  ])
+  USING_CACAO=$it_cv_cacao
+  AC_SUBST(USING_CACAO)
+  AM_CONDITIONAL(USING_CACAO, test "x${USING_CACAO}" = "xyes")
+  AC_PROVIDE([$0])dnl
+])
+m4trace:acinclude.m4:2368: -1- AC_DEFUN([IT_CHECK_FOR_METHOD], [
+AC_REQUIRE([IT_CHECK_JAVA_AND_JAVAC_WORK])
+AC_CACHE_CHECK([if $2 is missing], it_cv_$1, [
+CLASS=Test.java
+BYTECODE=$(echo $CLASS|sed 's#\.java##')
+mkdir tmp.$$
+cd tmp.$$
+cat << \EOF > $CLASS
+[/* [#]line __oline__ "configure" */
+import java.lang.reflect.Method;
+
+public class Test
+{
+  public static void main(String[] args)
+  {
+    Class<?> cl = $3.class;
+    try
+      {
+        Method m = cl.getDeclaredMethod($4);
+	System.err.println("Method found: " + m);
+      }
+    catch (NoSuchMethodException e)
+      {
+        System.exit(-1);
+      }
+  }
+
+  public void dontRun()
+  {
+    $5;
+  }
+
+}
+]
+EOF
+if $JAVAC -cp . $JAVACFLAGS -source 5 -target 5 -nowarn $CLASS >&AS_MESSAGE_LOG_FD 2>&1; then
+  if $JAVA -classpath . $BYTECODE >&AS_MESSAGE_LOG_FD 2>&1; then
+      it_cv_$1=no;
+  else
+      it_cv_$1=yes;
+  fi
+else
+  it_cv_$1=yes;
+fi
+])
+rm -f $CLASS *.class
+cd ..
+rmdir tmp.$$
+AM_CONDITIONAL([LACKS_$1], test x"${it_cv_$1}" = "xyes")
+AC_PROVIDE([$0])dnl
+])
+m4trace:acinclude.m4:2420: -1- AC_DEFUN([IT_ENABLE_WERROR], [
+  AC_MSG_CHECKING([whether to enable -Werror])
+  AC_ARG_ENABLE([Werror],
+                [AS_HELP_STRING(--enable-Werror,build with -Werror [[default=no]])],
+  [
+    case "${enableval}" in
+      yes)
+        enable_werror=yes
+        ;;
+      *)
+        enable_werror=no
+        ;;
+    esac
+  ],
+  [
+    enable_werror=no
+  ])
+  AC_MSG_RESULT([$enable_werror])
+  AM_CONDITIONAL([ENABLE_WERROR], test x"${enable_werror}" = "xyes")
+])
+m4trace:acinclude.m4:2442: -1- AC_DEFUN([IT_ENABLE_JAR_COMPRESSION], [
+  AC_MSG_CHECKING([whether to enable JAR compression])
+  AC_ARG_ENABLE([jar-compression],
+                [AS_HELP_STRING(--disable-jar-compression,compress built jars [[default=yes]])],
+  [
+    case "${enableval}" in
+      no)
+        enable_jar_compression=no
+        ;;
+      *)
+        enable_jar_compression=yes
+        ;;
+    esac
+  ],
+  [
+    enable_jar_compression=yes
+  ])
+  AC_MSG_RESULT([$enable_jar_compression])
+  AM_CONDITIONAL([ENABLE_JAR_COMPRESSION], test x"${enable_jar_compression}" = "xyes")
+])
+m4trace:acinclude.m4:2471: -1- AC_DEFUN([IT_CHECK_FOR_CONSTRUCTOR], [
+AC_REQUIRE([IT_CHECK_JAVA_AND_JAVAC_WORK])
+AC_CACHE_CHECK([if $2($3) is missing], it_cv_$1, [
+CLASS=Test.java
+BYTECODE=$(echo $CLASS|sed 's#\.java##')
+mkdir tmp.$$
+cd tmp.$$
+cat << \EOF > $CLASS
+[/* [#]line __oline__ "configure" */
+import java.lang.reflect.Constructor;
+
+public class Test
+{
+  public static void main(String[] args)
+  {
+    Class<?> cl = $2.class;
+    try
+      {
+      	Constructor<?> cons = cl.getDeclaredConstructor($3);
+	System.err.println("Constructor found: " + cons);
+      }
+    catch (NoSuchMethodException e)
+      {
+        System.exit(-1);
+      }
+  }
+
+  private class TestCons extends $2
+  {
+     TestCons()
+     {
+       super($4);
+     }
+  }
+
+}
+
+]
+EOF
+if $JAVAC -cp . $JAVACFLAGS -source 5 -target 5 -nowarn $CLASS >&AS_MESSAGE_LOG_FD 2>&1; then
+  if $JAVA -classpath . $BYTECODE >&AS_MESSAGE_LOG_FD 2>&1; then
+      it_cv_$1=no;
+  else
+      it_cv_$1=yes;
+  fi
+else
+  it_cv_$1=yes;
+fi
+])
+rm -f $CLASS *.class
+cd ..
+rmdir tmp.$$
+AM_CONDITIONAL([LACKS_$1], test x"${it_cv_$1}" = "xyes")
+AC_PROVIDE([$0])dnl
+])
+m4trace:acinclude.m4:2527: -1- AC_DEFUN_ONCE([IT_USE_BOOTSTRAP_TOOLS], [
+  AC_REQUIRE([IT_BYTECODE7_CHECK])
+  AC_MSG_CHECKING([whether to disable the use of bootstrap tools for bootstrapping])
+  AC_ARG_ENABLE([bootstrap-tools],
+                [AS_HELP_STRING(--disable-bootstrap-tools,
+		disable the use of bootstrap tools for bootstrapping [[default=no if they support 7]])],
+  [
+    case "${enableval}" in
+      no)
+        disable_bootstrap_tools=yes
+        ;;
+      *)
+        disable_bootstrap_tools=no
+        ;;
+    esac
+  ],
+  [
+    if test "x${it_cv_bytecode7}" = "xyes"; then
+      disable_bootstrap_tools=no;
+    else
+      disable_bootstrap_tools=yes;
+    fi
+  ])
+  AC_MSG_RESULT([$disable_bootstrap_tools])
+  AM_CONDITIONAL([DISABLE_BOOTSTRAP_TOOLS], test x"${disable_bootstrap_tools}" = "xyes")
+])
+m4trace:acinclude.m4:2555: -1- AC_DEFUN_ONCE([IT_CHECK_FOR_XBOOTCLASSPATH], [
+  AC_REQUIRE([IT_CHECK_JAVA_AND_JAVAC_WORK])
+  AC_CACHE_CHECK([if the VM supports -Xbootclasspath], it_cv_xbootclasspath_works, [
+  CLASS=Test.java
+  BYTECODE=$(echo $CLASS|sed 's#\.java##')
+  mkdir tmp.$$
+  cd tmp.$$
+  cat << \EOF > $CLASS
+[/* [#]line __oline__ "configure" */
+
+public class Test
+{
+    public static void main(String[] args)
+    {
+      System.out.println("Hello World!");
+    }
+}]
+EOF
+  mkdir build
+  if $JAVAC -d build -cp . $JAVACFLAGS -source 5 -target 5 $CLASS >&AS_MESSAGE_LOG_FD 2>&1; then
+    if $JAVA -Xbootclasspath/p:build $BYTECODE >&AS_MESSAGE_LOG_FD 2>&1; then
+      it_cv_xbootclasspath_works=yes;
+    else
+      it_cv_xbootclasspath_works=no;
+    fi
+  else
+    it_cv_xbootclasspath_works=no;
+  fi
+  rm -f $CLASS build/*.class
+  rmdir build
+  cd ..
+  rmdir tmp.$$
+  ])
+  AC_PROVIDE([$0])dnl
+  AM_CONDITIONAL([VM_SUPPORTS_XBOOTCLASSPATH], test x"${it_cv_xbootclasspath_works}" = "xyes")
+])
+m4trace:configure.ac:1: -1- m4_pattern_forbid([^_?A[CHUM]_])
+m4trace:configure.ac:1: -1- m4_pattern_forbid([_AC_])
+m4trace:configure.ac:1: -1- m4_pattern_forbid([^LIBOBJS$], [do not use LIBOBJS directly, use AC_LIBOBJ (see section `AC_LIBOBJ vs LIBOBJS'])
+m4trace:configure.ac:1: -1- m4_pattern_allow([^AS_FLAGS$])
+m4trace:configure.ac:1: -1- m4_pattern_forbid([^_?m4_])
+m4trace:configure.ac:1: -1- m4_pattern_forbid([^dnl$])
+m4trace:configure.ac:1: -1- m4_pattern_forbid([^_?AS_])
+m4trace:configure.ac:1: -1- m4_pattern_allow([^SHELL$])
+m4trace:configure.ac:1: -1- m4_pattern_allow([^PATH_SEPARATOR$])
+m4trace:configure.ac:1: -1- m4_pattern_allow([^PACKAGE_NAME$])
+m4trace:configure.ac:1: -1- m4_pattern_allow([^PACKAGE_TARNAME$])
+m4trace:configure.ac:1: -1- m4_pattern_allow([^PACKAGE_VERSION$])
+m4trace:configure.ac:1: -1- m4_pattern_allow([^PACKAGE_STRING$])
+m4trace:configure.ac:1: -1- m4_pattern_allow([^PACKAGE_BUGREPORT$])
+m4trace:configure.ac:1: -1- m4_pattern_allow([^PACKAGE_URL$])
+m4trace:configure.ac:1: -1- m4_pattern_allow([^exec_prefix$])
+m4trace:configure.ac:1: -1- m4_pattern_allow([^prefix$])
+m4trace:configure.ac:1: -1- m4_pattern_allow([^program_transform_name$])
+m4trace:configure.ac:1: -1- m4_pattern_allow([^bindir$])
+m4trace:configure.ac:1: -1- m4_pattern_allow([^sbindir$])
+m4trace:configure.ac:1: -1- m4_pattern_allow([^libexecdir$])
+m4trace:configure.ac:1: -1- m4_pattern_allow([^datarootdir$])
+m4trace:configure.ac:1: -1- m4_pattern_allow([^datadir$])
+m4trace:configure.ac:1: -1- m4_pattern_allow([^sysconfdir$])
+m4trace:configure.ac:1: -1- m4_pattern_allow([^sharedstatedir$])
+m4trace:configure.ac:1: -1- m4_pattern_allow([^localstatedir$])
+m4trace:configure.ac:1: -1- m4_pattern_allow([^includedir$])
+m4trace:configure.ac:1: -1- m4_pattern_allow([^oldincludedir$])
+m4trace:configure.ac:1: -1- m4_pattern_allow([^docdir$])
+m4trace:configure.ac:1: -1- m4_pattern_allow([^infodir$])
+m4trace:configure.ac:1: -1- m4_pattern_allow([^htmldir$])
+m4trace:configure.ac:1: -1- m4_pattern_allow([^dvidir$])
+m4trace:configure.ac:1: -1- m4_pattern_allow([^pdfdir$])
+m4trace:configure.ac:1: -1- m4_pattern_allow([^psdir$])
+m4trace:configure.ac:1: -1- m4_pattern_allow([^libdir$])
+m4trace:configure.ac:1: -1- m4_pattern_allow([^localedir$])
+m4trace:configure.ac:1: -1- m4_pattern_allow([^mandir$])
+m4trace:configure.ac:1: -1- m4_pattern_allow([^PACKAGE_NAME$])
+m4trace:configure.ac:1: -1- m4_pattern_allow([^PACKAGE_TARNAME$])
+m4trace:configure.ac:1: -1- m4_pattern_allow([^PACKAGE_VERSION$])
+m4trace:configure.ac:1: -1- m4_pattern_allow([^PACKAGE_STRING$])
+m4trace:configure.ac:1: -1- m4_pattern_allow([^PACKAGE_BUGREPORT$])
+m4trace:configure.ac:1: -1- m4_pattern_allow([^PACKAGE_URL$])
+m4trace:configure.ac:1: -1- m4_pattern_allow([^DEFS$])
+m4trace:configure.ac:1: -1- m4_pattern_allow([^ECHO_C$])
+m4trace:configure.ac:1: -1- m4_pattern_allow([^ECHO_N$])
+m4trace:configure.ac:1: -1- m4_pattern_allow([^ECHO_T$])
+m4trace:configure.ac:1: -1- m4_pattern_allow([^LIBS$])
+m4trace:configure.ac:1: -1- m4_pattern_allow([^build_alias$])
+m4trace:configure.ac:1: -1- m4_pattern_allow([^host_alias$])
+m4trace:configure.ac:1: -1- m4_pattern_allow([^target_alias$])
+m4trace:configure.ac:2: -1- AM_INIT_AUTOMAKE([1.9 tar-pax foreign])
+m4trace:configure.ac:2: -1- m4_pattern_allow([^AM_[A-Z]+FLAGS$])
+m4trace:configure.ac:2: -1- AM_SET_CURRENT_AUTOMAKE_VERSION
+m4trace:configure.ac:2: -1- AM_AUTOMAKE_VERSION([1.13.4])
+m4trace:configure.ac:2: -1- _AM_AUTOCONF_VERSION([2.69])
+m4trace:configure.ac:2: -1- m4_pattern_allow([^INSTALL_PROGRAM$])
+m4trace:configure.ac:2: -1- m4_pattern_allow([^INSTALL_SCRIPT$])
+m4trace:configure.ac:2: -1- m4_pattern_allow([^INSTALL_DATA$])
+m4trace:configure.ac:2: -1- m4_pattern_allow([^am__isrc$])
+m4trace:configure.ac:2: -1- _AM_SUBST_NOTMAKE([am__isrc])
+m4trace:configure.ac:2: -1- m4_pattern_allow([^CYGPATH_W$])
+m4trace:configure.ac:2: -1- _AM_SET_OPTIONS([1.9 tar-pax foreign])
+m4trace:configure.ac:2: -1- _AM_SET_OPTION([1.9])
+m4trace:configure.ac:2: -2- _AM_MANGLE_OPTION([1.9])
+m4trace:configure.ac:2: -1- _AM_SET_OPTION([tar-pax])
+m4trace:configure.ac:2: -2- _AM_MANGLE_OPTION([tar-pax])
+m4trace:configure.ac:2: -1- _AM_SET_OPTION([foreign])
+m4trace:configure.ac:2: -2- _AM_MANGLE_OPTION([foreign])
+m4trace:configure.ac:2: -1- m4_pattern_allow([^PACKAGE$])
+m4trace:configure.ac:2: -1- m4_pattern_allow([^VERSION$])
+m4trace:configure.ac:2: -1- _AM_IF_OPTION([no-define], [], [AC_DEFINE_UNQUOTED([PACKAGE], ["$PACKAGE"], [Name of package])
+ AC_DEFINE_UNQUOTED([VERSION], ["$VERSION"], [Version number of package])])
+m4trace:configure.ac:2: -2- _AM_MANGLE_OPTION([no-define])
+m4trace:configure.ac:2: -1- m4_pattern_allow([^PACKAGE$])
+m4trace:configure.ac:2: -1- m4_pattern_allow([^VERSION$])
+m4trace:configure.ac:2: -1- AM_SANITY_CHECK
+m4trace:configure.ac:2: -1- AM_MISSING_PROG([ACLOCAL], [aclocal-${am__api_version}])
+m4trace:configure.ac:2: -1- AM_MISSING_HAS_RUN
+m4trace:configure.ac:2: -1- AM_AUX_DIR_EXPAND
+m4trace:configure.ac:2: -1- m4_pattern_allow([^ACLOCAL$])
+m4trace:configure.ac:2: -1- AM_MISSING_PROG([AUTOCONF], [autoconf])
+m4trace:configure.ac:2: -1- m4_pattern_allow([^AUTOCONF$])
+m4trace:configure.ac:2: -1- AM_MISSING_PROG([AUTOMAKE], [automake-${am__api_version}])
+m4trace:configure.ac:2: -1- m4_pattern_allow([^AUTOMAKE$])
+m4trace:configure.ac:2: -1- AM_MISSING_PROG([AUTOHEADER], [autoheader])
+m4trace:configure.ac:2: -1- m4_pattern_allow([^AUTOHEADER$])
+m4trace:configure.ac:2: -1- AM_MISSING_PROG([MAKEINFO], [makeinfo])
+m4trace:configure.ac:2: -1- m4_pattern_allow([^MAKEINFO$])
+m4trace:configure.ac:2: -1- AM_PROG_INSTALL_SH
+m4trace:configure.ac:2: -1- m4_pattern_allow([^install_sh$])
+m4trace:configure.ac:2: -1- AM_PROG_INSTALL_STRIP
+m4trace:configure.ac:2: -1- m4_pattern_allow([^STRIP$])
+m4trace:configure.ac:2: -1- m4_pattern_allow([^INSTALL_STRIP_PROGRAM$])
+m4trace:configure.ac:2: -1- m4_pattern_allow([^MKDIR_P$])
+m4trace:configure.ac:2: -1- m4_pattern_allow([^mkdir_p$])
+m4trace:configure.ac:2: -1- m4_pattern_allow([^AWK$])
+m4trace:configure.ac:2: -1- m4_pattern_allow([^SET_MAKE$])
+m4trace:configure.ac:2: -1- AM_SET_LEADING_DOT
+m4trace:configure.ac:2: -1- m4_pattern_allow([^am__leading_dot$])
+m4trace:configure.ac:2: -1- _AM_IF_OPTION([tar-ustar], [_AM_PROG_TAR([ustar])], [_AM_IF_OPTION([tar-pax], [_AM_PROG_TAR([pax])],
+			     [_AM_PROG_TAR([v7])])])
+m4trace:configure.ac:2: -2- _AM_MANGLE_OPTION([tar-ustar])
+m4trace:configure.ac:2: -1- _AM_IF_OPTION([tar-pax], [_AM_PROG_TAR([pax])], [_AM_PROG_TAR([v7])])
+m4trace:configure.ac:2: -2- _AM_MANGLE_OPTION([tar-pax])
+m4trace:configure.ac:2: -1- _AM_PROG_TAR([pax])
+m4trace:configure.ac:2: -1- m4_pattern_allow([^AMTAR$])
+m4trace:configure.ac:2: -1- AM_RUN_LOG([$_am_tar --version])
+m4trace:configure.ac:2: -1- AM_RUN_LOG([tardir=conftest.dir && eval $am__tar_ >conftest.tar])
+m4trace:configure.ac:2: -1- AM_RUN_LOG([$am__untar <conftest.tar])
+m4trace:configure.ac:2: -1- AM_RUN_LOG([cat conftest.dir/file])
+m4trace:configure.ac:2: -1- m4_pattern_allow([^am__tar$])
+m4trace:configure.ac:2: -1- m4_pattern_allow([^am__untar$])
+m4trace:configure.ac:2: -1- _AM_IF_OPTION([no-dependencies], [], [AC_PROVIDE_IFELSE([AC_PROG_CC],
+		  [_AM_DEPENDENCIES([CC])],
+		  [m4_define([AC_PROG_CC],
+			     m4_defn([AC_PROG_CC])[_AM_DEPENDENCIES([CC])])])dnl
+AC_PROVIDE_IFELSE([AC_PROG_CXX],
+		  [_AM_DEPENDENCIES([CXX])],
+		  [m4_define([AC_PROG_CXX],
+			     m4_defn([AC_PROG_CXX])[_AM_DEPENDENCIES([CXX])])])dnl
+AC_PROVIDE_IFELSE([AC_PROG_OBJC],
+		  [_AM_DEPENDENCIES([OBJC])],
+		  [m4_define([AC_PROG_OBJC],
+			     m4_defn([AC_PROG_OBJC])[_AM_DEPENDENCIES([OBJC])])])dnl
+AC_PROVIDE_IFELSE([AC_PROG_OBJCXX],
+		  [_AM_DEPENDENCIES([OBJCXX])],
+		  [m4_define([AC_PROG_OBJCXX],
+			     m4_defn([AC_PROG_OBJCXX])[_AM_DEPENDENCIES([OBJCXX])])])dnl
+])
+m4trace:configure.ac:2: -2- _AM_MANGLE_OPTION([no-dependencies])
+m4trace:configure.ac:2: -1- AM_SILENT_RULES
+m4trace:configure.ac:2: -1- m4_pattern_allow([^AM_V$])
+m4trace:configure.ac:2: -1- AM_SUBST_NOTMAKE([AM_V])
+m4trace:configure.ac:2: -1- _AM_SUBST_NOTMAKE([AM_V])
+m4trace:configure.ac:2: -1- m4_pattern_allow([^AM_DEFAULT_V$])
+m4trace:configure.ac:2: -1- AM_SUBST_NOTMAKE([AM_DEFAULT_V])
+m4trace:configure.ac:2: -1- _AM_SUBST_NOTMAKE([AM_DEFAULT_V])
+m4trace:configure.ac:2: -1- m4_pattern_allow([^AM_DEFAULT_VERBOSITY$])
+m4trace:configure.ac:2: -1- m4_pattern_allow([^AM_BACKSLASH$])
+m4trace:configure.ac:2: -1- _AM_SUBST_NOTMAKE([AM_BACKSLASH])
+m4trace:configure.ac:7: -1- m4_pattern_allow([^abs_top_builddir$])
+m4trace:configure.ac:12: -1- m4_pattern_allow([^abs_top_srcdir$])
+m4trace:configure.ac:14: -1- m4_pattern_allow([^build$])
+m4trace:configure.ac:14: -1- m4_pattern_allow([^build_cpu$])
+m4trace:configure.ac:14: -1- m4_pattern_allow([^build_vendor$])
+m4trace:configure.ac:14: -1- m4_pattern_allow([^build_os$])
+m4trace:configure.ac:14: -1- m4_pattern_allow([^host$])
+m4trace:configure.ac:14: -1- m4_pattern_allow([^host_cpu$])
+m4trace:configure.ac:14: -1- m4_pattern_allow([^host_vendor$])
+m4trace:configure.ac:14: -1- m4_pattern_allow([^host_os$])
+m4trace:configure.ac:18: -1- m4_pattern_allow([^CC$])
+m4trace:configure.ac:18: -1- m4_pattern_allow([^CFLAGS$])
+m4trace:configure.ac:18: -1- m4_pattern_allow([^LDFLAGS$])
+m4trace:configure.ac:18: -1- m4_pattern_allow([^LIBS$])
+m4trace:configure.ac:18: -1- m4_pattern_allow([^CPPFLAGS$])
+m4trace:configure.ac:18: -1- m4_pattern_allow([^CC$])
+m4trace:configure.ac:18: -1- m4_pattern_allow([^CC$])
+m4trace:configure.ac:18: -1- m4_pattern_allow([^CC$])
+m4trace:configure.ac:18: -1- m4_pattern_allow([^CC$])
+m4trace:configure.ac:18: -1- m4_pattern_allow([^ac_ct_CC$])
+m4trace:configure.ac:18: -1- m4_pattern_allow([^EXEEXT$])
+m4trace:configure.ac:18: -1- m4_pattern_allow([^OBJEXT$])
+m4trace:configure.ac:18: -1- _AM_DEPENDENCIES([CC])
+m4trace:configure.ac:18: -1- AM_SET_DEPDIR
+m4trace:configure.ac:18: -1- m4_pattern_allow([^DEPDIR$])
+m4trace:configure.ac:18: -1- AM_OUTPUT_DEPENDENCY_COMMANDS
+m4trace:configure.ac:18: -1- AM_MAKE_INCLUDE
+m4trace:configure.ac:18: -1- m4_pattern_allow([^am__include$])
+m4trace:configure.ac:18: -1- m4_pattern_allow([^am__quote$])
+m4trace:configure.ac:18: -1- AM_DEP_TRACK
+m4trace:configure.ac:18: -1- AM_CONDITIONAL([AMDEP], [test "x$enable_dependency_tracking" != xno])
+m4trace:configure.ac:18: -1- m4_pattern_allow([^AMDEP_TRUE$])
+m4trace:configure.ac:18: -1- m4_pattern_allow([^AMDEP_FALSE$])
+m4trace:configure.ac:18: -1- _AM_SUBST_NOTMAKE([AMDEP_TRUE])
+m4trace:configure.ac:18: -1- _AM_SUBST_NOTMAKE([AMDEP_FALSE])
+m4trace:configure.ac:18: -1- m4_pattern_allow([^AMDEPBACKSLASH$])
+m4trace:configure.ac:18: -1- _AM_SUBST_NOTMAKE([AMDEPBACKSLASH])
+m4trace:configure.ac:18: -1- m4_pattern_allow([^am__nodep$])
+m4trace:configure.ac:18: -1- _AM_SUBST_NOTMAKE([am__nodep])
+m4trace:configure.ac:18: -1- m4_pattern_allow([^CCDEPMODE$])
+m4trace:configure.ac:18: -1- AM_CONDITIONAL([am__fastdepCC], [
+  test "x$enable_dependency_tracking" != xno \
+  && test "$am_cv_CC_dependencies_compiler_type" = gcc3])
+m4trace:configure.ac:18: -1- m4_pattern_allow([^am__fastdepCC_TRUE$])
+m4trace:configure.ac:18: -1- m4_pattern_allow([^am__fastdepCC_FALSE$])
+m4trace:configure.ac:18: -1- _AM_SUBST_NOTMAKE([am__fastdepCC_TRUE])
+m4trace:configure.ac:18: -1- _AM_SUBST_NOTMAKE([am__fastdepCC_FALSE])
+m4trace:configure.ac:19: -1- m4_pattern_allow([^CXX$])
+m4trace:configure.ac:19: -1- m4_pattern_allow([^CXXFLAGS$])
+m4trace:configure.ac:19: -1- m4_pattern_allow([^LDFLAGS$])
+m4trace:configure.ac:19: -1- m4_pattern_allow([^LIBS$])
+m4trace:configure.ac:19: -1- m4_pattern_allow([^CPPFLAGS$])
+m4trace:configure.ac:19: -1- m4_pattern_allow([^CXX$])
+m4trace:configure.ac:19: -1- m4_pattern_allow([^ac_ct_CXX$])
+m4trace:configure.ac:19: -1- _AM_DEPENDENCIES([CXX])
+m4trace:configure.ac:19: -1- m4_pattern_allow([^CXXDEPMODE$])
+m4trace:configure.ac:19: -1- AM_CONDITIONAL([am__fastdepCXX], [
+  test "x$enable_dependency_tracking" != xno \
+  && test "$am_cv_CXX_dependencies_compiler_type" = gcc3])
+m4trace:configure.ac:19: -1- m4_pattern_allow([^am__fastdepCXX_TRUE$])
+m4trace:configure.ac:19: -1- m4_pattern_allow([^am__fastdepCXX_FALSE$])
+m4trace:configure.ac:19: -1- _AM_SUBST_NOTMAKE([am__fastdepCXX_TRUE])
+m4trace:configure.ac:19: -1- _AM_SUBST_NOTMAKE([am__fastdepCXX_FALSE])
+m4trace:configure.ac:21: -1- IT_FIND_TOOL([MAKE], [make])
+m4trace:configure.ac:21: -1- m4_pattern_allow([^MAKE$])
+m4trace:configure.ac:21: -1- m4_pattern_allow([^MAKE$])
+m4trace:configure.ac:22: -1- IT_FIND_TOOL([GZIP], [gzip])
+m4trace:configure.ac:22: -1- m4_pattern_allow([^GZIP$])
+m4trace:configure.ac:22: -1- m4_pattern_allow([^GZIP$])
+m4trace:configure.ac:23: -1- IT_FIND_TOOL([ANT], [ant])
+m4trace:configure.ac:23: -1- m4_pattern_allow([^ANT$])
+m4trace:configure.ac:23: -1- m4_pattern_allow([^ANT$])
+m4trace:configure.ac:24: -1- IT_FIND_TOOL([FIND], [find])
+m4trace:configure.ac:24: -1- m4_pattern_allow([^FIND$])
+m4trace:configure.ac:24: -1- m4_pattern_allow([^FIND$])
+m4trace:configure.ac:25: -1- IT_FIND_TOOL([PATCH], [patch])
+m4trace:configure.ac:25: -1- m4_pattern_allow([^PATCH$])
+m4trace:configure.ac:25: -1- m4_pattern_allow([^PATCH$])
+m4trace:configure.ac:26: -1- IT_FIND_TOOL([TAR], [tar])
+m4trace:configure.ac:26: -1- m4_pattern_allow([^TAR$])
+m4trace:configure.ac:26: -1- m4_pattern_allow([^TAR$])
+m4trace:configure.ac:27: -1- IT_FIND_TOOL([CHMOD], [chmod])
+m4trace:configure.ac:27: -1- m4_pattern_allow([^CHMOD$])
+m4trace:configure.ac:27: -1- m4_pattern_allow([^CHMOD$])
+m4trace:configure.ac:28: -1- IT_FIND_TOOL([SHA256SUM], [sha256sum])
+m4trace:configure.ac:28: -1- m4_pattern_allow([^SHA256SUM$])
+m4trace:configure.ac:28: -1- m4_pattern_allow([^SHA256SUM$])
+m4trace:configure.ac:29: -1- IT_FIND_TOOL([WGET], [wget])
+m4trace:configure.ac:29: -1- m4_pattern_allow([^WGET$])
+m4trace:configure.ac:29: -1- m4_pattern_allow([^WGET$])
+m4trace:configure.ac:30: -1- IT_FIND_TOOL([ZIP], [zip])
+m4trace:configure.ac:30: -1- m4_pattern_allow([^ZIP$])
+m4trace:configure.ac:30: -1- m4_pattern_allow([^ZIP$])
+m4trace:configure.ac:31: -1- IT_FIND_TOOL([UNZIP], [unzip])
+m4trace:configure.ac:31: -1- m4_pattern_allow([^UNZIP$])
+m4trace:configure.ac:31: -1- m4_pattern_allow([^UNZIP$])
+m4trace:configure.ac:32: -1- IT_FIND_TOOL([CPIO], [cpio])
+m4trace:configure.ac:32: -1- m4_pattern_allow([^CPIO$])
+m4trace:configure.ac:32: -1- m4_pattern_allow([^CPIO$])
+m4trace:configure.ac:33: -1- IT_FIND_TOOL([FILE], [file])
+m4trace:configure.ac:33: -1- m4_pattern_allow([^FILE$])
+m4trace:configure.ac:33: -1- m4_pattern_allow([^FILE$])
+m4trace:configure.ac:34: -1- m4_pattern_allow([^FASTJAR$])
+m4trace:configure.ac:34: -1- m4_pattern_allow([^ac_ct_FASTJAR$])
+m4trace:configure.ac:38: -1- m4_pattern_allow([^FASTJAR$])
+m4trace:configure.ac:39: -1- m4_pattern_allow([^LDD$])
+m4trace:configure.ac:42: -1- IT_FIND_TOOL([GAWK], [gawk])
+m4trace:configure.ac:42: -1- m4_pattern_allow([^GAWK$])
+m4trace:configure.ac:42: -1- m4_pattern_allow([^GAWK$])
+m4trace:configure.ac:43: -1- IT_CHECK_FOR_MERCURIAL
+m4trace:configure.ac:43: -1- m4_pattern_allow([^HG$])
+m4trace:configure.ac:43: -1- m4_pattern_allow([^HG$])
+m4trace:configure.ac:44: -1- IT_OBTAIN_HG_REVISIONS
+m4trace:configure.ac:44: -1- IT_WITH_OPENJDK_SRC_DIR
+m4trace:configure.ac:44: -1- m4_pattern_allow([^OPENJDK_SRC_DIR$])
+m4trace:configure.ac:44: -1- AM_CONDITIONAL([OPENJDK_SRC_DIR_FOUND], [test "x${with_external_src_dir}" = "xtrue"])
+m4trace:configure.ac:44: -1- m4_pattern_allow([^OPENJDK_SRC_DIR_FOUND_TRUE$])
+m4trace:configure.ac:44: -1- m4_pattern_allow([^OPENJDK_SRC_DIR_FOUND_FALSE$])
+m4trace:configure.ac:44: -1- _AM_SUBST_NOTMAKE([OPENJDK_SRC_DIR_FOUND_TRUE])
+m4trace:configure.ac:44: -1- _AM_SUBST_NOTMAKE([OPENJDK_SRC_DIR_FOUND_FALSE])
+m4trace:configure.ac:44: -1- AM_CONDITIONAL([OPENJDK_SRC_DIR_HARDLINKABLE], [test "x${openjdk_src_dir_hardlinkable}" = "xyes"])
+m4trace:configure.ac:44: -1- m4_pattern_allow([^OPENJDK_SRC_DIR_HARDLINKABLE_TRUE$])
+m4trace:configure.ac:44: -1- m4_pattern_allow([^OPENJDK_SRC_DIR_HARDLINKABLE_FALSE$])
+m4trace:configure.ac:44: -1- _AM_SUBST_NOTMAKE([OPENJDK_SRC_DIR_HARDLINKABLE_TRUE])
+m4trace:configure.ac:44: -1- _AM_SUBST_NOTMAKE([OPENJDK_SRC_DIR_HARDLINKABLE_FALSE])
+m4trace:configure.ac:44: -1- m4_pattern_allow([^ICEDTEA_REVISION$])
+m4trace:configure.ac:44: -1- m4_pattern_allow([^JDK_REVISION$])
+m4trace:configure.ac:44: -1- m4_pattern_allow([^HOTSPOT_REVISION$])
+m4trace:configure.ac:44: -1- AM_CONDITIONAL([HAS_ICEDTEA_REVISION], [test "x${ICEDTEA_REVISION}" != xnone])
+m4trace:configure.ac:44: -1- m4_pattern_allow([^HAS_ICEDTEA_REVISION_TRUE$])
+m4trace:configure.ac:44: -1- m4_pattern_allow([^HAS_ICEDTEA_REVISION_FALSE$])
+m4trace:configure.ac:44: -1- _AM_SUBST_NOTMAKE([HAS_ICEDTEA_REVISION_TRUE])
+m4trace:configure.ac:44: -1- _AM_SUBST_NOTMAKE([HAS_ICEDTEA_REVISION_FALSE])
+m4trace:configure.ac:44: -1- AM_CONDITIONAL([HAS_JDK_REVISION], [test "x${JDK_REVISION}" != xnone])
+m4trace:configure.ac:44: -1- m4_pattern_allow([^HAS_JDK_REVISION_TRUE$])
+m4trace:configure.ac:44: -1- m4_pattern_allow([^HAS_JDK_REVISION_FALSE$])
+m4trace:configure.ac:44: -1- _AM_SUBST_NOTMAKE([HAS_JDK_REVISION_TRUE])
+m4trace:configure.ac:44: -1- _AM_SUBST_NOTMAKE([HAS_JDK_REVISION_FALSE])
+m4trace:configure.ac:44: -1- AM_CONDITIONAL([HAS_HOTSPOT_REVISION], [test "x${HOTSPOT_REVISION}" != xnone])
+m4trace:configure.ac:44: -1- m4_pattern_allow([^HAS_HOTSPOT_REVISION_TRUE$])
+m4trace:configure.ac:44: -1- m4_pattern_allow([^HAS_HOTSPOT_REVISION_FALSE$])
+m4trace:configure.ac:44: -1- _AM_SUBST_NOTMAKE([HAS_HOTSPOT_REVISION_TRUE])
+m4trace:configure.ac:44: -1- _AM_SUBST_NOTMAKE([HAS_HOTSPOT_REVISION_FALSE])
+m4trace:configure.ac:45: -1- m4_pattern_allow([^LSB_RELEASE$])
+m4trace:configure.ac:46: -1- IT_WITH_GCJ
+m4trace:configure.ac:46: -1- m4_pattern_allow([^GCJ$])
+m4trace:configure.ac:46: -1- AM_CONDITIONAL([BUILD_NATIVE_ECJ], [test x"${GCJ}" != xno])
+m4trace:configure.ac:46: -1- m4_pattern_allow([^BUILD_NATIVE_ECJ_TRUE$])
+m4trace:configure.ac:46: -1- m4_pattern_allow([^BUILD_NATIVE_ECJ_FALSE$])
+m4trace:configure.ac:46: -1- _AM_SUBST_NOTMAKE([BUILD_NATIVE_ECJ_TRUE])
+m4trace:configure.ac:46: -1- _AM_SUBST_NOTMAKE([BUILD_NATIVE_ECJ_FALSE])
+m4trace:configure.ac:46: -1- m4_pattern_allow([^GCJ$])
+m4trace:configure.ac:47: -1- IT_WITH_HOTSPOT_BUILD
+m4trace:configure.ac:47: -1- IT_ENABLE_ZERO_BUILD
+m4trace:configure.ac:47: -1- IT_SET_ARCH_SETTINGS
+m4trace:configure.ac:47: -1- m4_pattern_allow([^BUILD_ARCH_DIR$])
+m4trace:configure.ac:47: -1- m4_pattern_allow([^INSTALL_ARCH_DIR$])
+m4trace:configure.ac:47: -1- m4_pattern_allow([^JRE_ARCH_DIR$])
+m4trace:configure.ac:47: -1- m4_pattern_allow([^ARCH_PREFIX$])
+m4trace:configure.ac:47: -1- m4_pattern_allow([^ARCHFLAG$])
+m4trace:configure.ac:47: -1- IT_ENABLE_CACAO
+m4trace:configure.ac:47: -1- AM_CONDITIONAL([ENABLE_CACAO], [test x"${ENABLE_CACAO}" = "xyes"])
+m4trace:configure.ac:47: -1- m4_pattern_allow([^ENABLE_CACAO_TRUE$])
+m4trace:configure.ac:47: -1- m4_pattern_allow([^ENABLE_CACAO_FALSE$])
+m4trace:configure.ac:47: -1- _AM_SUBST_NOTMAKE([ENABLE_CACAO_TRUE])
+m4trace:configure.ac:47: -1- _AM_SUBST_NOTMAKE([ENABLE_CACAO_FALSE])
+m4trace:configure.ac:47: -1- m4_pattern_allow([^ENABLE_CACAO$])
+m4trace:configure.ac:47: -1- IT_ENABLE_JAMVM
+m4trace:configure.ac:47: -1- AM_CONDITIONAL([ENABLE_JAMVM], [test x"${ENABLE_JAMVM}" = "xyes"])
+m4trace:configure.ac:47: -1- m4_pattern_allow([^ENABLE_JAMVM_TRUE$])
+m4trace:configure.ac:47: -1- m4_pattern_allow([^ENABLE_JAMVM_FALSE$])
+m4trace:configure.ac:47: -1- _AM_SUBST_NOTMAKE([ENABLE_JAMVM_TRUE])
+m4trace:configure.ac:47: -1- _AM_SUBST_NOTMAKE([ENABLE_JAMVM_FALSE])
+m4trace:configure.ac:47: -1- m4_pattern_allow([^ENABLE_JAMVM$])
+m4trace:configure.ac:47: -1- AM_CONDITIONAL([ZERO_BUILD], [test "x${use_zero}" = xyes])
+m4trace:configure.ac:47: -1- m4_pattern_allow([^ZERO_BUILD_TRUE$])
+m4trace:configure.ac:47: -1- m4_pattern_allow([^ZERO_BUILD_FALSE$])
+m4trace:configure.ac:47: -1- _AM_SUBST_NOTMAKE([ZERO_BUILD_TRUE])
+m4trace:configure.ac:47: -1- _AM_SUBST_NOTMAKE([ZERO_BUILD_FALSE])
+m4trace:configure.ac:47: -1- m4_pattern_allow([^CPP$])
+m4trace:configure.ac:47: -1- m4_pattern_allow([^CPPFLAGS$])
+m4trace:configure.ac:47: -1- m4_pattern_allow([^CPP$])
+m4trace:configure.ac:47: -1- m4_pattern_allow([^GREP$])
+m4trace:configure.ac:47: -1- m4_pattern_allow([^EGREP$])
+m4trace:configure.ac:47: -1- m4_pattern_allow([^STDC_HEADERS$])
+m4trace:configure.ac:47: -1- m4_pattern_allow([^SIZEOF_VOID_P$])
+m4trace:configure.ac:47: -1- m4_pattern_allow([^AC_APPLE_UNIVERSAL_BUILD$])
+m4trace:configure.ac:47: -1- m4_pattern_allow([^ZERO_LIBARCH$])
+m4trace:configure.ac:47: -1- m4_pattern_allow([^ZERO_BITSPERWORD$])
+m4trace:configure.ac:47: -1- m4_pattern_allow([^ZERO_ENDIANNESS$])
+m4trace:configure.ac:47: -1- m4_pattern_allow([^ZERO_ARCHDEF$])
+m4trace:configure.ac:47: -1- m4_pattern_allow([^HSBUILD$])
+m4trace:configure.ac:47: -1- AM_CONDITIONAL([WITH_ALT_HSBUILD], [test "x${HSBUILD}" != "xdefault"])
+m4trace:configure.ac:47: -1- m4_pattern_allow([^WITH_ALT_HSBUILD_TRUE$])
+m4trace:configure.ac:47: -1- m4_pattern_allow([^WITH_ALT_HSBUILD_FALSE$])
+m4trace:configure.ac:47: -1- _AM_SUBST_NOTMAKE([WITH_ALT_HSBUILD_TRUE])
+m4trace:configure.ac:47: -1- _AM_SUBST_NOTMAKE([WITH_ALT_HSBUILD_FALSE])
+m4trace:configure.ac:48: -1- m4_pattern_allow([^LINUX32$])
+m4trace:configure.ac:49: -1- IT_CHECK_GCC_VERSION
+m4trace:configure.ac:49: -1- AM_CONDITIONAL([GCC_OLD], [test ! ${gcc_major_ver} -ge 4 -a ${gcc_minor_ver} -ge 3])
+m4trace:configure.ac:49: -1- m4_pattern_allow([^GCC_OLD_TRUE$])
+m4trace:configure.ac:49: -1- m4_pattern_allow([^GCC_OLD_FALSE$])
+m4trace:configure.ac:49: -1- _AM_SUBST_NOTMAKE([GCC_OLD_TRUE])
+m4trace:configure.ac:49: -1- _AM_SUBST_NOTMAKE([GCC_OLD_FALSE])
+m4trace:configure.ac:50: -1- IT_FIND_NUMBER_OF_PROCESSORS
+m4trace:configure.ac:50: -1- IT_FIND_TOOL([GETCONF], [getconf])
+m4trace:configure.ac:50: -1- m4_pattern_allow([^GETCONF$])
+m4trace:configure.ac:50: -1- m4_pattern_allow([^GETCONF$])
+m4trace:configure.ac:51: -1- IT_CP_SUPPORTS_REFLINK
+m4trace:configure.ac:51: -1- AM_CONDITIONAL([CP_SUPPORTS_REFLINK], [test x"${it_cv_reflink}" = "xyes"])
+m4trace:configure.ac:51: -1- m4_pattern_allow([^CP_SUPPORTS_REFLINK_TRUE$])
+m4trace:configure.ac:51: -1- m4_pattern_allow([^CP_SUPPORTS_REFLINK_FALSE$])
+m4trace:configure.ac:51: -1- _AM_SUBST_NOTMAKE([CP_SUPPORTS_REFLINK_TRUE])
+m4trace:configure.ac:51: -1- _AM_SUBST_NOTMAKE([CP_SUPPORTS_REFLINK_FALSE])
+m4trace:configure.ac:52: -1- IT_CAN_HARDLINK_TO_SOURCE_TREE
+m4trace:configure.ac:52: -1- AM_CONDITIONAL([SRC_DIR_HARDLINKABLE], [test x"${it_cv_hardlink_src}" = "xyes"])
+m4trace:configure.ac:52: -1- m4_pattern_allow([^SRC_DIR_HARDLINKABLE_TRUE$])
+m4trace:configure.ac:52: -1- m4_pattern_allow([^SRC_DIR_HARDLINKABLE_FALSE$])
+m4trace:configure.ac:52: -1- _AM_SUBST_NOTMAKE([SRC_DIR_HARDLINKABLE_TRUE])
+m4trace:configure.ac:52: -1- _AM_SUBST_NOTMAKE([SRC_DIR_HARDLINKABLE_FALSE])
+m4trace:configure.ac:53: -1- IT_DISABLE_TESTS
+m4trace:configure.ac:53: -1- AM_CONDITIONAL([DISABLE_TESTS], [test x"${disable_tests}" = "xyes"])
+m4trace:configure.ac:53: -1- m4_pattern_allow([^DISABLE_TESTS_TRUE$])
+m4trace:configure.ac:53: -1- m4_pattern_allow([^DISABLE_TESTS_FALSE$])
+m4trace:configure.ac:53: -1- _AM_SUBST_NOTMAKE([DISABLE_TESTS_TRUE])
+m4trace:configure.ac:53: -1- _AM_SUBST_NOTMAKE([DISABLE_TESTS_FALSE])
+m4trace:configure.ac:54: -1- IT_DISABLE_HOTSPOT_TESTS
+m4trace:configure.ac:54: -1- AM_CONDITIONAL([DISABLE_HOTSPOT_TESTS], [test x"${disable_hotspot_tests}" = "xyes"])
+m4trace:configure.ac:54: -1- m4_pattern_allow([^DISABLE_HOTSPOT_TESTS_TRUE$])
+m4trace:configure.ac:54: -1- m4_pattern_allow([^DISABLE_HOTSPOT_TESTS_FALSE$])
+m4trace:configure.ac:54: -1- _AM_SUBST_NOTMAKE([DISABLE_HOTSPOT_TESTS_TRUE])
+m4trace:configure.ac:54: -1- _AM_SUBST_NOTMAKE([DISABLE_HOTSPOT_TESTS_FALSE])
+m4trace:configure.ac:55: -1- IT_DISABLE_LANGTOOLS_TESTS
+m4trace:configure.ac:55: -1- AM_CONDITIONAL([DISABLE_LANGTOOLS_TESTS], [test x"${disable_langtools_tests}" = "xyes"])
+m4trace:configure.ac:55: -1- m4_pattern_allow([^DISABLE_LANGTOOLS_TESTS_TRUE$])
+m4trace:configure.ac:55: -1- m4_pattern_allow([^DISABLE_LANGTOOLS_TESTS_FALSE$])
+m4trace:configure.ac:55: -1- _AM_SUBST_NOTMAKE([DISABLE_LANGTOOLS_TESTS_TRUE])
+m4trace:configure.ac:55: -1- _AM_SUBST_NOTMAKE([DISABLE_LANGTOOLS_TESTS_FALSE])
+m4trace:configure.ac:56: -1- IT_DISABLE_JDK_TESTS
+m4trace:configure.ac:56: -1- AM_CONDITIONAL([DISABLE_JDK_TESTS], [test x"${disable_jdk_tests}" = "xyes"])
+m4trace:configure.ac:56: -1- m4_pattern_allow([^DISABLE_JDK_TESTS_TRUE$])
+m4trace:configure.ac:56: -1- m4_pattern_allow([^DISABLE_JDK_TESTS_FALSE$])
+m4trace:configure.ac:56: -1- _AM_SUBST_NOTMAKE([DISABLE_JDK_TESTS_TRUE])
+m4trace:configure.ac:56: -1- _AM_SUBST_NOTMAKE([DISABLE_JDK_TESTS_FALSE])
+m4trace:configure.ac:59: -1- m4_pattern_allow([^XVFB_RUN_CMD$])
+m4trace:configure.ac:60: -1- m4_pattern_allow([^XVFB_RUN_CMD$])
+m4trace:configure.ac:67: -1- AM_CONDITIONAL([ENABLE_PULSE_JAVA], [test "x${enable_pulse_java}" = "xyes"])
+m4trace:configure.ac:67: -1- m4_pattern_allow([^ENABLE_PULSE_JAVA_TRUE$])
+m4trace:configure.ac:67: -1- m4_pattern_allow([^ENABLE_PULSE_JAVA_FALSE$])
+m4trace:configure.ac:67: -1- _AM_SUBST_NOTMAKE([ENABLE_PULSE_JAVA_TRUE])
+m4trace:configure.ac:67: -1- _AM_SUBST_NOTMAKE([ENABLE_PULSE_JAVA_FALSE])
+m4trace:configure.ac:75: -1- AM_CONDITIONAL([ENABLE_DOCS], [test x$ENABLE_DOCS = xyes])
+m4trace:configure.ac:75: -1- m4_pattern_allow([^ENABLE_DOCS_TRUE$])
+m4trace:configure.ac:75: -1- m4_pattern_allow([^ENABLE_DOCS_FALSE$])
+m4trace:configure.ac:75: -1- _AM_SUBST_NOTMAKE([ENABLE_DOCS_TRUE])
+m4trace:configure.ac:75: -1- _AM_SUBST_NOTMAKE([ENABLE_DOCS_FALSE])
+m4trace:configure.ac:78: -1- IT_LOCATE_NSS
+m4trace:configure.ac:78: -1- IT_OBTAIN_DEFAULT_LIBDIR
+m4trace:configure.ac:78: -1- m4_pattern_allow([^DEFAULT_LIBDIR$])
+m4trace:configure.ac:78: -1- AM_CONDITIONAL([ENABLE_NSS], [test x$ENABLE_NSS = xyes])
+m4trace:configure.ac:78: -1- m4_pattern_allow([^ENABLE_NSS_TRUE$])
+m4trace:configure.ac:78: -1- m4_pattern_allow([^ENABLE_NSS_FALSE$])
+m4trace:configure.ac:78: -1- _AM_SUBST_NOTMAKE([ENABLE_NSS_TRUE])
+m4trace:configure.ac:78: -1- _AM_SUBST_NOTMAKE([ENABLE_NSS_FALSE])
+m4trace:configure.ac:78: -1- PKG_CHECK_MODULES([NSS], [nss], [NSS_FOUND=yes], [NSS_FOUND=no])
+m4trace:configure.ac:78: -1- PKG_PROG_PKG_CONFIG
+m4trace:configure.ac:78: -1- m4_pattern_forbid([^_?PKG_[A-Z_]+$])
+m4trace:configure.ac:78: -1- m4_pattern_allow([^PKG_CONFIG(_(PATH|LIBDIR|SYSROOT_DIR|ALLOW_SYSTEM_(CFLAGS|LIBS)))?$])
+m4trace:configure.ac:78: -1- m4_pattern_allow([^PKG_CONFIG_(DISABLE_UNINSTALLED|TOP_BUILD_DIR|DEBUG_SPEW)$])
+m4trace:configure.ac:78: -1- m4_pattern_allow([^PKG_CONFIG$])
+m4trace:configure.ac:78: -1- m4_pattern_allow([^PKG_CONFIG_PATH$])
+m4trace:configure.ac:78: -1- m4_pattern_allow([^PKG_CONFIG_LIBDIR$])
+m4trace:configure.ac:78: -1- m4_pattern_allow([^PKG_CONFIG$])
+m4trace:configure.ac:78: -1- m4_pattern_allow([^NSS_CFLAGS$])
+m4trace:configure.ac:78: -1- m4_pattern_allow([^NSS_LIBS$])
+m4trace:configure.ac:78: -1- PKG_CHECK_EXISTS([nss], [pkg_cv_[]NSS_CFLAGS=`$PKG_CONFIG --[]cflags "nss" 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes ], [pkg_failed=yes])
+m4trace:configure.ac:78: -1- PKG_CHECK_EXISTS([nss], [pkg_cv_[]NSS_LIBS=`$PKG_CONFIG --[]libs "nss" 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes ], [pkg_failed=yes])
+m4trace:configure.ac:78: -1- _PKG_SHORT_ERRORS_SUPPORTED
+m4trace:configure.ac:78: -1- m4_pattern_allow([^NSS_LIBDIR$])
+m4trace:configure.ac:79: -1- IT_GET_PKGVERSION
+m4trace:configure.ac:79: -1- AM_CONDITIONAL([HAS_PKGVERSION], [test "x${PKGVERSION}" != "xnone"])
+m4trace:configure.ac:79: -1- m4_pattern_allow([^HAS_PKGVERSION_TRUE$])
+m4trace:configure.ac:79: -1- m4_pattern_allow([^HAS_PKGVERSION_FALSE$])
+m4trace:configure.ac:79: -1- _AM_SUBST_NOTMAKE([HAS_PKGVERSION_TRUE])
+m4trace:configure.ac:79: -1- _AM_SUBST_NOTMAKE([HAS_PKGVERSION_FALSE])
+m4trace:configure.ac:79: -1- m4_pattern_allow([^PKGVERSION$])
+m4trace:configure.ac:80: -1- IT_GET_LSB_DATA
+m4trace:configure.ac:80: -1- m4_pattern_allow([^DIST_ID$])
+m4trace:configure.ac:80: -1- m4_pattern_allow([^DIST_NAME$])
+m4trace:configure.ac:82: -1- IT_SET_ARCH_SETTINGS
+m4trace:configure.ac:82: -1- m4_pattern_allow([^BUILD_ARCH_DIR$])
+m4trace:configure.ac:82: -1- m4_pattern_allow([^INSTALL_ARCH_DIR$])
+m4trace:configure.ac:82: -1- m4_pattern_allow([^JRE_ARCH_DIR$])
+m4trace:configure.ac:82: -1- m4_pattern_allow([^ARCH_PREFIX$])
+m4trace:configure.ac:82: -1- m4_pattern_allow([^ARCHFLAG$])
+m4trace:configure.ac:83: -1- IT_SET_OS_DIRS
+m4trace:configure.ac:83: -1- m4_pattern_allow([^BUILD_OS_DIR$])
+m4trace:configure.ac:83: -1- m4_pattern_allow([^OS_PATH$])
+m4trace:configure.ac:85: -1- m4_pattern_allow([^OPENJDK_BUILD_DIR$])
+m4trace:configure.ac:87: -1- IT_CHECK_NUMBER_OF_PARALLEL_JOBS
+m4trace:configure.ac:87: -1- m4_pattern_allow([^PARALLEL_JOBS$])
+m4trace:configure.ac:88: -1- IT_CHECK_IF_BOOTSTRAPPING
+m4trace:configure.ac:88: -1- AM_CONDITIONAL([BOOTSTRAPPING], [test x"${enable_bootstrap}" = "xyes"])
+m4trace:configure.ac:88: -1- m4_pattern_allow([^BOOTSTRAPPING_TRUE$])
+m4trace:configure.ac:88: -1- m4_pattern_allow([^BOOTSTRAPPING_FALSE$])
+m4trace:configure.ac:88: -1- _AM_SUBST_NOTMAKE([BOOTSTRAPPING_TRUE])
+m4trace:configure.ac:88: -1- _AM_SUBST_NOTMAKE([BOOTSTRAPPING_FALSE])
+m4trace:configure.ac:89: -1- IT_CHECK_IF_DOWNLOADING
+m4trace:configure.ac:89: -1- AM_CONDITIONAL([DOWNLOADING], [test x"${enable_downloading}" = "xyes"])
+m4trace:configure.ac:89: -1- m4_pattern_allow([^DOWNLOADING_TRUE$])
+m4trace:configure.ac:89: -1- m4_pattern_allow([^DOWNLOADING_FALSE$])
+m4trace:configure.ac:89: -1- _AM_SUBST_NOTMAKE([DOWNLOADING_TRUE])
+m4trace:configure.ac:89: -1- _AM_SUBST_NOTMAKE([DOWNLOADING_FALSE])
+m4trace:configure.ac:89: -1- m4_pattern_allow([^enable_downloading$])
+m4trace:configure.ac:90: -1- IT_CHECK_FOR_JDK
+m4trace:configure.ac:90: -1- m4_pattern_allow([^SYSTEM_JDK_DIR$])
+m4trace:configure.ac:91: -1- IT_FIND_JAVA
+m4trace:configure.ac:91: -1- m4_pattern_allow([^JAVA$])
+m4trace:configure.ac:91: -1- m4_pattern_allow([^JAVA$])
+m4trace:configure.ac:91: -1- m4_pattern_allow([^JAVA$])
+m4trace:configure.ac:91: -1- m4_pattern_allow([^JAVA$])
+m4trace:configure.ac:92: -1- IT_FIND_COMPILER
+m4trace:configure.ac:92: -1- IT_FIND_JAVAC
+m4trace:configure.ac:92: -1- m4_pattern_allow([^JAVAC$])
+m4trace:configure.ac:92: -1- m4_pattern_allow([^JAVAC$])
+m4trace:configure.ac:92: -1- IT_FIND_ECJ
+m4trace:configure.ac:92: -1- m4_pattern_allow([^ECJ$])
+m4trace:configure.ac:92: -1- m4_pattern_allow([^ECJ$])
+m4trace:configure.ac:92: -1- m4_pattern_allow([^ECJ$])
+m4trace:configure.ac:92: -1- m4_pattern_allow([^ECJ$])
+m4trace:configure.ac:92: -1- m4_pattern_allow([^ECJ$])
+m4trace:configure.ac:92: -1- IT_USING_ECJ
+m4trace:configure.ac:92: -1- m4_pattern_allow([^USING_ECJ$])
+m4trace:configure.ac:92: -1- m4_pattern_allow([^ECJ$])
+m4trace:configure.ac:92: -1- m4_pattern_allow([^JAVAC$])
+m4trace:configure.ac:93: -1- IT_FIND_JAVAH
+m4trace:configure.ac:93: -1- m4_pattern_allow([^JAVAH$])
+m4trace:configure.ac:93: -1- m4_pattern_allow([^JAVAH$])
+m4trace:configure.ac:93: -1- m4_pattern_allow([^JAVAH$])
+m4trace:configure.ac:94: -1- IT_FIND_JAR
+m4trace:configure.ac:94: -1- m4_pattern_allow([^JAR$])
+m4trace:configure.ac:94: -1- m4_pattern_allow([^JAR$])
+m4trace:configure.ac:94: -1- m4_pattern_allow([^JAR$])
+m4trace:configure.ac:94: -1- m4_pattern_allow([^JAR_KNOWS_ATFILE$])
+m4trace:configure.ac:94: -1- m4_pattern_allow([^JAR_ACCEPTS_STDIN_LIST$])
+m4trace:configure.ac:94: -1- m4_pattern_allow([^JAR_KNOWS_J_OPTIONS$])
+m4trace:configure.ac:95: -1- IT_FIND_RMIC
+m4trace:configure.ac:95: -1- m4_pattern_allow([^RMIC$])
+m4trace:configure.ac:95: -1- m4_pattern_allow([^RMIC$])
+m4trace:configure.ac:95: -1- m4_pattern_allow([^RMIC$])
+m4trace:configure.ac:96: -1- IT_FIND_NATIVE2ASCII
+m4trace:configure.ac:96: -1- m4_pattern_allow([^NATIVE2ASCII$])
+m4trace:configure.ac:96: -1- m4_pattern_allow([^NATIVE2ASCII$])
+m4trace:configure.ac:96: -1- m4_pattern_allow([^NATIVE2ASCII$])
+m4trace:configure.ac:97: -1- IT_USING_CACAO
+m4trace:configure.ac:97: -1- m4_pattern_allow([^USING_CACAO$])
+m4trace:configure.ac:97: -1- AM_CONDITIONAL([USING_CACAO], [test "x${USING_CACAO}" = "xyes"])
+m4trace:configure.ac:97: -1- m4_pattern_allow([^USING_CACAO_TRUE$])
+m4trace:configure.ac:97: -1- m4_pattern_allow([^USING_CACAO_FALSE$])
+m4trace:configure.ac:97: -1- _AM_SUBST_NOTMAKE([USING_CACAO_TRUE])
+m4trace:configure.ac:97: -1- _AM_SUBST_NOTMAKE([USING_CACAO_FALSE])
+m4trace:configure.ac:99: -1- IT_FIND_ECJ_JAR
+m4trace:configure.ac:99: -1- m4_pattern_allow([^ECJ_JAR$])
+m4trace:configure.ac:100: -1- IT_FIND_TOOL([XSLTPROC], [xsltproc])
+m4trace:configure.ac:100: -1- m4_pattern_allow([^XSLTPROC$])
+m4trace:configure.ac:100: -1- m4_pattern_allow([^XSLTPROC$])
+m4trace:configure.ac:106: -1- IT_JAVAH
+m4trace:configure.ac:106: -1- IT_CHECK_JAVA_AND_JAVAC_WORK
+m4trace:configure.ac:106: -1- _m4_warn([obsolete], [The macro `AC_FD_CC' is obsolete.
+You should run autoupdate.], [../.././../lib/autoconf/general.m4:383: AC_FD_CC is expanded from...
+../../../lib/m4sugar/m4sh.m4:639: AS_IF is expanded from...
+../.././../lib/autoconf/general.m4:2031: AC_CACHE_VAL is expanded from...
+../.././../lib/autoconf/general.m4:2052: AC_CACHE_CHECK is expanded from...
+acinclude.m4:1190: IT_JAVAH is expanded from...
+configure.ac:106: the top level])
+m4trace:configure.ac:106: -1- _m4_warn([obsolete], [The macro `AC_FD_CC' is obsolete.
+You should run autoupdate.], [../.././../lib/autoconf/general.m4:383: AC_FD_CC is expanded from...
+../../../lib/m4sugar/m4sh.m4:639: AS_IF is expanded from...
+../.././../lib/autoconf/general.m4:2031: AC_CACHE_VAL is expanded from...
+../.././../lib/autoconf/general.m4:2052: AC_CACHE_CHECK is expanded from...
+acinclude.m4:1190: IT_JAVAH is expanded from...
+configure.ac:106: the top level])
+m4trace:configure.ac:106: -1- _m4_warn([obsolete], [The macro `AC_FD_CC' is obsolete.
+You should run autoupdate.], [../.././../lib/autoconf/general.m4:383: AC_FD_CC is expanded from...
+../../../lib/m4sugar/m4sh.m4:639: AS_IF is expanded from...
+../.././../lib/autoconf/general.m4:2031: AC_CACHE_VAL is expanded from...
+../.././../lib/autoconf/general.m4:2052: AC_CACHE_CHECK is expanded from...
+acinclude.m4:1190: IT_JAVAH is expanded from...
+configure.ac:106: the top level])
+m4trace:configure.ac:106: -1- _m4_warn([obsolete], [The macro `AC_FD_CC' is obsolete.
+You should run autoupdate.], [../.././../lib/autoconf/general.m4:383: AC_FD_CC is expanded from...
+../../../lib/m4sugar/m4sh.m4:639: AS_IF is expanded from...
+../.././../lib/autoconf/general.m4:2031: AC_CACHE_VAL is expanded from...
+../.././../lib/autoconf/general.m4:2052: AC_CACHE_CHECK is expanded from...
+acinclude.m4:1190: IT_JAVAH is expanded from...
+configure.ac:106: the top level])
+m4trace:configure.ac:106: -1- _m4_warn([obsolete], [The macro `AC_FD_CC' is obsolete.
+You should run autoupdate.], [../.././../lib/autoconf/general.m4:383: AC_FD_CC is expanded from...
+../../../lib/m4sugar/m4sh.m4:639: AS_IF is expanded from...
+../.././../lib/autoconf/general.m4:2031: AC_CACHE_VAL is expanded from...
+../.././../lib/autoconf/general.m4:2052: AC_CACHE_CHECK is expanded from...
+acinclude.m4:1190: IT_JAVAH is expanded from...
+configure.ac:106: the top level])
+m4trace:configure.ac:106: -1- _m4_warn([obsolete], [The macro `AC_FD_CC' is obsolete.
+You should run autoupdate.], [../.././../lib/autoconf/general.m4:383: AC_FD_CC is expanded from...
+../../../lib/m4sugar/m4sh.m4:639: AS_IF is expanded from...
+../.././../lib/autoconf/general.m4:2031: AC_CACHE_VAL is expanded from...
+../.././../lib/autoconf/general.m4:2052: AC_CACHE_CHECK is expanded from...
+acinclude.m4:1190: IT_JAVAH is expanded from...
+configure.ac:106: the top level])
+m4trace:configure.ac:106: -1- _m4_warn([obsolete], [The macro `AC_FD_CC' is obsolete.
+You should run autoupdate.], [../.././../lib/autoconf/general.m4:383: AC_FD_CC is expanded from...
+../../../lib/m4sugar/m4sh.m4:639: AS_IF is expanded from...
+../.././../lib/autoconf/general.m4:2031: AC_CACHE_VAL is expanded from...
+../.././../lib/autoconf/general.m4:2052: AC_CACHE_CHECK is expanded from...
+acinclude.m4:1190: IT_JAVAH is expanded from...
+configure.ac:106: the top level])
+m4trace:configure.ac:106: -1- _m4_warn([obsolete], [The macro `AC_FD_CC' is obsolete.
+You should run autoupdate.], [../.././../lib/autoconf/general.m4:383: AC_FD_CC is expanded from...
+../../../lib/m4sugar/m4sh.m4:639: AS_IF is expanded from...
+../.././../lib/autoconf/general.m4:2031: AC_CACHE_VAL is expanded from...
+../.././../lib/autoconf/general.m4:2052: AC_CACHE_CHECK is expanded from...
+acinclude.m4:1190: IT_JAVAH is expanded from...
+configure.ac:106: the top level])
+m4trace:configure.ac:106: -1- AM_CONDITIONAL([CP39408_JAVAH], [test x"${it_cv_cp39408_javah}" = "xyes"])
+m4trace:configure.ac:106: -1- m4_pattern_allow([^CP39408_JAVAH_TRUE$])
+m4trace:configure.ac:106: -1- m4_pattern_allow([^CP39408_JAVAH_FALSE$])
+m4trace:configure.ac:106: -1- _AM_SUBST_NOTMAKE([CP39408_JAVAH_TRUE])
+m4trace:configure.ac:106: -1- _AM_SUBST_NOTMAKE([CP39408_JAVAH_FALSE])
+m4trace:configure.ac:106: -1- AM_CONDITIONAL([CP40188_JAVAH], [test x"${it_cv_cp40188_javah}" = "xyes"])
+m4trace:configure.ac:106: -1- m4_pattern_allow([^CP40188_JAVAH_TRUE$])
+m4trace:configure.ac:106: -1- m4_pattern_allow([^CP40188_JAVAH_FALSE$])
+m4trace:configure.ac:106: -1- _AM_SUBST_NOTMAKE([CP40188_JAVAH_TRUE])
+m4trace:configure.ac:106: -1- _AM_SUBST_NOTMAKE([CP40188_JAVAH_FALSE])
+m4trace:configure.ac:106: -1- AM_CONDITIONAL([CP45526_JAVAH], [test x"${it_cv_cp45526_javah}" = "xyes"])
+m4trace:configure.ac:106: -1- m4_pattern_allow([^CP45526_JAVAH_TRUE$])
+m4trace:configure.ac:106: -1- m4_pattern_allow([^CP45526_JAVAH_FALSE$])
+m4trace:configure.ac:106: -1- _AM_SUBST_NOTMAKE([CP45526_JAVAH_TRUE])
+m4trace:configure.ac:106: -1- _AM_SUBST_NOTMAKE([CP45526_JAVAH_FALSE])
+m4trace:configure.ac:106: -1- AM_CONDITIONAL([JAVAH_SUPPORTS_X_OPTIONS], [test x"${it_cv_javahx}" = "xyes"])
+m4trace:configure.ac:106: -1- m4_pattern_allow([^JAVAH_SUPPORTS_X_OPTIONS_TRUE$])
+m4trace:configure.ac:106: -1- m4_pattern_allow([^JAVAH_SUPPORTS_X_OPTIONS_FALSE$])
+m4trace:configure.ac:106: -1- _AM_SUBST_NOTMAKE([JAVAH_SUPPORTS_X_OPTIONS_TRUE])
+m4trace:configure.ac:106: -1- _AM_SUBST_NOTMAKE([JAVAH_SUPPORTS_X_OPTIONS_FALSE])
+m4trace:configure.ac:107: -1- IT_LIBRARY_CHECK
+m4trace:configure.ac:107: -1- AM_CONDITIONAL([CP40616], [test x"${it_cv_cp40616}" = "xyes"])
+m4trace:configure.ac:107: -1- m4_pattern_allow([^CP40616_TRUE$])
+m4trace:configure.ac:107: -1- m4_pattern_allow([^CP40616_FALSE$])
+m4trace:configure.ac:107: -1- _AM_SUBST_NOTMAKE([CP40616_TRUE])
+m4trace:configure.ac:107: -1- _AM_SUBST_NOTMAKE([CP40616_FALSE])
+m4trace:configure.ac:108: -1- IT_CHECK_FOR_CLASS([JAVA_UTIL_SCANNER], [java.util.Scanner])
+m4trace:configure.ac:108: -1- AM_CONDITIONAL([LACKS_JAVA_UTIL_SCANNER], [test x"${it_cv_JAVA_UTIL_SCANNER}" = "xyes"])
+m4trace:configure.ac:108: -1- m4_pattern_allow([^LACKS_JAVA_UTIL_SCANNER_TRUE$])
+m4trace:configure.ac:108: -1- m4_pattern_allow([^LACKS_JAVA_UTIL_SCANNER_FALSE$])
+m4trace:configure.ac:108: -1- _AM_SUBST_NOTMAKE([LACKS_JAVA_UTIL_SCANNER_TRUE])
+m4trace:configure.ac:108: -1- _AM_SUBST_NOTMAKE([LACKS_JAVA_UTIL_SCANNER_FALSE])
+m4trace:configure.ac:109: -1- IT_PR40630_CHECK
+m4trace:configure.ac:109: -1- AM_CONDITIONAL([CP40630], [test x"${it_cv_cp40630}" = "xyes"])
+m4trace:configure.ac:109: -1- m4_pattern_allow([^CP40630_TRUE$])
+m4trace:configure.ac:109: -1- m4_pattern_allow([^CP40630_FALSE$])
+m4trace:configure.ac:109: -1- _AM_SUBST_NOTMAKE([CP40630_TRUE])
+m4trace:configure.ac:109: -1- _AM_SUBST_NOTMAKE([CP40630_FALSE])
+m4trace:configure.ac:110: -1- IT_CHECK_FOR_CLASS([JAVAX_ANNOTATION_RESOURCE], [javax.annotation.Resource])
+m4trace:configure.ac:110: -1- AM_CONDITIONAL([LACKS_JAVAX_ANNOTATION_RESOURCE], [test x"${it_cv_JAVAX_ANNOTATION_RESOURCE}" = "xyes"])
+m4trace:configure.ac:110: -1- m4_pattern_allow([^LACKS_JAVAX_ANNOTATION_RESOURCE_TRUE$])
+m4trace:configure.ac:110: -1- m4_pattern_allow([^LACKS_JAVAX_ANNOTATION_RESOURCE_FALSE$])
+m4trace:configure.ac:110: -1- _AM_SUBST_NOTMAKE([LACKS_JAVAX_ANNOTATION_RESOURCE_TRUE])
+m4trace:configure.ac:110: -1- _AM_SUBST_NOTMAKE([LACKS_JAVAX_ANNOTATION_RESOURCE_FALSE])
+m4trace:configure.ac:111: -1- IT_GETDTDTYPE_CHECK
+m4trace:configure.ac:111: -1- AM_CONDITIONAL([DTDTYPE_QNAME], [test x"${it_cv_dtdtype}" = "xyes"])
+m4trace:configure.ac:111: -1- m4_pattern_allow([^DTDTYPE_QNAME_TRUE$])
+m4trace:configure.ac:111: -1- m4_pattern_allow([^DTDTYPE_QNAME_FALSE$])
+m4trace:configure.ac:111: -1- _AM_SUBST_NOTMAKE([DTDTYPE_QNAME_TRUE])
+m4trace:configure.ac:111: -1- _AM_SUBST_NOTMAKE([DTDTYPE_QNAME_FALSE])
+m4trace:configure.ac:113: -1- IT_CHECK_FOR_CLASS([JAVAX_MANAGEMENT_REMOTE_JMXSERVICEURL], [javax.management.remote.JMXServiceURL])
+m4trace:configure.ac:113: -1- AM_CONDITIONAL([LACKS_JAVAX_MANAGEMENT_REMOTE_JMXSERVICEURL], [test x"${it_cv_JAVAX_MANAGEMENT_REMOTE_JMXSERVICEURL}" = "xyes"])
+m4trace:configure.ac:113: -1- m4_pattern_allow([^LACKS_JAVAX_MANAGEMENT_REMOTE_JMXSERVICEURL_TRUE$])
+m4trace:configure.ac:113: -1- m4_pattern_allow([^LACKS_JAVAX_MANAGEMENT_REMOTE_JMXSERVICEURL_FALSE$])
+m4trace:configure.ac:113: -1- _AM_SUBST_NOTMAKE([LACKS_JAVAX_MANAGEMENT_REMOTE_JMXSERVICEURL_TRUE])
+m4trace:configure.ac:113: -1- _AM_SUBST_NOTMAKE([LACKS_JAVAX_MANAGEMENT_REMOTE_JMXSERVICEURL_FALSE])
+m4trace:configure.ac:115: -1- IT_CHECK_FOR_CLASS([JAVAX_MANAGEMENT_MODELMBEAN_MODELMBEANINFO], [javax.management.modelmbean.ModelMBeanInfo])
+m4trace:configure.ac:115: -1- AM_CONDITIONAL([LACKS_JAVAX_MANAGEMENT_MODELMBEAN_MODELMBEANINFO], [test x"${it_cv_JAVAX_MANAGEMENT_MODELMBEAN_MODELMBEANINFO}" = "xyes"])
+m4trace:configure.ac:115: -1- m4_pattern_allow([^LACKS_JAVAX_MANAGEMENT_MODELMBEAN_MODELMBEANINFO_TRUE$])
+m4trace:configure.ac:115: -1- m4_pattern_allow([^LACKS_JAVAX_MANAGEMENT_MODELMBEAN_MODELMBEANINFO_FALSE$])
+m4trace:configure.ac:115: -1- _AM_SUBST_NOTMAKE([LACKS_JAVAX_MANAGEMENT_MODELMBEAN_MODELMBEANINFO_TRUE])
+m4trace:configure.ac:115: -1- _AM_SUBST_NOTMAKE([LACKS_JAVAX_MANAGEMENT_MODELMBEAN_MODELMBEANINFO_FALSE])
+m4trace:configure.ac:117: -1- IT_CHECK_FOR_METHOD([JAVA_UTIL_REGEX_MATCHER_QUOTEREPLACEMENT], [java.util.regex.Matcher.quoteReplacement], [java.util.regex.Matcher], ["quoteReplacement",String.class], [java.util.regex.Matcher.quoteReplacement("Blah")
+])
+m4trace:configure.ac:117: -1- AM_CONDITIONAL([LACKS_JAVA_UTIL_REGEX_MATCHER_QUOTEREPLACEMENT], [test x"${it_cv_JAVA_UTIL_REGEX_MATCHER_QUOTEREPLACEMENT}" = "xyes"])
+m4trace:configure.ac:117: -1- m4_pattern_allow([^LACKS_JAVA_UTIL_REGEX_MATCHER_QUOTEREPLACEMENT_TRUE$])
+m4trace:configure.ac:117: -1- m4_pattern_allow([^LACKS_JAVA_UTIL_REGEX_MATCHER_QUOTEREPLACEMENT_FALSE$])
+m4trace:configure.ac:117: -1- _AM_SUBST_NOTMAKE([LACKS_JAVA_UTIL_REGEX_MATCHER_QUOTEREPLACEMENT_TRUE])
+m4trace:configure.ac:117: -1- _AM_SUBST_NOTMAKE([LACKS_JAVA_UTIL_REGEX_MATCHER_QUOTEREPLACEMENT_FALSE])
+m4trace:configure.ac:124: -1- IT_CHECK_FOR_METHOD([JAVAX_SWING_PLAF_BASIC_BASICDIRECTORYMODEL_ADDPROPERTYCHANGELISTENER], [javax.swing.plaf.basic.BasicDirectoryModel.addPropertyChangeListener], [javax.swing.plaf.basic.BasicDirectoryModel], ["addPropertyChangeListener",java.beans.PropertyChangeListener.class], [javax.swing.plaf.basic.BasicDirectoryModel model = new javax.swing.plaf.basic.BasicDirectoryModel(new javax.swing.JFileChooser()); model.addPropertyChangeListener(model)
+])
+m4trace:configure.ac:124: -1- AM_CONDITIONAL([LACKS_JAVAX_SWING_PLAF_BASIC_BASICDIRECTORYMODEL_ADDPROPERTYCHANGELISTENER], [test x"${it_cv_JAVAX_SWING_PLAF_BASIC_BASICDIRECTORYMODEL_ADDPROPERTYCHANGELISTENER}" = "xyes"])
+m4trace:configure.ac:124: -1- m4_pattern_allow([^LACKS_JAVAX_SWING_PLAF_BASIC_BASICDIRECTORYMODEL_ADDPROPERTYCHANGELISTENER_TRUE$])
+m4trace:configure.ac:124: -1- m4_pattern_allow([^LACKS_JAVAX_SWING_PLAF_BASIC_BASICDIRECTORYMODEL_ADDPROPERTYCHANGELISTENER_FALSE$])
+m4trace:configure.ac:124: -1- _AM_SUBST_NOTMAKE([LACKS_JAVAX_SWING_PLAF_BASIC_BASICDIRECTORYMODEL_ADDPROPERTYCHANGELISTENER_TRUE])
+m4trace:configure.ac:124: -1- _AM_SUBST_NOTMAKE([LACKS_JAVAX_SWING_PLAF_BASIC_BASICDIRECTORYMODEL_ADDPROPERTYCHANGELISTENER_FALSE])
+m4trace:configure.ac:131: -1- IT_CHECK_FOR_METHOD([JAVAX_NET_SSL_SSLCONTEXT_GETDEFAULTSSLPARAMETERS], [javax.net.ssl.SSLContext.getDefaultSSLParameters], [javax.net.ssl.SSLContext], ["getDefaultSSLParameters"], [try { javax.net.ssl.SSLContext.getDefault().getDefaultSSLParameters(); } catch (Exception e) {}
+])
+m4trace:configure.ac:131: -1- AM_CONDITIONAL([LACKS_JAVAX_NET_SSL_SSLCONTEXT_GETDEFAULTSSLPARAMETERS], [test x"${it_cv_JAVAX_NET_SSL_SSLCONTEXT_GETDEFAULTSSLPARAMETERS}" = "xyes"])
+m4trace:configure.ac:131: -1- m4_pattern_allow([^LACKS_JAVAX_NET_SSL_SSLCONTEXT_GETDEFAULTSSLPARAMETERS_TRUE$])
+m4trace:configure.ac:131: -1- m4_pattern_allow([^LACKS_JAVAX_NET_SSL_SSLCONTEXT_GETDEFAULTSSLPARAMETERS_FALSE$])
+m4trace:configure.ac:131: -1- _AM_SUBST_NOTMAKE([LACKS_JAVAX_NET_SSL_SSLCONTEXT_GETDEFAULTSSLPARAMETERS_TRUE])
+m4trace:configure.ac:131: -1- _AM_SUBST_NOTMAKE([LACKS_JAVAX_NET_SSL_SSLCONTEXT_GETDEFAULTSSLPARAMETERS_FALSE])
+m4trace:configure.ac:137: -1- IT_CHECK_FOR_METHOD([JAVAX_NET_SSL_SSLENGINE_SETSSLPARAMETERS], [javax.net.ssl.SSLEngine.setSSLParameters], [javax.net.ssl.SSLEngine], ["setSSLParameters", javax.net.ssl.SSLParameters.class], [try { javax.net.ssl.SSLContext.getDefault().createSSLEngine().setSSLParameters(new javax.net.ssl.SSLParameters()); }
+   catch (Exception e) {}
+])
+m4trace:configure.ac:137: -1- AM_CONDITIONAL([LACKS_JAVAX_NET_SSL_SSLENGINE_SETSSLPARAMETERS], [test x"${it_cv_JAVAX_NET_SSL_SSLENGINE_SETSSLPARAMETERS}" = "xyes"])
+m4trace:configure.ac:137: -1- m4_pattern_allow([^LACKS_JAVAX_NET_SSL_SSLENGINE_SETSSLPARAMETERS_TRUE$])
+m4trace:configure.ac:137: -1- m4_pattern_allow([^LACKS_JAVAX_NET_SSL_SSLENGINE_SETSSLPARAMETERS_FALSE$])
+m4trace:configure.ac:137: -1- _AM_SUBST_NOTMAKE([LACKS_JAVAX_NET_SSL_SSLENGINE_SETSSLPARAMETERS_TRUE])
+m4trace:configure.ac:137: -1- _AM_SUBST_NOTMAKE([LACKS_JAVAX_NET_SSL_SSLENGINE_SETSSLPARAMETERS_FALSE])
+m4trace:configure.ac:145: -1- IT_CHECK_FOR_CONSTRUCTOR([JAVAX_RMI_SSL_SSLRMISERVERSOCKETFACTORY_7], [javax.rmi.ssl.SslRMIServerSocketFactory], [javax.net.ssl.SSLContext.class,String@<:@@:>@.class,String@<:@@:>@.class,Boolean.TYPE], [null,null,null,true
+])
+m4trace:configure.ac:145: -1- AM_CONDITIONAL([LACKS_JAVAX_RMI_SSL_SSLRMISERVERSOCKETFACTORY_7], [test x"${it_cv_JAVAX_RMI_SSL_SSLRMISERVERSOCKETFACTORY_7}" = "xyes"])
+m4trace:configure.ac:145: -1- m4_pattern_allow([^LACKS_JAVAX_RMI_SSL_SSLRMISERVERSOCKETFACTORY_7_TRUE$])
+m4trace:configure.ac:145: -1- m4_pattern_allow([^LACKS_JAVAX_RMI_SSL_SSLRMISERVERSOCKETFACTORY_7_FALSE$])
+m4trace:configure.ac:145: -1- _AM_SUBST_NOTMAKE([LACKS_JAVAX_RMI_SSL_SSLRMISERVERSOCKETFACTORY_7_TRUE])
+m4trace:configure.ac:145: -1- _AM_SUBST_NOTMAKE([LACKS_JAVAX_RMI_SSL_SSLRMISERVERSOCKETFACTORY_7_FALSE])
+m4trace:configure.ac:151: -1- IT_CHECK_ENABLE_WARNINGS
+m4trace:configure.ac:151: -1- AM_CONDITIONAL([ENABLE_WARNINGS], [test x"${ENABLE_WARNINGS}" = "xyes"])
+m4trace:configure.ac:151: -1- m4_pattern_allow([^ENABLE_WARNINGS_TRUE$])
+m4trace:configure.ac:151: -1- m4_pattern_allow([^ENABLE_WARNINGS_FALSE$])
+m4trace:configure.ac:151: -1- _AM_SUBST_NOTMAKE([ENABLE_WARNINGS_TRUE])
+m4trace:configure.ac:151: -1- _AM_SUBST_NOTMAKE([ENABLE_WARNINGS_FALSE])
+m4trace:configure.ac:151: -1- m4_pattern_allow([^ENABLE_WARNINGS$])
+m4trace:configure.ac:152: -1- IT_DIAMOND_CHECK
+m4trace:configure.ac:152: -1- AM_CONDITIONAL([JAVAC_LACKS_DIAMOND], [test x"${it_cv_diamond}" = "xyes"])
+m4trace:configure.ac:152: -1- m4_pattern_allow([^JAVAC_LACKS_DIAMOND_TRUE$])
+m4trace:configure.ac:152: -1- m4_pattern_allow([^JAVAC_LACKS_DIAMOND_FALSE$])
+m4trace:configure.ac:152: -1- _AM_SUBST_NOTMAKE([JAVAC_LACKS_DIAMOND_TRUE])
+m4trace:configure.ac:152: -1- _AM_SUBST_NOTMAKE([JAVAC_LACKS_DIAMOND_FALSE])
+m4trace:configure.ac:153: -1- IT_BYTECODE7_CHECK
+m4trace:configure.ac:153: -1- AM_CONDITIONAL([NO_BYTECODE7], [test x"${it_cv_bytecode7}" = "xno"])
+m4trace:configure.ac:153: -1- m4_pattern_allow([^NO_BYTECODE7_TRUE$])
+m4trace:configure.ac:153: -1- m4_pattern_allow([^NO_BYTECODE7_FALSE$])
+m4trace:configure.ac:153: -1- _AM_SUBST_NOTMAKE([NO_BYTECODE7_TRUE])
+m4trace:configure.ac:153: -1- _AM_SUBST_NOTMAKE([NO_BYTECODE7_FALSE])
+m4trace:configure.ac:154: -1- IT_USE_BOOTSTRAP_TOOLS
+m4trace:configure.ac:154: -1- AM_CONDITIONAL([DISABLE_BOOTSTRAP_TOOLS], [test x"${disable_bootstrap_tools}" = "xyes"])
+m4trace:configure.ac:154: -1- m4_pattern_allow([^DISABLE_BOOTSTRAP_TOOLS_TRUE$])
+m4trace:configure.ac:154: -1- m4_pattern_allow([^DISABLE_BOOTSTRAP_TOOLS_FALSE$])
+m4trace:configure.ac:154: -1- _AM_SUBST_NOTMAKE([DISABLE_BOOTSTRAP_TOOLS_TRUE])
+m4trace:configure.ac:154: -1- _AM_SUBST_NOTMAKE([DISABLE_BOOTSTRAP_TOOLS_FALSE])
+m4trace:configure.ac:155: -1- IT_CHECK_FOR_XBOOTCLASSPATH
+m4trace:configure.ac:155: -1- AM_CONDITIONAL([VM_SUPPORTS_XBOOTCLASSPATH], [test x"${it_cv_xbootclasspath_works}" = "xyes"])
+m4trace:configure.ac:155: -1- m4_pattern_allow([^VM_SUPPORTS_XBOOTCLASSPATH_TRUE$])
+m4trace:configure.ac:155: -1- m4_pattern_allow([^VM_SUPPORTS_XBOOTCLASSPATH_FALSE$])
+m4trace:configure.ac:155: -1- _AM_SUBST_NOTMAKE([VM_SUPPORTS_XBOOTCLASSPATH_TRUE])
+m4trace:configure.ac:155: -1- _AM_SUBST_NOTMAKE([VM_SUPPORTS_XBOOTCLASSPATH_FALSE])
+m4trace:configure.ac:157: -1- IT_FIND_RHINO_JAR
+m4trace:configure.ac:157: -1- AM_CONDITIONAL([WITH_RHINO], [test x"${RHINO_JAR}" != "xno"])
+m4trace:configure.ac:157: -1- m4_pattern_allow([^WITH_RHINO_TRUE$])
+m4trace:configure.ac:157: -1- m4_pattern_allow([^WITH_RHINO_FALSE$])
+m4trace:configure.ac:157: -1- _AM_SUBST_NOTMAKE([WITH_RHINO_TRUE])
+m4trace:configure.ac:157: -1- _AM_SUBST_NOTMAKE([WITH_RHINO_FALSE])
+m4trace:configure.ac:157: -1- m4_pattern_allow([^RHINO_JAR$])
+m4trace:configure.ac:158: -1- IT_WITH_OPENJDK_SRC_ZIP
+m4trace:configure.ac:158: -1- AM_CONDITIONAL([USE_ALT_OPENJDK_SRC_ZIP], [test "x${ALT_OPENJDK_SRC_ZIP}" != "xnot specified"])
+m4trace:configure.ac:158: -1- m4_pattern_allow([^USE_ALT_OPENJDK_SRC_ZIP_TRUE$])
+m4trace:configure.ac:158: -1- m4_pattern_allow([^USE_ALT_OPENJDK_SRC_ZIP_FALSE$])
+m4trace:configure.ac:158: -1- _AM_SUBST_NOTMAKE([USE_ALT_OPENJDK_SRC_ZIP_TRUE])
+m4trace:configure.ac:158: -1- _AM_SUBST_NOTMAKE([USE_ALT_OPENJDK_SRC_ZIP_FALSE])
+m4trace:configure.ac:158: -1- m4_pattern_allow([^ALT_OPENJDK_SRC_ZIP$])
+m4trace:configure.ac:159: -1- IT_WITH_HOTSPOT_SRC_ZIP
+m4trace:configure.ac:159: -1- AM_CONDITIONAL([USE_ALT_HOTSPOT_SRC_ZIP], [test "x${ALT_HOTSPOT_SRC_ZIP}" != "xnot specified"])
+m4trace:configure.ac:159: -1- m4_pattern_allow([^USE_ALT_HOTSPOT_SRC_ZIP_TRUE$])
+m4trace:configure.ac:159: -1- m4_pattern_allow([^USE_ALT_HOTSPOT_SRC_ZIP_FALSE$])
+m4trace:configure.ac:159: -1- _AM_SUBST_NOTMAKE([USE_ALT_HOTSPOT_SRC_ZIP_TRUE])
+m4trace:configure.ac:159: -1- _AM_SUBST_NOTMAKE([USE_ALT_HOTSPOT_SRC_ZIP_FALSE])
+m4trace:configure.ac:159: -1- m4_pattern_allow([^ALT_HOTSPOT_SRC_ZIP$])
+m4trace:configure.ac:160: -1- IT_WITH_CORBA_SRC_ZIP
+m4trace:configure.ac:160: -1- AM_CONDITIONAL([USE_ALT_CORBA_SRC_ZIP], [test "x${ALT_CORBA_SRC_ZIP}" != "xnot specified"])
+m4trace:configure.ac:160: -1- m4_pattern_allow([^USE_ALT_CORBA_SRC_ZIP_TRUE$])
+m4trace:configure.ac:160: -1- m4_pattern_allow([^USE_ALT_CORBA_SRC_ZIP_FALSE$])
+m4trace:configure.ac:160: -1- _AM_SUBST_NOTMAKE([USE_ALT_CORBA_SRC_ZIP_TRUE])
+m4trace:configure.ac:160: -1- _AM_SUBST_NOTMAKE([USE_ALT_CORBA_SRC_ZIP_FALSE])
+m4trace:configure.ac:160: -1- m4_pattern_allow([^ALT_CORBA_SRC_ZIP$])
+m4trace:configure.ac:161: -1- IT_WITH_JAXP_SRC_ZIP
+m4trace:configure.ac:161: -1- AM_CONDITIONAL([USE_ALT_JAXP_SRC_ZIP], [test "x${ALT_JAXP_SRC_ZIP}" != "xnot specified"])
+m4trace:configure.ac:161: -1- m4_pattern_allow([^USE_ALT_JAXP_SRC_ZIP_TRUE$])
+m4trace:configure.ac:161: -1- m4_pattern_allow([^USE_ALT_JAXP_SRC_ZIP_FALSE$])
+m4trace:configure.ac:161: -1- _AM_SUBST_NOTMAKE([USE_ALT_JAXP_SRC_ZIP_TRUE])
+m4trace:configure.ac:161: -1- _AM_SUBST_NOTMAKE([USE_ALT_JAXP_SRC_ZIP_FALSE])
+m4trace:configure.ac:161: -1- m4_pattern_allow([^ALT_JAXP_SRC_ZIP$])
+m4trace:configure.ac:162: -1- IT_WITH_JAXWS_SRC_ZIP
+m4trace:configure.ac:162: -1- AM_CONDITIONAL([USE_ALT_JAXWS_SRC_ZIP], [test "x${ALT_JAXWS_SRC_ZIP}" != "xnot specified"])
+m4trace:configure.ac:162: -1- m4_pattern_allow([^USE_ALT_JAXWS_SRC_ZIP_TRUE$])
+m4trace:configure.ac:162: -1- m4_pattern_allow([^USE_ALT_JAXWS_SRC_ZIP_FALSE$])
+m4trace:configure.ac:162: -1- _AM_SUBST_NOTMAKE([USE_ALT_JAXWS_SRC_ZIP_TRUE])
+m4trace:configure.ac:162: -1- _AM_SUBST_NOTMAKE([USE_ALT_JAXWS_SRC_ZIP_FALSE])
+m4trace:configure.ac:162: -1- m4_pattern_allow([^ALT_JAXWS_SRC_ZIP$])
+m4trace:configure.ac:163: -1- IT_WITH_JDK_SRC_ZIP
+m4trace:configure.ac:163: -1- AM_CONDITIONAL([USE_ALT_JDK_SRC_ZIP], [test "x${ALT_JDK_SRC_ZIP}" != "xnot specified"])
+m4trace:configure.ac:163: -1- m4_pattern_allow([^USE_ALT_JDK_SRC_ZIP_TRUE$])
+m4trace:configure.ac:163: -1- m4_pattern_allow([^USE_ALT_JDK_SRC_ZIP_FALSE$])
+m4trace:configure.ac:163: -1- _AM_SUBST_NOTMAKE([USE_ALT_JDK_SRC_ZIP_TRUE])
+m4trace:configure.ac:163: -1- _AM_SUBST_NOTMAKE([USE_ALT_JDK_SRC_ZIP_FALSE])
+m4trace:configure.ac:163: -1- m4_pattern_allow([^ALT_JDK_SRC_ZIP$])
+m4trace:configure.ac:164: -1- IT_WITH_LANGTOOLS_SRC_ZIP
+m4trace:configure.ac:164: -1- AM_CONDITIONAL([USE_ALT_LANGTOOLS_SRC_ZIP], [test "x${ALT_LANGTOOLS_SRC_ZIP}" != "xnot specified"])
+m4trace:configure.ac:164: -1- m4_pattern_allow([^USE_ALT_LANGTOOLS_SRC_ZIP_TRUE$])
+m4trace:configure.ac:164: -1- m4_pattern_allow([^USE_ALT_LANGTOOLS_SRC_ZIP_FALSE$])
+m4trace:configure.ac:164: -1- _AM_SUBST_NOTMAKE([USE_ALT_LANGTOOLS_SRC_ZIP_TRUE])
+m4trace:configure.ac:164: -1- _AM_SUBST_NOTMAKE([USE_ALT_LANGTOOLS_SRC_ZIP_FALSE])
+m4trace:configure.ac:164: -1- m4_pattern_allow([^ALT_LANGTOOLS_SRC_ZIP$])
+m4trace:configure.ac:165: -1- IT_WITH_ALT_JAR_BINARY
+m4trace:configure.ac:165: -1- AM_CONDITIONAL([USE_ALT_JAR], [test x = x])
+m4trace:configure.ac:165: -1- m4_pattern_allow([^USE_ALT_JAR_TRUE$])
+m4trace:configure.ac:165: -1- m4_pattern_allow([^USE_ALT_JAR_FALSE$])
+m4trace:configure.ac:165: -1- _AM_SUBST_NOTMAKE([USE_ALT_JAR_TRUE])
+m4trace:configure.ac:165: -1- _AM_SUBST_NOTMAKE([USE_ALT_JAR_FALSE])
+m4trace:configure.ac:165: -1- AM_CONDITIONAL([USE_ALT_JAR], [test x != x])
+m4trace:configure.ac:165: -1- m4_pattern_allow([^USE_ALT_JAR_TRUE$])
+m4trace:configure.ac:165: -1- m4_pattern_allow([^USE_ALT_JAR_FALSE$])
+m4trace:configure.ac:165: -1- _AM_SUBST_NOTMAKE([USE_ALT_JAR_TRUE])
+m4trace:configure.ac:165: -1- _AM_SUBST_NOTMAKE([USE_ALT_JAR_FALSE])
+m4trace:configure.ac:165: -1- m4_pattern_allow([^ALT_JAR_CMD$])
+m4trace:configure.ac:167: -1- IT_ENABLE_CACAO
+m4trace:configure.ac:167: -1- AM_CONDITIONAL([ENABLE_CACAO], [test x"${ENABLE_CACAO}" = "xyes"])
+m4trace:configure.ac:167: -1- m4_pattern_allow([^ENABLE_CACAO_TRUE$])
+m4trace:configure.ac:167: -1- m4_pattern_allow([^ENABLE_CACAO_FALSE$])
+m4trace:configure.ac:167: -1- _AM_SUBST_NOTMAKE([ENABLE_CACAO_TRUE])
+m4trace:configure.ac:167: -1- _AM_SUBST_NOTMAKE([ENABLE_CACAO_FALSE])
+m4trace:configure.ac:167: -1- m4_pattern_allow([^ENABLE_CACAO$])
+m4trace:configure.ac:168: -1- IT_WITH_CACAO_HOME
+m4trace:configure.ac:168: -1- AM_CONDITIONAL([USE_SYSTEM_CACAO], [true])
+m4trace:configure.ac:168: -1- m4_pattern_allow([^USE_SYSTEM_CACAO_TRUE$])
+m4trace:configure.ac:168: -1- m4_pattern_allow([^USE_SYSTEM_CACAO_FALSE$])
+m4trace:configure.ac:168: -1- _AM_SUBST_NOTMAKE([USE_SYSTEM_CACAO_TRUE])
+m4trace:configure.ac:168: -1- _AM_SUBST_NOTMAKE([USE_SYSTEM_CACAO_FALSE])
+m4trace:configure.ac:168: -1- AM_CONDITIONAL([USE_SYSTEM_CACAO], [false])
+m4trace:configure.ac:168: -1- m4_pattern_allow([^USE_SYSTEM_CACAO_TRUE$])
+m4trace:configure.ac:168: -1- m4_pattern_allow([^USE_SYSTEM_CACAO_FALSE$])
+m4trace:configure.ac:168: -1- _AM_SUBST_NOTMAKE([USE_SYSTEM_CACAO_TRUE])
+m4trace:configure.ac:168: -1- _AM_SUBST_NOTMAKE([USE_SYSTEM_CACAO_FALSE])
+m4trace:configure.ac:168: -1- m4_pattern_allow([^CACAO_IMPORT_PATH$])
+m4trace:configure.ac:169: -1- IT_WITH_CACAO_SRC_ZIP
+m4trace:configure.ac:169: -1- AM_CONDITIONAL([USE_ALT_CACAO_SRC_ZIP], [test "x${ALT_CACAO_SRC_ZIP}" != "xnot specified"])
+m4trace:configure.ac:169: -1- m4_pattern_allow([^USE_ALT_CACAO_SRC_ZIP_TRUE$])
+m4trace:configure.ac:169: -1- m4_pattern_allow([^USE_ALT_CACAO_SRC_ZIP_FALSE$])
+m4trace:configure.ac:169: -1- _AM_SUBST_NOTMAKE([USE_ALT_CACAO_SRC_ZIP_TRUE])
+m4trace:configure.ac:169: -1- _AM_SUBST_NOTMAKE([USE_ALT_CACAO_SRC_ZIP_FALSE])
+m4trace:configure.ac:169: -1- m4_pattern_allow([^ALT_CACAO_SRC_ZIP$])
+m4trace:configure.ac:170: -1- IT_WITH_CACAO_SRC_DIR
+m4trace:configure.ac:170: -1- AM_CONDITIONAL([USE_ALT_CACAO_SRC_DIR], [test x = x])
+m4trace:configure.ac:170: -1- m4_pattern_allow([^USE_ALT_CACAO_SRC_DIR_TRUE$])
+m4trace:configure.ac:170: -1- m4_pattern_allow([^USE_ALT_CACAO_SRC_DIR_FALSE$])
+m4trace:configure.ac:170: -1- _AM_SUBST_NOTMAKE([USE_ALT_CACAO_SRC_DIR_TRUE])
+m4trace:configure.ac:170: -1- _AM_SUBST_NOTMAKE([USE_ALT_CACAO_SRC_DIR_FALSE])
+m4trace:configure.ac:170: -1- AM_CONDITIONAL([USE_ALT_CACAO_SRC_DIR], [test x != x])
+m4trace:configure.ac:170: -1- m4_pattern_allow([^USE_ALT_CACAO_SRC_DIR_TRUE$])
+m4trace:configure.ac:170: -1- m4_pattern_allow([^USE_ALT_CACAO_SRC_DIR_FALSE$])
+m4trace:configure.ac:170: -1- _AM_SUBST_NOTMAKE([USE_ALT_CACAO_SRC_DIR_TRUE])
+m4trace:configure.ac:170: -1- _AM_SUBST_NOTMAKE([USE_ALT_CACAO_SRC_DIR_FALSE])
+m4trace:configure.ac:170: -1- m4_pattern_allow([^ALT_CACAO_SRC_DIR$])
+m4trace:configure.ac:171: -1- IT_ENABLE_JAMVM
+m4trace:configure.ac:171: -1- AM_CONDITIONAL([ENABLE_JAMVM], [test x"${ENABLE_JAMVM}" = "xyes"])
+m4trace:configure.ac:171: -1- m4_pattern_allow([^ENABLE_JAMVM_TRUE$])
+m4trace:configure.ac:171: -1- m4_pattern_allow([^ENABLE_JAMVM_FALSE$])
+m4trace:configure.ac:171: -1- _AM_SUBST_NOTMAKE([ENABLE_JAMVM_TRUE])
+m4trace:configure.ac:171: -1- _AM_SUBST_NOTMAKE([ENABLE_JAMVM_FALSE])
+m4trace:configure.ac:171: -1- m4_pattern_allow([^ENABLE_JAMVM$])
+m4trace:configure.ac:172: -1- IT_WITH_JAMVM_SRC_ZIP
+m4trace:configure.ac:172: -1- AM_CONDITIONAL([USE_ALT_JAMVM_SRC_ZIP], [test "x${ALT_JAMVM_SRC_ZIP}" != "xnot specified"])
+m4trace:configure.ac:172: -1- m4_pattern_allow([^USE_ALT_JAMVM_SRC_ZIP_TRUE$])
+m4trace:configure.ac:172: -1- m4_pattern_allow([^USE_ALT_JAMVM_SRC_ZIP_FALSE$])
+m4trace:configure.ac:172: -1- _AM_SUBST_NOTMAKE([USE_ALT_JAMVM_SRC_ZIP_TRUE])
+m4trace:configure.ac:172: -1- _AM_SUBST_NOTMAKE([USE_ALT_JAMVM_SRC_ZIP_FALSE])
+m4trace:configure.ac:172: -1- m4_pattern_allow([^ALT_JAMVM_SRC_ZIP$])
+m4trace:configure.ac:174: -1- IT_DISABLE_OPTIMIZATIONS
+m4trace:configure.ac:174: -1- AM_CONDITIONAL([DISABLE_OPTIMIZATIONS], [test x"${disable_optimizations}" = "xyes"])
+m4trace:configure.ac:174: -1- m4_pattern_allow([^DISABLE_OPTIMIZATIONS_TRUE$])
+m4trace:configure.ac:174: -1- m4_pattern_allow([^DISABLE_OPTIMIZATIONS_FALSE$])
+m4trace:configure.ac:174: -1- _AM_SUBST_NOTMAKE([DISABLE_OPTIMIZATIONS_TRUE])
+m4trace:configure.ac:174: -1- _AM_SUBST_NOTMAKE([DISABLE_OPTIMIZATIONS_FALSE])
+m4trace:configure.ac:175: -1- IT_ENABLE_WERROR
+m4trace:configure.ac:175: -1- AM_CONDITIONAL([ENABLE_WERROR], [test x"${enable_werror}" = "xyes"])
+m4trace:configure.ac:175: -1- m4_pattern_allow([^ENABLE_WERROR_TRUE$])
+m4trace:configure.ac:175: -1- m4_pattern_allow([^ENABLE_WERROR_FALSE$])
+m4trace:configure.ac:175: -1- _AM_SUBST_NOTMAKE([ENABLE_WERROR_TRUE])
+m4trace:configure.ac:175: -1- _AM_SUBST_NOTMAKE([ENABLE_WERROR_FALSE])
+m4trace:configure.ac:176: -1- IT_ENABLE_JAR_COMPRESSION
+m4trace:configure.ac:176: -1- AM_CONDITIONAL([ENABLE_JAR_COMPRESSION], [test x"${enable_jar_compression}" = "xyes"])
+m4trace:configure.ac:176: -1- m4_pattern_allow([^ENABLE_JAR_COMPRESSION_TRUE$])
+m4trace:configure.ac:176: -1- m4_pattern_allow([^ENABLE_JAR_COMPRESSION_FALSE$])
+m4trace:configure.ac:176: -1- _AM_SUBST_NOTMAKE([ENABLE_JAR_COMPRESSION_TRUE])
+m4trace:configure.ac:176: -1- _AM_SUBST_NOTMAKE([ENABLE_JAR_COMPRESSION_FALSE])
+m4trace:configure.ac:177: -1- IT_SET_SHARK_BUILD
+m4trace:configure.ac:177: -1- AM_CONDITIONAL([SHARK_BUILD], [test "x${use_shark}" = xyes])
+m4trace:configure.ac:177: -1- m4_pattern_allow([^SHARK_BUILD_TRUE$])
+m4trace:configure.ac:177: -1- m4_pattern_allow([^SHARK_BUILD_FALSE$])
+m4trace:configure.ac:177: -1- _AM_SUBST_NOTMAKE([SHARK_BUILD_TRUE])
+m4trace:configure.ac:177: -1- _AM_SUBST_NOTMAKE([SHARK_BUILD_FALSE])
+m4trace:configure.ac:178: -1- IT_CHECK_ADDITIONAL_VMS
+m4trace:configure.ac:178: -2- _m4_warn([obsolete], [The macro `AC_HELP_STRING' is obsolete.
+You should run autoupdate.], [../.././../lib/autoconf/general.m4:207: AC_HELP_STRING is expanded from...
+acinclude.m4:1294: IT_CHECK_ADDITIONAL_VMS is expanded from...
+configure.ac:178: the top level])
+m4trace:configure.ac:178: -1- AM_CONDITIONAL([ADD_JAMVM_BUILD], [test x$add_vm_jamvm != x])
+m4trace:configure.ac:178: -1- m4_pattern_allow([^ADD_JAMVM_BUILD_TRUE$])
+m4trace:configure.ac:178: -1- m4_pattern_allow([^ADD_JAMVM_BUILD_FALSE$])
+m4trace:configure.ac:178: -1- _AM_SUBST_NOTMAKE([ADD_JAMVM_BUILD_TRUE])
+m4trace:configure.ac:178: -1- _AM_SUBST_NOTMAKE([ADD_JAMVM_BUILD_FALSE])
+m4trace:configure.ac:178: -1- AM_CONDITIONAL([ADD_CACAO_BUILD], [test x$add_vm_cacao != x])
+m4trace:configure.ac:178: -1- m4_pattern_allow([^ADD_CACAO_BUILD_TRUE$])
+m4trace:configure.ac:178: -1- m4_pattern_allow([^ADD_CACAO_BUILD_FALSE$])
+m4trace:configure.ac:178: -1- _AM_SUBST_NOTMAKE([ADD_CACAO_BUILD_TRUE])
+m4trace:configure.ac:178: -1- _AM_SUBST_NOTMAKE([ADD_CACAO_BUILD_FALSE])
+m4trace:configure.ac:178: -1- AM_CONDITIONAL([ADD_ZERO_BUILD], [test x$add_vm_zero  != x || test x$add_vm_shark != x])
+m4trace:configure.ac:178: -1- m4_pattern_allow([^ADD_ZERO_BUILD_TRUE$])
+m4trace:configure.ac:178: -1- m4_pattern_allow([^ADD_ZERO_BUILD_FALSE$])
+m4trace:configure.ac:178: -1- _AM_SUBST_NOTMAKE([ADD_ZERO_BUILD_TRUE])
+m4trace:configure.ac:178: -1- _AM_SUBST_NOTMAKE([ADD_ZERO_BUILD_FALSE])
+m4trace:configure.ac:178: -1- AM_CONDITIONAL([ADD_SHARK_BUILD], [test x$add_vm_shark != x])
+m4trace:configure.ac:178: -1- m4_pattern_allow([^ADD_SHARK_BUILD_TRUE$])
+m4trace:configure.ac:178: -1- m4_pattern_allow([^ADD_SHARK_BUILD_FALSE$])
+m4trace:configure.ac:178: -1- _AM_SUBST_NOTMAKE([ADD_SHARK_BUILD_TRUE])
+m4trace:configure.ac:178: -1- _AM_SUBST_NOTMAKE([ADD_SHARK_BUILD_FALSE])
+m4trace:configure.ac:178: -1- AM_CONDITIONAL([BUILD_CACAO], [test x$add_vm_cacao != x || test "x${ENABLE_CACAO}" = xyes])
+m4trace:configure.ac:178: -1- m4_pattern_allow([^BUILD_CACAO_TRUE$])
+m4trace:configure.ac:178: -1- m4_pattern_allow([^BUILD_CACAO_FALSE$])
+m4trace:configure.ac:178: -1- _AM_SUBST_NOTMAKE([BUILD_CACAO_TRUE])
+m4trace:configure.ac:178: -1- _AM_SUBST_NOTMAKE([BUILD_CACAO_FALSE])
+m4trace:configure.ac:178: -1- AM_CONDITIONAL([BUILD_JAMVM], [test x$add_vm_jamvm != x || test "x${ENABLE_JAMVM}" = xyes])
+m4trace:configure.ac:178: -1- m4_pattern_allow([^BUILD_JAMVM_TRUE$])
+m4trace:configure.ac:178: -1- m4_pattern_allow([^BUILD_JAMVM_FALSE$])
+m4trace:configure.ac:178: -1- _AM_SUBST_NOTMAKE([BUILD_JAMVM_TRUE])
+m4trace:configure.ac:178: -1- _AM_SUBST_NOTMAKE([BUILD_JAMVM_FALSE])
+m4trace:configure.ac:180: -1- IT_WITH_VERSION_SUFFIX
+m4trace:configure.ac:180: -1- m4_pattern_allow([^VERSION_SUFFIX$])
+m4trace:configure.ac:181: -1- IT_WITH_PROJECT
+m4trace:configure.ac:181: -1- m4_pattern_allow([^PROJECT_NAME$])
+m4trace:configure.ac:181: -1- AM_CONDITIONAL([USE_CLOSURES], [test x"${project}" = "xclosures"])
+m4trace:configure.ac:181: -1- m4_pattern_allow([^USE_CLOSURES_TRUE$])
+m4trace:configure.ac:181: -1- m4_pattern_allow([^USE_CLOSURES_FALSE$])
+m4trace:configure.ac:181: -1- _AM_SUBST_NOTMAKE([USE_CLOSURES_TRUE])
+m4trace:configure.ac:181: -1- _AM_SUBST_NOTMAKE([USE_CLOSURES_FALSE])
+m4trace:configure.ac:181: -1- AM_CONDITIONAL([USE_CVMI], [test x"${project}" = "xcvmi"])
+m4trace:configure.ac:181: -1- m4_pattern_allow([^USE_CVMI_TRUE$])
+m4trace:configure.ac:181: -1- m4_pattern_allow([^USE_CVMI_FALSE$])
+m4trace:configure.ac:181: -1- _AM_SUBST_NOTMAKE([USE_CVMI_TRUE])
+m4trace:configure.ac:181: -1- _AM_SUBST_NOTMAKE([USE_CVMI_FALSE])
+m4trace:configure.ac:181: -1- AM_CONDITIONAL([USE_CACIOCAVALLO], [test x"${project}" = "xcaciocavallo"])
+m4trace:configure.ac:181: -1- m4_pattern_allow([^USE_CACIOCAVALLO_TRUE$])
+m4trace:configure.ac:181: -1- m4_pattern_allow([^USE_CACIOCAVALLO_FALSE$])
+m4trace:configure.ac:181: -1- _AM_SUBST_NOTMAKE([USE_CACIOCAVALLO_TRUE])
+m4trace:configure.ac:181: -1- _AM_SUBST_NOTMAKE([USE_CACIOCAVALLO_FALSE])
+m4trace:configure.ac:181: -1- AM_CONDITIONAL([USE_BSD], [test x"${project}" = "xbsd"])
+m4trace:configure.ac:181: -1- m4_pattern_allow([^USE_BSD_TRUE$])
+m4trace:configure.ac:181: -1- m4_pattern_allow([^USE_BSD_FALSE$])
+m4trace:configure.ac:181: -1- _AM_SUBST_NOTMAKE([USE_BSD_TRUE])
+m4trace:configure.ac:181: -1- _AM_SUBST_NOTMAKE([USE_BSD_FALSE])
+m4trace:configure.ac:181: -1- AM_CONDITIONAL([USE_NIO2], [test x"${project}" = "xnio2"])
+m4trace:configure.ac:181: -1- m4_pattern_allow([^USE_NIO2_TRUE$])
+m4trace:configure.ac:181: -1- m4_pattern_allow([^USE_NIO2_FALSE$])
+m4trace:configure.ac:181: -1- _AM_SUBST_NOTMAKE([USE_NIO2_TRUE])
+m4trace:configure.ac:181: -1- _AM_SUBST_NOTMAKE([USE_NIO2_FALSE])
+m4trace:configure.ac:181: -1- AM_CONDITIONAL([USE_JDK7], [test x"${project}" = "xjdk7"])
+m4trace:configure.ac:181: -1- m4_pattern_allow([^USE_JDK7_TRUE$])
+m4trace:configure.ac:181: -1- m4_pattern_allow([^USE_JDK7_FALSE$])
+m4trace:configure.ac:181: -1- _AM_SUBST_NOTMAKE([USE_JDK7_TRUE])
+m4trace:configure.ac:181: -1- _AM_SUBST_NOTMAKE([USE_JDK7_FALSE])
+m4trace:configure.ac:182: -1- IT_ENABLE_HG
+m4trace:configure.ac:182: -1- AM_CONDITIONAL([USE_HG], [test x"${enable_hg}" = "xyes"])
+m4trace:configure.ac:182: -1- m4_pattern_allow([^USE_HG_TRUE$])
+m4trace:configure.ac:182: -1- m4_pattern_allow([^USE_HG_FALSE$])
+m4trace:configure.ac:182: -1- _AM_SUBST_NOTMAKE([USE_HG_TRUE])
+m4trace:configure.ac:182: -1- _AM_SUBST_NOTMAKE([USE_HG_FALSE])
+m4trace:configure.ac:183: -1- IT_WITH_TZDATA_DIR
+m4trace:configure.ac:183: -1- m4_pattern_allow([^TZDATA_DIR$])
+m4trace:configure.ac:183: -1- AM_CONDITIONAL([WITH_TZDATA_DIR], [test "x${TZDATA_DIR}" != "x"])
+m4trace:configure.ac:183: -1- m4_pattern_allow([^WITH_TZDATA_DIR_TRUE$])
+m4trace:configure.ac:183: -1- m4_pattern_allow([^WITH_TZDATA_DIR_FALSE$])
+m4trace:configure.ac:183: -1- _AM_SUBST_NOTMAKE([WITH_TZDATA_DIR_TRUE])
+m4trace:configure.ac:183: -1- _AM_SUBST_NOTMAKE([WITH_TZDATA_DIR_FALSE])
+m4trace:configure.ac:185: -1- IT_WITH_PAX
+m4trace:configure.ac:185: -1- AM_CONDITIONAL([WITH_PAX], [test "x${PAX_COMMAND}" != "xnot specified"])
+m4trace:configure.ac:185: -1- m4_pattern_allow([^WITH_PAX_TRUE$])
+m4trace:configure.ac:185: -1- m4_pattern_allow([^WITH_PAX_FALSE$])
+m4trace:configure.ac:185: -1- _AM_SUBST_NOTMAKE([WITH_PAX_TRUE])
+m4trace:configure.ac:185: -1- _AM_SUBST_NOTMAKE([WITH_PAX_FALSE])
+m4trace:configure.ac:185: -1- m4_pattern_allow([^PAX_COMMAND$])
+m4trace:configure.ac:185: -1- m4_pattern_allow([^PAX_COMMAND_ARGS$])
+m4trace:configure.ac:188: -1- m4_pattern_allow([^HG$])
+m4trace:configure.ac:194: -1- m4_pattern_allow([^HG$])
+m4trace:configure.ac:195: -1- IT_WITH_HG_REVISION
+m4trace:configure.ac:195: -1- m4_pattern_allow([^HGREV$])
+m4trace:configure.ac:195: -1- AM_CONDITIONAL([WITH_HGREV], [test "x${HGREV}" != "x"])
+m4trace:configure.ac:195: -1- m4_pattern_allow([^WITH_HGREV_TRUE$])
+m4trace:configure.ac:195: -1- m4_pattern_allow([^WITH_HGREV_FALSE$])
+m4trace:configure.ac:195: -1- _AM_SUBST_NOTMAKE([WITH_HGREV_TRUE])
+m4trace:configure.ac:195: -1- _AM_SUBST_NOTMAKE([WITH_HGREV_FALSE])
+m4trace:configure.ac:197: -1- m4_pattern_allow([^GCJ$])
+m4trace:configure.ac:198: -1- m4_pattern_allow([^GCJ$])
+m4trace:configure.ac:200: -1- IT_CHECK_FOR_KERBEROS
+m4trace:configure.ac:200: -1- m4_pattern_allow([^HAVE_LIBKRB5$])
+m4trace:configure.ac:200: -1- m4_pattern_allow([^KRB5_LIBS$])
+m4trace:configure.ac:200: -1- AM_CONDITIONAL([USE_SYSTEM_KERBEROS], [test x"${ENABLE_SYSTEM_KERBEROS}" = "xyes"])
+m4trace:configure.ac:200: -1- m4_pattern_allow([^USE_SYSTEM_KERBEROS_TRUE$])
+m4trace:configure.ac:200: -1- m4_pattern_allow([^USE_SYSTEM_KERBEROS_FALSE$])
+m4trace:configure.ac:200: -1- _AM_SUBST_NOTMAKE([USE_SYSTEM_KERBEROS_TRUE])
+m4trace:configure.ac:200: -1- _AM_SUBST_NOTMAKE([USE_SYSTEM_KERBEROS_FALSE])
+m4trace:configure.ac:200: -1- m4_pattern_allow([^ENABLE_SYSTEM_KERBEROS$])
+m4trace:configure.ac:203: -1- m4_pattern_allow([^HAVE_X11_X_H$])
+m4trace:configure.ac:207: -1- IT_CHECK_FOR_ZLIB
+m4trace:configure.ac:207: -1- PKG_CHECK_MODULES([ZLIB], [zlib], [ZLIB_FOUND=yes], [ZLIB_FOUND=no])
+m4trace:configure.ac:207: -1- m4_pattern_allow([^ZLIB_CFLAGS$])
+m4trace:configure.ac:207: -1- m4_pattern_allow([^ZLIB_LIBS$])
+m4trace:configure.ac:207: -1- PKG_CHECK_EXISTS([zlib], [pkg_cv_[]ZLIB_CFLAGS=`$PKG_CONFIG --[]cflags "zlib" 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes ], [pkg_failed=yes])
+m4trace:configure.ac:207: -1- PKG_CHECK_EXISTS([zlib], [pkg_cv_[]ZLIB_LIBS=`$PKG_CONFIG --[]libs "zlib" 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes ], [pkg_failed=yes])
+m4trace:configure.ac:207: -1- _PKG_SHORT_ERRORS_SUPPORTED
+m4trace:configure.ac:207: -1- m4_pattern_allow([^ZLIB_CFLAGS$])
+m4trace:configure.ac:207: -1- m4_pattern_allow([^ZLIB_LIBS$])
+m4trace:configure.ac:207: -1- AM_CONDITIONAL([USE_SYSTEM_ZLIB], [test x"${ENABLE_SYSTEM_ZLIB}" = "xyes"])
+m4trace:configure.ac:207: -1- m4_pattern_allow([^USE_SYSTEM_ZLIB_TRUE$])
+m4trace:configure.ac:207: -1- m4_pattern_allow([^USE_SYSTEM_ZLIB_FALSE$])
+m4trace:configure.ac:207: -1- _AM_SUBST_NOTMAKE([USE_SYSTEM_ZLIB_TRUE])
+m4trace:configure.ac:207: -1- _AM_SUBST_NOTMAKE([USE_SYSTEM_ZLIB_FALSE])
+m4trace:configure.ac:207: -1- m4_pattern_allow([^ENABLE_SYSTEM_ZLIB$])
+m4trace:configure.ac:208: -1- IT_CHECK_FOR_JPEG
+m4trace:configure.ac:208: -1- m4_pattern_allow([^HAVE_LIBJPEG$])
+m4trace:configure.ac:208: -1- m4_pattern_allow([^JPEG_LIBS$])
+m4trace:configure.ac:208: -1- AM_CONDITIONAL([USE_SYSTEM_JPEG], [test x"${ENABLE_SYSTEM_JPEG}" = "xyes"])
+m4trace:configure.ac:208: -1- m4_pattern_allow([^USE_SYSTEM_JPEG_TRUE$])
+m4trace:configure.ac:208: -1- m4_pattern_allow([^USE_SYSTEM_JPEG_FALSE$])
+m4trace:configure.ac:208: -1- _AM_SUBST_NOTMAKE([USE_SYSTEM_JPEG_TRUE])
+m4trace:configure.ac:208: -1- _AM_SUBST_NOTMAKE([USE_SYSTEM_JPEG_FALSE])
+m4trace:configure.ac:208: -1- m4_pattern_allow([^ENABLE_SYSTEM_JPEG$])
+m4trace:configure.ac:209: -1- IT_CHECK_FOR_PNG
+m4trace:configure.ac:209: -1- PKG_CHECK_MODULES([PNG], [libpng], [LIBPNG_FOUND=yes], [LIBPNG_FOUND=no])
+m4trace:configure.ac:209: -1- m4_pattern_allow([^PNG_CFLAGS$])
+m4trace:configure.ac:209: -1- m4_pattern_allow([^PNG_LIBS$])
+m4trace:configure.ac:209: -1- PKG_CHECK_EXISTS([libpng], [pkg_cv_[]PNG_CFLAGS=`$PKG_CONFIG --[]cflags "libpng" 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes ], [pkg_failed=yes])
+m4trace:configure.ac:209: -1- PKG_CHECK_EXISTS([libpng], [pkg_cv_[]PNG_LIBS=`$PKG_CONFIG --[]libs "libpng" 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes ], [pkg_failed=yes])
+m4trace:configure.ac:209: -1- _PKG_SHORT_ERRORS_SUPPORTED
+m4trace:configure.ac:209: -1- m4_pattern_allow([^PNG_CFLAGS$])
+m4trace:configure.ac:209: -1- m4_pattern_allow([^PNG_LIBS$])
+m4trace:configure.ac:209: -1- AM_CONDITIONAL([USE_SYSTEM_PNG], [test x"${ENABLE_SYSTEM_PNG}" = "xyes"])
+m4trace:configure.ac:209: -1- m4_pattern_allow([^USE_SYSTEM_PNG_TRUE$])
+m4trace:configure.ac:209: -1- m4_pattern_allow([^USE_SYSTEM_PNG_FALSE$])
+m4trace:configure.ac:209: -1- _AM_SUBST_NOTMAKE([USE_SYSTEM_PNG_TRUE])
+m4trace:configure.ac:209: -1- _AM_SUBST_NOTMAKE([USE_SYSTEM_PNG_FALSE])
+m4trace:configure.ac:209: -1- m4_pattern_allow([^ENABLE_SYSTEM_PNG$])
+m4trace:configure.ac:210: -1- IT_CHECK_FOR_GIF
+m4trace:configure.ac:210: -1- m4_pattern_allow([^HAVE_LIBGIF$])
+m4trace:configure.ac:210: -1- m4_pattern_allow([^GIF_LIBS$])
+m4trace:configure.ac:210: -1- AM_CONDITIONAL([USE_SYSTEM_GIF], [test x"${ENABLE_SYSTEM_GIF}" = "xyes"])
+m4trace:configure.ac:210: -1- m4_pattern_allow([^USE_SYSTEM_GIF_TRUE$])
+m4trace:configure.ac:210: -1- m4_pattern_allow([^USE_SYSTEM_GIF_FALSE$])
+m4trace:configure.ac:210: -1- _AM_SUBST_NOTMAKE([USE_SYSTEM_GIF_TRUE])
+m4trace:configure.ac:210: -1- _AM_SUBST_NOTMAKE([USE_SYSTEM_GIF_FALSE])
+m4trace:configure.ac:210: -1- m4_pattern_allow([^ENABLE_SYSTEM_GIF$])
+m4trace:configure.ac:211: -1- IT_CHECK_FOR_LCMS
+m4trace:configure.ac:211: -1- PKG_CHECK_MODULES([LCMS2], [lcms2 >= 2.5], [LCMS2_FOUND=yes], [LCMS2_FOUND=no])
+m4trace:configure.ac:211: -1- m4_pattern_allow([^LCMS2_CFLAGS$])
+m4trace:configure.ac:211: -1- m4_pattern_allow([^LCMS2_LIBS$])
+m4trace:configure.ac:211: -1- PKG_CHECK_EXISTS([lcms2 >= 2.5], [pkg_cv_[]LCMS2_CFLAGS=`$PKG_CONFIG --[]cflags "lcms2 >= 2.5" 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes ], [pkg_failed=yes])
+m4trace:configure.ac:211: -1- PKG_CHECK_EXISTS([lcms2 >= 2.5], [pkg_cv_[]LCMS2_LIBS=`$PKG_CONFIG --[]libs "lcms2 >= 2.5" 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes ], [pkg_failed=yes])
+m4trace:configure.ac:211: -1- _PKG_SHORT_ERRORS_SUPPORTED
+m4trace:configure.ac:211: -1- m4_pattern_allow([^LCMS2_CFLAGS$])
+m4trace:configure.ac:211: -1- m4_pattern_allow([^LCMS2_LIBS$])
+m4trace:configure.ac:211: -1- AM_CONDITIONAL([USE_SYSTEM_LCMS], [test x"${ENABLE_SYSTEM_LCMS}" = "xyes"])
+m4trace:configure.ac:211: -1- m4_pattern_allow([^USE_SYSTEM_LCMS_TRUE$])
+m4trace:configure.ac:211: -1- m4_pattern_allow([^USE_SYSTEM_LCMS_FALSE$])
+m4trace:configure.ac:211: -1- _AM_SUBST_NOTMAKE([USE_SYSTEM_LCMS_TRUE])
+m4trace:configure.ac:211: -1- _AM_SUBST_NOTMAKE([USE_SYSTEM_LCMS_FALSE])
+m4trace:configure.ac:211: -1- m4_pattern_allow([^ENABLE_SYSTEM_LCMS$])
+m4trace:configure.ac:212: -1- IT_CHECK_FOR_GTK
+m4trace:configure.ac:212: -1- PKG_CHECK_MODULES([GTK], [gtk+-2.0 gthread-2.0], [GTK_FOUND=yes], [GTK_FOUND=no])
+m4trace:configure.ac:212: -1- m4_pattern_allow([^GTK_CFLAGS$])
+m4trace:configure.ac:212: -1- m4_pattern_allow([^GTK_LIBS$])
+m4trace:configure.ac:212: -1- PKG_CHECK_EXISTS([gtk+-2.0 gthread-2.0], [pkg_cv_[]GTK_CFLAGS=`$PKG_CONFIG --[]cflags "gtk+-2.0 gthread-2.0" 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes ], [pkg_failed=yes])
+m4trace:configure.ac:212: -1- PKG_CHECK_EXISTS([gtk+-2.0 gthread-2.0], [pkg_cv_[]GTK_LIBS=`$PKG_CONFIG --[]libs "gtk+-2.0 gthread-2.0" 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes ], [pkg_failed=yes])
+m4trace:configure.ac:212: -1- _PKG_SHORT_ERRORS_SUPPORTED
+m4trace:configure.ac:212: -1- m4_pattern_allow([^GTK_CFLAGS$])
+m4trace:configure.ac:212: -1- m4_pattern_allow([^GTK_LIBS$])
+m4trace:configure.ac:212: -1- AM_CONDITIONAL([USE_SYSTEM_GTK], [test x"${ENABLE_SYSTEM_GTK}" = "xyes"])
+m4trace:configure.ac:212: -1- m4_pattern_allow([^USE_SYSTEM_GTK_TRUE$])
+m4trace:configure.ac:212: -1- m4_pattern_allow([^USE_SYSTEM_GTK_FALSE$])
+m4trace:configure.ac:212: -1- _AM_SUBST_NOTMAKE([USE_SYSTEM_GTK_TRUE])
+m4trace:configure.ac:212: -1- _AM_SUBST_NOTMAKE([USE_SYSTEM_GTK_FALSE])
+m4trace:configure.ac:212: -1- m4_pattern_allow([^ENABLE_SYSTEM_GTK$])
+m4trace:configure.ac:213: -1- IT_CHECK_FOR_GIO
+m4trace:configure.ac:213: -1- PKG_CHECK_MODULES([GIO], [gio-2.0 >= 2.26], [GIO_FOUND=yes], [GIO_FOUND=no])
+m4trace:configure.ac:213: -1- m4_pattern_allow([^GIO_CFLAGS$])
+m4trace:configure.ac:213: -1- m4_pattern_allow([^GIO_LIBS$])
+m4trace:configure.ac:213: -1- PKG_CHECK_EXISTS([gio-2.0 >= 2.26], [pkg_cv_[]GIO_CFLAGS=`$PKG_CONFIG --[]cflags "gio-2.0 >= 2.26" 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes ], [pkg_failed=yes])
+m4trace:configure.ac:213: -1- PKG_CHECK_EXISTS([gio-2.0 >= 2.26], [pkg_cv_[]GIO_LIBS=`$PKG_CONFIG --[]libs "gio-2.0 >= 2.26" 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes ], [pkg_failed=yes])
+m4trace:configure.ac:213: -1- _PKG_SHORT_ERRORS_SUPPORTED
+m4trace:configure.ac:213: -1- m4_pattern_allow([^GIO_CFLAGS$])
+m4trace:configure.ac:213: -1- m4_pattern_allow([^GIO_LIBS$])
+m4trace:configure.ac:213: -1- AM_CONDITIONAL([USE_SYSTEM_GIO], [test x"${ENABLE_SYSTEM_GIO}" = "xyes"])
+m4trace:configure.ac:213: -1- m4_pattern_allow([^USE_SYSTEM_GIO_TRUE$])
+m4trace:configure.ac:213: -1- m4_pattern_allow([^USE_SYSTEM_GIO_FALSE$])
+m4trace:configure.ac:213: -1- _AM_SUBST_NOTMAKE([USE_SYSTEM_GIO_TRUE])
+m4trace:configure.ac:213: -1- _AM_SUBST_NOTMAKE([USE_SYSTEM_GIO_FALSE])
+m4trace:configure.ac:213: -1- m4_pattern_allow([^ENABLE_SYSTEM_GIO$])
+m4trace:configure.ac:214: -1- IT_CHECK_FOR_FONTCONFIG
+m4trace:configure.ac:214: -1- PKG_CHECK_MODULES([FONTCONFIG], [fontconfig], [FONTCONFIG_FOUND=yes], [FONTCONFIG_FOUND=no])
+m4trace:configure.ac:214: -1- m4_pattern_allow([^FONTCONFIG_CFLAGS$])
+m4trace:configure.ac:214: -1- m4_pattern_allow([^FONTCONFIG_LIBS$])
+m4trace:configure.ac:214: -1- PKG_CHECK_EXISTS([fontconfig], [pkg_cv_[]FONTCONFIG_CFLAGS=`$PKG_CONFIG --[]cflags "fontconfig" 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes ], [pkg_failed=yes])
+m4trace:configure.ac:214: -1- PKG_CHECK_EXISTS([fontconfig], [pkg_cv_[]FONTCONFIG_LIBS=`$PKG_CONFIG --[]libs "fontconfig" 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes ], [pkg_failed=yes])
+m4trace:configure.ac:214: -1- _PKG_SHORT_ERRORS_SUPPORTED
+m4trace:configure.ac:214: -1- m4_pattern_allow([^FONTCONFIG_CFLAGS$])
+m4trace:configure.ac:214: -1- m4_pattern_allow([^FONTCONFIG_LIBS$])
+m4trace:configure.ac:214: -1- AM_CONDITIONAL([USE_SYSTEM_FONTCONFIG], [test x"${ENABLE_SYSTEM_FONTCONFIG}" = "xyes"])
+m4trace:configure.ac:214: -1- m4_pattern_allow([^USE_SYSTEM_FONTCONFIG_TRUE$])
+m4trace:configure.ac:214: -1- m4_pattern_allow([^USE_SYSTEM_FONTCONFIG_FALSE$])
+m4trace:configure.ac:214: -1- _AM_SUBST_NOTMAKE([USE_SYSTEM_FONTCONFIG_TRUE])
+m4trace:configure.ac:214: -1- _AM_SUBST_NOTMAKE([USE_SYSTEM_FONTCONFIG_FALSE])
+m4trace:configure.ac:214: -1- m4_pattern_allow([^ENABLE_SYSTEM_FONTCONFIG$])
+m4trace:configure.ac:215: -1- IT_CHECK_FOR_CUPS
+m4trace:configure.ac:215: -1- m4_pattern_allow([^HAVE_LIBCUPS$])
+m4trace:configure.ac:215: -1- m4_pattern_allow([^CUPS_LIBS$])
+m4trace:configure.ac:216: -1- IT_CHECK_FOR_SYSCALLS
+m4trace:configure.ac:216: -1- AM_CONDITIONAL([USE_SYSCALL_COMPILATION], [test x"${ENABLE_SYSCALL_COMPILATION}" = "xyes"])
+m4trace:configure.ac:216: -1- m4_pattern_allow([^USE_SYSCALL_COMPILATION_TRUE$])
+m4trace:configure.ac:216: -1- m4_pattern_allow([^USE_SYSCALL_COMPILATION_FALSE$])
+m4trace:configure.ac:216: -1- _AM_SUBST_NOTMAKE([USE_SYSCALL_COMPILATION_TRUE])
+m4trace:configure.ac:216: -1- _AM_SUBST_NOTMAKE([USE_SYSCALL_COMPILATION_FALSE])
+m4trace:configure.ac:216: -1- m4_pattern_allow([^ENABLE_SYSCALL_COMPILATION$])
+m4trace:configure.ac:220: -1- PKG_CHECK_MODULES([XPROTO], [xproto], [XPROTO_FOUND=yes], [XPROTO_FOUND=no])
+m4trace:configure.ac:220: -1- m4_pattern_allow([^XPROTO_CFLAGS$])
+m4trace:configure.ac:220: -1- m4_pattern_allow([^XPROTO_LIBS$])
+m4trace:configure.ac:220: -1- PKG_CHECK_EXISTS([xproto], [pkg_cv_[]XPROTO_CFLAGS=`$PKG_CONFIG --[]cflags "xproto" 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes ], [pkg_failed=yes])
+m4trace:configure.ac:220: -1- PKG_CHECK_EXISTS([xproto], [pkg_cv_[]XPROTO_LIBS=`$PKG_CONFIG --[]libs "xproto" 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes ], [pkg_failed=yes])
+m4trace:configure.ac:220: -1- _PKG_SHORT_ERRORS_SUPPORTED
+m4trace:configure.ac:226: -1- m4_pattern_allow([^XT_CFLAGS$])
+m4trace:configure.ac:227: -1- m4_pattern_allow([^XT_LIBS$])
+m4trace:configure.ac:230: -1- PKG_CHECK_MODULES([XT], [xt], [XT_FOUND=yes], [XT_FOUND=no])
+m4trace:configure.ac:230: -1- m4_pattern_allow([^XT_CFLAGS$])
+m4trace:configure.ac:230: -1- m4_pattern_allow([^XT_LIBS$])
+m4trace:configure.ac:230: -1- PKG_CHECK_EXISTS([xt], [pkg_cv_[]XT_CFLAGS=`$PKG_CONFIG --[]cflags "xt" 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes ], [pkg_failed=yes])
+m4trace:configure.ac:230: -1- PKG_CHECK_EXISTS([xt], [pkg_cv_[]XT_LIBS=`$PKG_CONFIG --[]libs "xt" 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes ], [pkg_failed=yes])
+m4trace:configure.ac:230: -1- _PKG_SHORT_ERRORS_SUPPORTED
+m4trace:configure.ac:236: -1- m4_pattern_allow([^XT_CFLAGS$])
+m4trace:configure.ac:237: -1- m4_pattern_allow([^XT_LIBS$])
+m4trace:configure.ac:240: -1- PKG_CHECK_MODULES([X11], [x11], [X11_FOUND=yes], [X11_FOUND=no])
+m4trace:configure.ac:240: -1- m4_pattern_allow([^X11_CFLAGS$])
+m4trace:configure.ac:240: -1- m4_pattern_allow([^X11_LIBS$])
+m4trace:configure.ac:240: -1- PKG_CHECK_EXISTS([x11], [pkg_cv_[]X11_CFLAGS=`$PKG_CONFIG --[]cflags "x11" 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes ], [pkg_failed=yes])
+m4trace:configure.ac:240: -1- PKG_CHECK_EXISTS([x11], [pkg_cv_[]X11_LIBS=`$PKG_CONFIG --[]libs "x11" 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes ], [pkg_failed=yes])
+m4trace:configure.ac:240: -1- _PKG_SHORT_ERRORS_SUPPORTED
+m4trace:configure.ac:246: -1- m4_pattern_allow([^X11_CFLAGS$])
+m4trace:configure.ac:247: -1- m4_pattern_allow([^X11_LIBS$])
+m4trace:configure.ac:250: -1- PKG_CHECK_MODULES([XINERAMA], [xinerama], [XINERAMA_FOUND=yes
+	], [XINERAMA_FOUND=no])
+m4trace:configure.ac:250: -1- m4_pattern_allow([^XINERAMA_CFLAGS$])
+m4trace:configure.ac:250: -1- m4_pattern_allow([^XINERAMA_LIBS$])
+m4trace:configure.ac:250: -1- PKG_CHECK_EXISTS([xinerama], [pkg_cv_[]XINERAMA_CFLAGS=`$PKG_CONFIG --[]cflags "xinerama" 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes ], [pkg_failed=yes])
+m4trace:configure.ac:250: -1- PKG_CHECK_EXISTS([xinerama], [pkg_cv_[]XINERAMA_LIBS=`$PKG_CONFIG --[]libs "xinerama" 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes ], [pkg_failed=yes])
+m4trace:configure.ac:250: -1- _PKG_SHORT_ERRORS_SUPPORTED
+m4trace:configure.ac:257: -1- m4_pattern_allow([^XINERAMA_CFLAGS$])
+m4trace:configure.ac:258: -1- m4_pattern_allow([^XINERAMA_LIBS$])
+m4trace:configure.ac:260: -1- PKG_CHECK_MODULES([XRENDER], [xrender], [XRENDER_FOUND=yes], [XRENDER_FOUND=no])
+m4trace:configure.ac:260: -1- m4_pattern_allow([^XRENDER_CFLAGS$])
+m4trace:configure.ac:260: -1- m4_pattern_allow([^XRENDER_LIBS$])
+m4trace:configure.ac:260: -1- PKG_CHECK_EXISTS([xrender], [pkg_cv_[]XRENDER_CFLAGS=`$PKG_CONFIG --[]cflags "xrender" 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes ], [pkg_failed=yes])
+m4trace:configure.ac:260: -1- PKG_CHECK_EXISTS([xrender], [pkg_cv_[]XRENDER_LIBS=`$PKG_CONFIG --[]libs "xrender" 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes ], [pkg_failed=yes])
+m4trace:configure.ac:260: -1- _PKG_SHORT_ERRORS_SUPPORTED
+m4trace:configure.ac:306: -1- AM_CONDITIONAL([ENABLE_SYSTEMTAP], [test x$SDT_H_FOUND = xyes])
+m4trace:configure.ac:306: -1- m4_pattern_allow([^ENABLE_SYSTEMTAP_TRUE$])
+m4trace:configure.ac:306: -1- m4_pattern_allow([^ENABLE_SYSTEMTAP_FALSE$])
+m4trace:configure.ac:306: -1- _AM_SUBST_NOTMAKE([ENABLE_SYSTEMTAP_TRUE])
+m4trace:configure.ac:306: -1- _AM_SUBST_NOTMAKE([ENABLE_SYSTEMTAP_FALSE])
+m4trace:configure.ac:320: -1- m4_pattern_allow([^ABS_JAVA_HOME_DIR$])
+m4trace:configure.ac:321: -1- m4_pattern_allow([^ABS_CLIENT_LIBJVM_SO$])
+m4trace:configure.ac:322: -1- m4_pattern_allow([^ABS_SERVER_LIBJVM_SO$])
+m4trace:configure.ac:329: -1- PKG_CHECK_MODULES([XTST], [xtst], [XTST_FOUND=yes], [XTST_FOUND=no])
+m4trace:configure.ac:329: -1- m4_pattern_allow([^XTST_CFLAGS$])
+m4trace:configure.ac:329: -1- m4_pattern_allow([^XTST_LIBS$])
+m4trace:configure.ac:329: -1- PKG_CHECK_EXISTS([xtst], [pkg_cv_[]XTST_CFLAGS=`$PKG_CONFIG --[]cflags "xtst" 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes ], [pkg_failed=yes])
+m4trace:configure.ac:329: -1- PKG_CHECK_EXISTS([xtst], [pkg_cv_[]XTST_LIBS=`$PKG_CONFIG --[]libs "xtst" 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes ], [pkg_failed=yes])
+m4trace:configure.ac:329: -1- _PKG_SHORT_ERRORS_SUPPORTED
+m4trace:configure.ac:335: -1- m4_pattern_allow([^XTST_CFLAGS$])
+m4trace:configure.ac:336: -1- m4_pattern_allow([^XTST_LIBS$])
+m4trace:configure.ac:339: -1- PKG_CHECK_MODULES([FREETYPE2], [freetype2], [FREETYPE2_FOUND=yes
+	], [FREETYPE2_FOUND=no])
+m4trace:configure.ac:339: -1- m4_pattern_allow([^FREETYPE2_CFLAGS$])
+m4trace:configure.ac:339: -1- m4_pattern_allow([^FREETYPE2_LIBS$])
+m4trace:configure.ac:339: -1- PKG_CHECK_EXISTS([freetype2], [pkg_cv_[]FREETYPE2_CFLAGS=`$PKG_CONFIG --[]cflags "freetype2" 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes ], [pkg_failed=yes])
+m4trace:configure.ac:339: -1- PKG_CHECK_EXISTS([freetype2], [pkg_cv_[]FREETYPE2_LIBS=`$PKG_CONFIG --[]libs "freetype2" 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes ], [pkg_failed=yes])
+m4trace:configure.ac:339: -1- _PKG_SHORT_ERRORS_SUPPORTED
+m4trace:configure.ac:346: -1- m4_pattern_allow([^FREETYPE2_CFLAGS$])
+m4trace:configure.ac:347: -1- m4_pattern_allow([^FREETYPE2_LIBS$])
+m4trace:configure.ac:352: -1- PKG_CHECK_MODULES([ALSA], [alsa], [ALSA_FOUND=yes], [ALSA_FOUND=no])
+m4trace:configure.ac:352: -1- m4_pattern_allow([^ALSA_CFLAGS$])
+m4trace:configure.ac:352: -1- m4_pattern_allow([^ALSA_LIBS$])
+m4trace:configure.ac:352: -1- PKG_CHECK_EXISTS([alsa], [pkg_cv_[]ALSA_CFLAGS=`$PKG_CONFIG --[]cflags "alsa" 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes ], [pkg_failed=yes])
+m4trace:configure.ac:352: -1- PKG_CHECK_EXISTS([alsa], [pkg_cv_[]ALSA_LIBS=`$PKG_CONFIG --[]libs "alsa" 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes ], [pkg_failed=yes])
+m4trace:configure.ac:352: -1- _PKG_SHORT_ERRORS_SUPPORTED
+m4trace:configure.ac:358: -1- m4_pattern_allow([^ALSA_CFLAGS$])
+m4trace:configure.ac:359: -1- m4_pattern_allow([^ALSA_LIBS$])
+m4trace:configure.ac:365: -1- PKG_CHECK_MODULES([LIBPULSE], [libpulse >= 0.9.11], [LIBPULSE_FOUND=yes
+    ], [LIBPULSE_FOUND=no])
+m4trace:configure.ac:365: -1- m4_pattern_allow([^LIBPULSE_CFLAGS$])
+m4trace:configure.ac:365: -1- m4_pattern_allow([^LIBPULSE_LIBS$])
+m4trace:configure.ac:365: -1- PKG_CHECK_EXISTS([libpulse >= 0.9.11], [pkg_cv_[]LIBPULSE_CFLAGS=`$PKG_CONFIG --[]cflags "libpulse >= 0.9.11" 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes ], [pkg_failed=yes])
+m4trace:configure.ac:365: -1- PKG_CHECK_EXISTS([libpulse >= 0.9.11], [pkg_cv_[]LIBPULSE_LIBS=`$PKG_CONFIG --[]libs "libpulse >= 0.9.11" 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes ], [pkg_failed=yes])
+m4trace:configure.ac:365: -1- _PKG_SHORT_ERRORS_SUPPORTED
+m4trace:configure.ac:372: -1- m4_pattern_allow([^LIBPULSE_CFLAGS$])
+m4trace:configure.ac:373: -1- m4_pattern_allow([^LIBPULSE_LIBS$])
+m4trace:configure.ac:378: -1- PKG_CHECK_MODULES([LIBFFI], [libffi], [LIBFFI_FOUND=yes], [LIBFFI_FOUND=no])
+m4trace:configure.ac:378: -1- m4_pattern_allow([^LIBFFI_CFLAGS$])
+m4trace:configure.ac:378: -1- m4_pattern_allow([^LIBFFI_LIBS$])
+m4trace:configure.ac:378: -1- PKG_CHECK_EXISTS([libffi], [pkg_cv_[]LIBFFI_CFLAGS=`$PKG_CONFIG --[]cflags "libffi" 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes ], [pkg_failed=yes])
+m4trace:configure.ac:378: -1- PKG_CHECK_EXISTS([libffi], [pkg_cv_[]LIBFFI_LIBS=`$PKG_CONFIG --[]libs "libffi" 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes ], [pkg_failed=yes])
+m4trace:configure.ac:378: -1- _PKG_SHORT_ERRORS_SUPPORTED
+m4trace:configure.ac:391: -1- m4_pattern_allow([^LIBFFI_CFLAGS$])
+m4trace:configure.ac:392: -1- m4_pattern_allow([^LIBFFI_LIBS$])
+m4trace:configure.ac:409: -1- IT_FIND_TOOL([LLVM_CONFIG], [llvm-config])
+m4trace:configure.ac:409: -1- m4_pattern_allow([^LLVM_CONFIG$])
+m4trace:configure.ac:409: -1- m4_pattern_allow([^LLVM_CONFIG$])
+m4trace:configure.ac:457: -1- m4_pattern_allow([^LLVM_CFLAGS$])
+m4trace:configure.ac:458: -1- m4_pattern_allow([^LLVM_LDFLAGS$])
+m4trace:configure.ac:459: -1- m4_pattern_allow([^LLVM_LIBS$])
+m4trace:configure.ac:462: -1- m4_pattern_allow([^CONFIGURE_ARGS$])
+m4trace:configure.ac:465: -1- m4_pattern_allow([^LIB@&t@OBJS$])
+m4trace:configure.ac:465: -1- m4_pattern_allow([^LTLIBOBJS$])
+m4trace:configure.ac:465: -1- AM_CONDITIONAL([am__EXEEXT], [test -n "$EXEEXT"])
+m4trace:configure.ac:465: -1- m4_pattern_allow([^am__EXEEXT_TRUE$])
+m4trace:configure.ac:465: -1- m4_pattern_allow([^am__EXEEXT_FALSE$])
+m4trace:configure.ac:465: -1- _AM_SUBST_NOTMAKE([am__EXEEXT_TRUE])
+m4trace:configure.ac:465: -1- _AM_SUBST_NOTMAKE([am__EXEEXT_FALSE])
+m4trace:configure.ac:465: -1- _m4_warn([obsolete], [AC_C_BIGENDIAN should be used with AC_CONFIG_HEADERS], [])
+m4trace:configure.ac:465: -1- _AM_OUTPUT_DEPENDENCY_COMMANDS
