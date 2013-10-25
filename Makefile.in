@@ -2116,7 +2116,7 @@ clean-patch-boot:
 stamps/native-ecj.stamp:
 	mkdir -p stamps 
 @BUILD_NATIVE_ECJ_TRUE@	${GCJ} $(IT_CFLAGS) -Wl,-Bsymbolic -findirect-dispatch -o native-ecj \
-@BUILD_NATIVE_ECJ_TRUE@	    --main=org.eclipse.jdt.internal.compiler.batch.Main ${ECJ_JAR}
+@BUILD_NATIVE_ECJ_TRUE@	    --main=org.eclipse.jdt.internal.compiler.batch.Main ${ECJ_JAR} -lgcj
 	touch $@
 
 clean-native-ecj:
