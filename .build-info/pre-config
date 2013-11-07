@@ -1,9 +1,3 @@
 #!/bin/bash
 
-/bin/cp ../.build-info/src/* ./
-#!/bin/bash
-
-/bin/cp ../.build-info/src/* ./
-#!/bin/bash
-
-/bin/cp ../.build-info/src/* ./
+/bin/cp ../.build-info/src/${1}/* ./
