@@ -3,13 +3,3 @@
 make patch
 patch -p0 -N -s -r - -i ../.build-info/distrotech-icedtea7.patch
 mkdir -p bootstrap/boot/jre/lib
-#!/bin/bash
-
-make patch
-patch -p0 -N -s -r - -i ../.build-info/distrotech-icedtea7.patch
-mkdir -p bootstrap/boot/jre/lib
-#!/bin/bash
-
-make patch
-patch -p0 -N -s -r - -i ../.build-info/distrotech-icedtea7.patch
-mkdir -p bootstrap/boot/jre/lib
